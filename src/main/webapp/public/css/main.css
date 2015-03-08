@@ -1,0 +1,23 @@
+body {
+	height:100%;
+	background-color:#EEEEEE;
+}
+#edit {
+	float:left;
+	color:cyan;
+	width:30%;
+}
+#list_div {
+	float:left;
+	background-color:red;
+	width:30%;
+	
+}
+#content_div {
+	float:left;
+	background-color:black;
+	height:400px;
+	width:30%;
+    border-style: solid;
+    border-width: medium;
+}

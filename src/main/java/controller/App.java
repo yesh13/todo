@@ -9,6 +9,10 @@ public class App {
 	public String main(){
 		return "main";
 	}
+	@RequestMapping("/add")
+	public String add(){
+		return "add";
+	}
 	@RequestMapping("/about")
 	public String about(){
 		return "about";
