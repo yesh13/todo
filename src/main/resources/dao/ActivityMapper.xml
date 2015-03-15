@@ -60,13 +60,13 @@
 	</select>
 	
 	<insert id="addActivity" parameterType="map">
-		insert into Activity (uid,name,parent,note,location,start_time,end_time)
+		insert into activity (uid,name,parent,note,location,start_time,end_time)
 		values (#{uid},#{act.name},#{act.parent.id},#{act.note.note},#{act.location.place},
 		#{act.schedule.startTime},#{act.schedule.endTime})
 	</insert>
 
 	<update id="updateActivity">
-		update Activity set
+		update activity set
 		uid = #{uid},
 		name = #{act.name},
 		parent = #{act.parent.id},
@@ -78,6 +78,6 @@
 	</update>
 
 	<delete id="deleteActivity">
-		delete from Activity where aid = #{aid}
+		delete from activity where aid = #{aid}
 	</delete>
 </mapper>
