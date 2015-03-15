@@ -1,23 +1,36 @@
-body {
+html{
 	height:100%;
-	background-color:#EEEEEE;
+		overflow:hidden;
 }
-#edit {
-	float:left;
-	color:cyan;
-	width:30%;
+body{
+	padding-top:50px;
+	height:100%;
+		overflow:hidden;
 }
-#list_div {
-	float:left;
-	background-color:red;
-	width:30%;
-	
+
+.side-nav{
+	padding-left:0px;
+	padding-right:0px;
 }
-#content_div {
-	float:left;
-	background-color:black;
-	height:400px;
-	width:30%;
-    border-style: solid;
-    border-width: medium;
+
+div.full-height{
+	height:100%;
+}
+div.full-height-flow{
+	height:100%;
+	overflow:auto;
+}
+textarea{
+	resize:none;
+}
+:not(:hover)>.show-when-hover{
+	display:none;
+}
+div.list-header>ol{
+	display:inline-block;
+}
+div.list-header>a{
+	float:right;
+	padding-top:8px;
+	padding-bottom:8px;
 }

@@ -13,6 +13,10 @@ public class App {
 	public String add(){
 		return "add";
 	}
+	@RequestMapping("/todo")
+	public String todo(){
+		return "todo";
+	}
 	@RequestMapping("/about")
 	public String about(){
 		return "about";

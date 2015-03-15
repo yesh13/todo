@@ -1,6 +1,7 @@
 package dao;
 
 import java.util.List;
+import org.apache.ibatis.type.DateTypeHandler;
 
 import domain.Activity;
 import domain.ActivityId;
@@ -13,11 +14,9 @@ public interface ActivityMapper {
 
 	public Activity getById(@Param("aid") int aid,@Param("uid") int uid);
 
-	public int addActivity(@Param("uid") int uid,@Param("name") String name,@Param("parent") int parent,
-			@Param("location") String location,@Param("note") String note);
+	public int addActivity(@Param("uid") int uid,@Param("act") Activity act);
 
-	public int updateActivity(@Param("aid") int aid,@Param("uid") int uid,@Param("name") String name,
-			@Param("parent") int parent,@Param("location") String location,@Param("note") String note);
-	public List<Activity> getRealChildById(@Param("aid") int aid,@Param("uid") int uid);
+	public int updateActivity(@Param("uid") int uid,@Param("act") Activity act);
+	public List<Activity> getRealChildById(@Param("uid") int uid,@Param("aid") int aid);
 
 }
