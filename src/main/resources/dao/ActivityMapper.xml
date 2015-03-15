@@ -27,17 +27,27 @@
     <result property="place" column="location"/>
   </association>
   <association property="parent" resultMap="parentRM"/>
+   <association property="schedule" javaType="domain.Schedule">
+    <result property="startTime" column="start_time"/>
+    <result property="endTime" column="end_time"/>
+  </association>
 </resultMap>
+
 <resultMap id="actBriefResultMap" type="domain.Activity">
   <constructor>
     <arg javaType="domain.ActivityId" resultMap="aidRM"/>
   </constructor>
   <result property="name" column="name"/>
-  <association property="location" javaType="domain.Location">
+   <association property="location" javaType="domain.Location">
     <result property="place" column="location"/>
+  </association>
+  <association property="schedule" javaType="domain.Schedule">
+    <result property="startTime" column="start_time"/>
+    <result property="endTime" column="end_time"/>
   </association>
   <association property="parent" resultMap="parentRM"/>
 </resultMap>
+
 <resultMap id="actSetResultMap" type="domain.ActivitySet">
 <collection property="realList" ofType="domain.Activity" resultMap="actBriefResultMap"/>
 </resultMap>
@@ -50,18 +60,21 @@
 	</select>
 	
 	<insert id="addActivity" parameterType="map">
-		insert into Activity (uid,name,parent,note,location)
-		values (#{uid},#{name},#{parent},#{note},#{location})
+		insert into Activity (uid,name,parent,note,location,start_time,end_time)
+		values (#{uid},#{act.name},#{act.parent.id},#{act.note.note},#{act.location.place},
+		#{act.schedule.startTime},#{act.schedule.endTime})
 	</insert>
 
 	<update id="updateActivity">
 		update Activity set
 		uid = #{uid},
-		name = #{name},
-		parent = #{parent},
-		note = #{note},
-		location = #{location}
-		where aid = #{aid}
+		name = #{act.name},
+		parent = #{act.parent.id},
+		note = #{act.note.note},
+		location = #{act.location.place},
+		start_time=#{act.schedule.startTime},
+		end_time=#{act.schedule.endTime}
+		where aid = #{act.aid.id}
 	</update>
 
 	<delete id="deleteActivity">

@@ -31,8 +31,7 @@ public class ActivityDao {
 		ActivityMapper mapper;
 		try {
 			mapper = session.getMapper(ActivityMapper.class);
-			return mapper.addActivity(uid,act.getName(),act.getParent().mainId(),
-				  act.getLocation().toString(),act.getNote().toString());
+			return mapper.addActivity(uid,act);
 		}
 		finally {
 			session.commit();
@@ -45,8 +44,7 @@ public class ActivityDao {
 		ActivityMapper mapper;
 		try {
 		  mapper = session.getMapper(ActivityMapper.class);
-		  return mapper.updateActivity(act.getAid().mainId(),uid,act.getName(),act.getParent().mainId(),
-				  act.getLocation().toString(),act.getNote().toString());
+		  return mapper.updateActivity(uid,act);
 		}
 		finally {
 		session.commit();
@@ -58,7 +56,7 @@ public class ActivityDao {
 		ActivityMapper mapper;
 		try {
 		  mapper = session.getMapper(ActivityMapper.class);
-		List<Activity> list=mapper.getRealChildById(aid.mainId(), uid);
+		List<Activity> list=mapper.getRealChildById(uid, aid.mainId());
 		  return (new ActivitySet()).setRealList(list);
 		}
 		finally {

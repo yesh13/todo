@@ -1,12 +1,24 @@
 package domain;
 
+import java.sql.Timestamp;
+
 public class Activity {
 	private ActivityId aid;
 	private ActivitySet child;
 	private Location location=new Location("");
+
 	private String name;
 	private Note note=new Note("");
 	private ActivityId parent;
+	private Schedule schedule=new Schedule();
+
+	public Schedule getSchedule() {
+		return schedule;
+	}
+
+	public void setSchedule(Schedule schedule) {
+		this.schedule = schedule;
+	}
 
 	public Activity() {
 		super();
