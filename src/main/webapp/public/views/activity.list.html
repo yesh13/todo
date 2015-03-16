@@ -1,0 +1,23 @@
+	<div class="list-header">
+		<ol class="breadcrumb">
+			<li><a ui-sref="activity({aid:0})"
+			droppable-activity="0"> Root </a></li>
+			<li ng-repeat="item in actPath track by $index" 
+			droppable-activity="actPath[$index].aid">
+			<a ui-sref="activity({aid:actPath[$index].aid})">
+					{{actPath[$index].name}} </a>
+					</li>
+		</ol>
+		<a href="javascript:void(0)" ng-click="setActivity(-1)"><span
+			class="glyphicon glyphicon-plus" aria-hidden="true"></span> new</a>
+	</div>
+	<ul class="nav nav-stacked">
+
+		<li ng-repeat="item in actList track by $index" draggable="true"
+		draggable-activity="actList[$index].aid"
+		droppable-activity="actList[$index].aid"><a 
+			href="javascript:void(0)" ng-click="setActivity($index)">{{item.name}}
+				<span ui-sref="activity({aid:actList[$index].aid})"
+				class="glyphicon glyphicon-menu-right show-when-hover"></span>
+		</a></li>
+	</ul>

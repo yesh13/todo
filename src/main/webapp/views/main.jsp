@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<html style="min-width:1200px">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Todo</title>
@@ -16,11 +16,17 @@
 	<script type="text/javascript" src="/resources/js/angular.min.js"></script>
 	<script type="text/javascript"
 		src="/resources/js/angular-ui-router.min.js"></script>
-	<script type="text/javascript"
-		src="/resources/js/datepicker.js"></script>
-			<script type="text/javascript"
-		src="/resources/js/ui-bootstrap.min.js"></script>
+	<script type="text/javascript" src="/resources/js/datepicker.js"></script>
+	<script type="text/javascript" src="/resources/js/ui-bootstrap.min.js"></script>
 	<script type="text/javascript" src="/resources/js/main.js"></script>
+	<script type="text/ng-template" id="activity.html" ng-include="'/resources/views/activity-desktop.html'">
+
+<div class="col-xs-4 full-height-flow" ng-include="'/resources/views/activity.list.html'">
+</div>
+<div class="col-xs-5 full-height-flow" ng-include="'/resources/views/activity.detail.html'">
+</div>
+
+</script>
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container-fluid">
 		<div class="navbar-header">

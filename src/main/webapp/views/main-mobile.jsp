@@ -6,18 +6,30 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>Todo</title>
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/datepicker.css">
 <link rel="stylesheet" type="text/css" href="/resources/css/main.css">
 </head>
 <body ng-app="mainApp">
 	<script type="text/javascript" src="/resources/js/angular.min.js"></script>
 	<script type="text/javascript"
 		src="/resources/js/angular-ui-router.min.js"></script>
+	<script type="text/javascript"
+		src="/resources/js/datepicker.js"></script>
 			<script type="text/javascript"
 		src="/resources/js/ui-bootstrap.min.js"></script>
 	<script type="text/javascript" src="/resources/js/main.js"></script>
+		<script type="text/ng-template" id="activity.html">
+  <tabset class="bottom-tab">
+    <tab heading="List"><div class="col-xs-12 full-height-flow" ng-include="'/resources/views/activity.list.html'"></div></tab>
+    <tab heading="Detail"><div class="col-xs-12 full-height-flow" ng-include="'/resources/views/activity.detail.html'"></div></tab>
+  </tabset>
+
+</script>
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container-fluid">
 		<div>

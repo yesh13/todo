@@ -1,15 +1,16 @@
 var app = angular.module("mainApp", [ "ui.router", "ui.bootstrap",
 		"ngQuickDate" ]);
-app.config(function($stateProvider) {
+app.config(function($stateProvider,$urlRouterProvider) {
 	$stateProvider.state('activity', {
 		url : '/activity/:aid',
-		templateUrl : '/resources/views/activity.html',
+		templateUrl : 'activity.html',
 		controller : 'actListCtrl as actList'
 	});
 	$stateProvider.state('today', {
 		url : '/today',
 		templateUrl : '/resources/views/today.html'
 	});
+	$urlRouterProvider.otherwise('/activity/0');
 });
 app.service("dragService", function() {
 });
@@ -111,6 +112,7 @@ var actList = app
 app.directive('draggableActivity', function() {
 	return function(scope, element, attr) {
 		element.on('dragstart', function(event) {
+			console.log("dragstart");
 			// Prevent default dragging of selected content
 			scope.setBeingDragged(scope.$eval(attr.draggableActivity));
 		});
@@ -122,6 +124,7 @@ app.directive('droppableActivity', [
 			return function(scope, element, attr) {
 				element.on('drop', function(event) {
 					// Prevent default dragging of selected content
+					console.log("beDroped");
 					var droped = scope.$eval(attr.droppableActivity);
 					console.log(scope.beingDragged + "->" + droped);
 					var move = {
@@ -133,6 +136,7 @@ app.directive('droppableActivity', [
 							});
 				});
 				element.on('dragover', function(event) {
+					console.log("dragover");
 					var droped = scope.$eval(attr.droppableActivity);
 					if (droped != scope.beingDragged) {
 						event.preventDefault();

@@ -1,13 +1,11 @@
 html{
 	height:100%;
-	min-width:1200px;
 	overflow-y:hidden;
 	
 }
 body{
 	padding-top:50px;
 	height:100%;
-	min-width:1200px;
 	overflow-y:hidden;
 }
 
@@ -23,7 +21,8 @@ div.full-height-flow{
 	height:100%;
 	overflow:auto;
 }
-textarea{
+textarea#note-edit{
+	width:100%;
 	resize:none;
 }
 :not(:hover)>.show-when-hover{
@@ -36,4 +35,28 @@ div.list-header>a{
 	float:right;
 	padding-top:8px;
 	padding-bottom:8px;
+}
+
+div.bottom-tab{
+	position:relative;
+	height:100%;
+}
+div.bottom-tab>.tab-content {
+	position:absolute;
+	top:0px;
+	height:auto;
+	bottom:45px;
+	width:100%;
+}
+div.bottom-tab>.nav-tabs {
+	position:fixed;
+	bottom:0px;
+	width:100%;
+}
+div.bottom-tab>.nav-tabs>li {
+	text-align:center;
+	width:50%;
+}
+div.bottom-tab>.tab-content>.tab-pane {
+	height:100%;
 }

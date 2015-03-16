@@ -3,12 +3,15 @@ package controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import domain.Activity;
 import domain.Todo;
 
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,6 +24,10 @@ import application.ActivityService;
 
 @RestController
 public class ActivityCtrl {
+	@ModelAttribute
+	public void header(HttpServletResponse response){
+		response.setHeader("Cache-Control", "no-cache");
+	}
 	//parentString is 0 to show top level activities
 	@RequestMapping(value="/api/activity/list/{parentString}", method=RequestMethod.GET)
 	public List<ActivityDTO> list(@PathVariable String parentString){
