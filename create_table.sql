@@ -2,7 +2,7 @@ create table if not exists account (
 uid int unsigned not null auto_increment primary key,
 name varchar(20) unique,
 nickname varchar(20),
-passwd varchar(20));
+passwd varchar(20)) character set=utf8;
 
 create table if not exists activity (
 aid int unsigned not null auto_increment,

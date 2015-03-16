@@ -2,6 +2,8 @@ package application;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,11 +22,12 @@ public class ActivityService {
 			dto.setAid(act.getAid().toString());
 			dto.setLocation(act.getLocation().toString());
 			dto.setName(act.getName());
+			DateFormat df=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 			if (act.getSchedule().getStartTime() != null) {
-				dto.setStartTime(act.getSchedule().getStartTime().toString());
+				dto.setStartTime(df.format(act.getSchedule().getStartTime()));
 			}
 			if (act.getSchedule().getEndTime() != null) {
-				dto.setEndTime(act.getSchedule().getEndTime().toString());
+				dto.setEndTime(df.format(act.getSchedule().getEndTime()));
 			}
 			if(withNote==true){
 				dto.setNote(act.getNote().toString());	
@@ -51,21 +54,25 @@ public class ActivityService {
 		act.setNote(new Note(dto.getNote()));
 		act.setLocation(new Location(dto.getLocation()));
 		act.setParent(new ActivityId(dto.getParent()));
+		DateFormat df=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 		if(dto.getStartTime()!=null) {
 			try{
-			act.getSchedule().setStartTime(Timestamp.valueOf(dto.getStartTime()));
+				long time=df.parse(dto.getStartTime()).getTime();
+				act.getSchedule().setStartTime(new Timestamp(time));
 			}
-			catch(IllegalArgumentException e){
+			catch(java.text.ParseException e){
 				
 			}
 		}
 		if(dto.getEndTime()!=null) {
 			try{
-			act.getSchedule().setEndTime(Timestamp.valueOf(dto.getEndTime()));
+				long time=df.parse(dto.getEndTime()).getTime();
+				act.getSchedule().setEndTime(new Timestamp(time));
 			}
-			catch(IllegalArgumentException e){		
+			catch(java.text.ParseException e){
+				
 			}
-		}		
+		}	
 		(new ActivityDao()).insert(act, user);
 		return 0;
 	}
@@ -84,19 +91,23 @@ public class ActivityService {
 		if(dto.getNote()!=null) act.setNote(new Note(dto.getNote()));
 		if(dto.getLocation()!=null) act.setLocation(new Location(dto.getLocation()));
 		if(dto.getParent()!=null) act.setParent(new ActivityId(dto.getParent()));
+		DateFormat df=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 		if(dto.getStartTime()!=null) {
 			try{
-			act.getSchedule().setStartTime(Timestamp.valueOf(dto.getStartTime()));
+				long time=df.parse(dto.getStartTime()).getTime();
+				act.getSchedule().setStartTime(new Timestamp(time));
 			}
-			catch(IllegalArgumentException e){
+			catch(java.text.ParseException e){
 				
 			}
 		}
 		if(dto.getEndTime()!=null) {
 			try{
-			act.getSchedule().setEndTime(Timestamp.valueOf(dto.getEndTime()));
+				long time=df.parse(dto.getEndTime()).getTime();
+				act.getSchedule().setEndTime(new Timestamp(time));
 			}
-			catch(IllegalArgumentException e){		
+			catch(java.text.ParseException e){
+				
 			}
 		}
 		(new ActivityDao()).update(act, user);

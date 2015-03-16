@@ -8,6 +8,6 @@
   </select>
   	<insert id="addAccount" parameterType="map">
 		insert into account (name,passwd)
-		values (#{name},#{passwd})
+		values (${name},${passwd})
 	</insert>
 </mapper>

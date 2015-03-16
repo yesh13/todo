@@ -1,34 +1,15 @@
-$("document").ready(function(){
-	$("#add_form").submit(function(event){
-		addActivity();
-		event.preventDefault();
-	})
-	$("#edit_form").submit(function(event){
-		editActivity();
-		event.preventDefault();
-	})
-	listRefresh();
-})
-function listRefresh(){
-	$.getJSON("/api/list/0",function(data){
-		$("ul").text("");
-		data.forEach(function(data){
-			$("ul").append("<li><a noref onClick='javascript:rmTodo(this)'>"+"name:"+data.name+
-					"<br>location:"+data.location+
-					"<br>note:"+data.note+"</a></li>");
+var app=angular.module("testApp",[]);
+console.log("testApp");
+app.controller("testCtrl",['$scope','$http',function($scope,$http){
+	$scope.title="Hello World";
+	$scope.setWidth=function(){
+		$scope.width=0;
+	}
+}]);
+app.directive('showSize',function() {
+	return function(scope, element, attr) {
+		element.on("click",function(){
+			element[0].innerHTML="height:"+element[0].offsetHeight+", width: "+element[0].offsetWidth;
 		})
-	})
-}
-function rmTodo(ele){
-	console.log("rm instruction")
-	$.post("api/todo","action=rm&name="+$(ele).text(),function(){
-		listRefresh();
-	})
-}
-function addActivity(){
-	console.log("addAct");
-	$.post("api/activity",$("#add_form").serialize(),null)
-}
-function editActivity(){
-	$.post("api/activity/2",$("#edit_form").serialize(),null)
-}
+	};
+});

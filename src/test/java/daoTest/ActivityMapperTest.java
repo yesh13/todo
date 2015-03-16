@@ -22,7 +22,7 @@ public class ActivityMapperTest {
 		  Activity act=new Activity(new ActivityId("1"));
 		  act.setName("ActivityMapperTest");
 		  act.setParent(new ActivityId("0"));
-		  mapper.addActivity(1, act);
+		  //mapper.addActivity(1, act);
 		}
 		finally {
 			  session.commit();

@@ -1,5 +1,5 @@
 
-<div class="col-md-4 full-height-flow">
+<div class="col-xs-4 full-height-flow">
 	<div class="list-header">
 		<ol class="breadcrumb">
 			<li><a ui-sref="activity({aid:0})"
@@ -25,15 +25,16 @@
 	</ul>
 
 </div>
-<div class="col-md-5 full-height-flow">
+<div class="col-xs-5 full-height-flow">
 	aid: {{activity.aid}}
 	<form novalidate>
 		Name:<br> <input type="text" ng-model="activity.name"><br>
 		Location:<br> <input type="text"
 			ng-model="activity.location"><br> Time:<br>
-			<input type="text" ng-model="activity.endTime"></input><br>
+			from <quick-datepicker ng-model='activity.startTime'></quick-datepicker> to 
+			<quick-datepicker ng-model='activity.endTime'></quick-datepicker><br>
 			Note:<br>
-		<textarea rows="10" cols="70" ng-model="activity.note"></textarea>
+		<textarea rows="10" style="width:400px" ng-model="activity.note"></textarea>
 		
 		<br>
 		<button ng-click="sumbit()">submit</button>

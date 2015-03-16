@@ -3,30 +3,30 @@
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-  <environments default="development">
-    <environment id="development">
-      <transactionManager type="JDBC"/>
-      <dataSource type="POOLED">
-        <property name="driver" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://localhost:3306/todo?useUnicode=true&amp;
-        characterEncoding=utf8&amp;zeroDateTimeBehavior=convertToNull"/>
-        <property name="username" value="todo"/>
-        <property name="password" value="1520"/>
-      </dataSource>
-    </environment>
-    <environment id="openshift">
-      <transactionManager type="JDBC"/>
-      <dataSource type="POOLED">
-        <property name="driver" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://${host}:${port}/todo?useUnicode=true&amp;
-        characterEncoding=utf8&amp;zeroDateTimeBehavior=convertToNull"/>
-        <property name="username" value="${username}"/>
-        <property name="password" value="${passwd}"/>
-      </dataSource>
-    </environment>
-  </environments>
-  <mappers>
-    <mapper resource="dao/AccountMapper.xml"/>
-    <mapper resource="dao/ActivityMapper.xml"/>
-  </mappers>
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="com.mysql.jdbc.Driver" />
+				<property name="url"
+					value="jdbc:mysql://localhost:3306/todo?useUnicode=true&amp;characterEncoding=UTF8&amp;zeroDateTimeBehavior=convertToNull" />
+				<property name="username" value="todo" />
+				<property name="password" value="1520" />
+			</dataSource>
+		</environment>
+		<environment id="openshift">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="com.mysql.jdbc.Driver" />
+				<property name="url"
+					value="jdbc:mysql://${host}:${port}/todo?useUnicode=true&amp;characterEncoding=UTF8&amp;zeroDateTimeBehavior=convertToNull" />
+				<property name="username" value="${username}" />
+				<property name="password" value="${passwd}" />
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<mapper resource="dao/AccountMapper.xml" />
+		<mapper resource="dao/ActivityMapper.xml" />
+	</mappers>
 </configuration>

@@ -14,9 +14,7 @@ public class AccountMapperTest {
 		AccountMapper mapper;
 		try {
 		  mapper = session.getMapper(AccountMapper.class);
-//		  return mapper.insert(uid,act.getName(),act.getParent().toString(),
-//				  act.getLocation().toString(),act.getNote().toString());
-		  mapper.addAccount("namea","mima");
+		  //mapper.addAccount("叶舒豪","aad");
 		}
 		finally {
 			session.commit();
@@ -30,7 +28,7 @@ public class AccountMapperTest {
 		AccountMapper mapper;
 		try {
 		  mapper = session.getMapper(AccountMapper.class);
-		  org.junit.Assert.assertEquals("get", mapper.getByName("shuhao").getPasswd(), "hello");
+		  org.junit.Assert.assertEquals("get", mapper.getByName("dddd").getPasswd(), "叶舒豪");
 		}
 		finally {
 		  session.close();

@@ -1,11 +1,14 @@
 html{
 	height:100%;
-		overflow:hidden;
+	min-width:1200px;
+	overflow-y:hidden;
+	
 }
 body{
 	padding-top:50px;
 	height:100%;
-		overflow:hidden;
+	min-width:1200px;
+	overflow-y:hidden;
 }
 
 .side-nav{

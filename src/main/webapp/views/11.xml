@@ -1,16 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://java.sun.com/xml/ns/javaee" id="WebApp_ID" version="3.0">
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee">
 	<display-name>Archetype Created Web Application</display-name>
 	<filter>
 		<filter-name>deviceResolverRequestFilter</filter-name>
 		<filter-class>org.springframework.mobile.device.DeviceResolverRequestFilter
 		</filter-class>
 	</filter>
-	<filter-mapping>
-		<filter-name>deviceResolverRequestFilter</filter-name>
-		<servlet-name>mvc-dispatcher</servlet-name>
-	</filter-mapping>
 	<servlet>
 		<servlet-name>mvc-dispatcher</servlet-name>
 		<servlet-class>
