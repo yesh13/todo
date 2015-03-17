@@ -13,6 +13,10 @@ public class Location {
 		this.place = place;
 	}
 
+	public String getPlace() {
+		return place;
+	}
+
 	public Location() {
 		super();
 	}

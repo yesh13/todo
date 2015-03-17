@@ -21,32 +21,33 @@ import application.ActivityService;
 
 @RestController
 public class ActivityCtrl {
+	private int user=1;
 	//parentString is 0 to show top level activities
 	@RequestMapping(value="/api/activity/list/{parentString}", method=RequestMethod.GET)
 	public List<ActivityDTO> list(@PathVariable String parentString){
-		List<ActivityDTO> nameList = (new ActivityService()).getChild(parentString);
+		List<ActivityDTO> nameList = (new ActivityService()).getChild(parentString,user);
 		return nameList;
 	}
 	@RequestMapping(value="/api/activity/detail/{aidString}", method=RequestMethod.GET)
 	public ActivityDTO getActivity(@PathVariable String aidString){
-		ActivityDTO adto=(new ActivityService()).getActivity(aidString,true);
+		ActivityDTO adto=(new ActivityService()).getActivity(aidString,user,true);
 		return adto;
 	}
 	@RequestMapping(value="/api/activity", method=RequestMethod.POST)
 	public String add(@RequestBody ActivityDTO dto){
 		System.out.println("act add post received");
-		int ret=(new ActivityService()).addActivity(dto);
+		int ret=(new ActivityService()).addActivity(dto,user);
 		return String.valueOf(ret);
 	}
 	@RequestMapping(value="/api/activity/{aidString}", method=RequestMethod.POST)
 	public String edit(@RequestBody ActivityDTO dto,@PathVariable String aidString){
 		dto.setAid(aidString);
-		int ret=(new ActivityService()).editActivity(dto);
+		int ret=(new ActivityService()).editActivity(dto,user);
 		return String.valueOf(ret);
 	}
 	@RequestMapping(value="/api/activity/path/{parentString}", method=RequestMethod.GET)
 	public List<ActivityDTO> path(@PathVariable String parentString){
-		List<ActivityDTO> nameList = (new ActivityService()).getPath(parentString);
+		List<ActivityDTO> nameList = (new ActivityService()).getPath(parentString,user);
 		return nameList;
 	}
 

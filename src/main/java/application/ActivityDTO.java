@@ -1,11 +1,26 @@
 package application;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
+import domain.Activity;
+import domain.Location;
+import domain.Note;
+
 public class ActivityDTO {
 	String name;
 	String location;
 	String note;
 	String aid;
 	String parent;
+	public String getUid() {
+		return uid;
+	}
+	public void setUid(String uid) {
+		this.uid = uid;
+	}
+	String uid;
 	public String getStartTime() {
 		return startTime;
 	}
@@ -49,5 +64,55 @@ public class ActivityDTO {
 	}
 	public void setAid(String aid) {
 		this.aid = aid;
+	}
+	
+	public ActivityDTO(Activity act,boolean withNote){
+		if(act!=null){
+			setAid(String.valueOf(act.getAid()));
+			setLocation(act.getLocation().toString());
+			setName(act.getName());
+			DateFormat df=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+			if (act.getSchedule().getStartTime() != null) {
+				setStartTime(df.format(act.getSchedule().getStartTime()));
+			}
+			if (act.getSchedule().getEndTime() != null) {
+				setEndTime(df.format(act.getSchedule().getEndTime()));
+			}
+			if(withNote==true){
+				setNote(act.getNote().toString());	
+			}
+			setParent(String.valueOf(act.getParent()));
+			}
+	}
+	public ActivityDTO() {
+		// TODO Auto-generated constructor stub
+	}
+	public static Activity getActivity(ActivityDTO dto) {
+		// TODO Auto-generated method stub
+		Activity act=new Activity();
+		act.setName(dto.getName());
+		act.setNote(new Note(dto.getNote()));
+		act.setLocation(new Location(dto.getLocation()));
+		act.setParent(Integer.parseInt(dto.getParent()));
+		DateFormat df=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+		if(dto.getStartTime()!=null) {
+			try{
+				long time=df.parse(dto.getStartTime()).getTime();
+				act.getSchedule().setStartTime(new Timestamp(time));
+			}
+			catch(java.text.ParseException e){
+				
+			}
+		}
+		if(dto.getEndTime()!=null) {
+			try{
+				long time=df.parse(dto.getEndTime()).getTime();
+				act.getSchedule().setEndTime(new Timestamp(time));
+			}
+			catch(java.text.ParseException e){
+				
+			}
+		}	
+		return null;
 	}
 }

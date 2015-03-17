@@ -1,40 +1,35 @@
 package domain;
 
 import java.sql.Timestamp;
+import java.util.List;
+
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+import application.Account;
 
 public class Activity {
-	private ActivityId aid;
-	private ActivitySet child;
+	private int aid;
 	private Location location=new Location("");
-
 	private String name;
+
 	private Note note=new Note("");
-	private ActivityId parent;
+
+	private int parent;
+
 	private Schedule schedule=new Schedule();
 
-	public Schedule getSchedule() {
-		return schedule;
-	}
-
-	public void setSchedule(Schedule schedule) {
-		this.schedule = schedule;
-	}
-
+	private int uid;
 	public Activity() {
 		super();
 	}
-
-	public Activity(ActivityId aid) {
+	public Activity(int aid) {
 		super();
 		this.aid = aid;
 	}
-
-	public ActivityId getAid() {
+	public int getAid() {
 		return aid;
-	}
-
-	public ActivitySet getChild() {
-		return child;
 	}
 
 	public Location getLocation() {
@@ -49,12 +44,21 @@ public class Activity {
 		return note;
 	}
 
-	public ActivityId getParent() {
+
+	public int getParent() {
 		return parent;
 	}
 
-	public void setChild(ActivitySet child) {
-		this.child = child;
+	public Schedule getSchedule() {
+		return schedule;
+	}
+
+	public int getUid() {
+		return uid;
+	}
+
+	public void setAid(int aid) {
+		this.aid = aid;
 	}
 
 	public void setLocation(Location location) {
@@ -69,7 +73,36 @@ public class Activity {
 		this.note = note;
 	}
 
-	public void setParent(ActivityId parent) {
+	public void setParent(int parent) {
 		this.parent = parent;
+	}
+
+	public void setSchedule(Schedule schedule) {
+		this.schedule = schedule;
+	}
+
+	public void setUid(int uid) {
+		this.uid = uid;
+	}
+	public static Activity getById(int aid,int uid){
+		Session session = util.HibernateFactory.get().openSession();
+	      Transaction tx = null;
+	      List<Activity> alist = null;
+	      try{
+	         tx = session.beginTransaction();
+	         alist = session.createQuery("from Activity act where act.aid = :aid and act.uid = :uid")
+	        		 .setInteger("aid", aid).setInteger("uid", uid).list();
+	         tx.commit();
+	      }catch (HibernateException e) {
+	         if (tx!=null) tx.rollback();
+	         e.printStackTrace(); 
+	      }finally {
+	         session.close(); 
+	      }
+	      if(alist.size()==0){
+	    	  return null;
+	      } else{
+	    	  return alist.get(0);
+	      }
 	}
 }

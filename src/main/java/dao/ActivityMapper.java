@@ -1,13 +1,7 @@
 package dao;
 
 import java.util.List;
-import org.apache.ibatis.type.DateTypeHandler;
-
 import domain.Activity;
-import domain.ActivityId;
-import domain.Location;
-import domain.Note;
-
 import org.apache.ibatis.annotations.Param;
 
 public interface ActivityMapper {

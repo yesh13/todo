@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="domain.Activity" table="activity">
+      <meta attribute="class-description">
+         This class contains the activity detail. 
+      </meta>
+      <id name="aid" type="int" column="aid">
+         <generator class="native"/>
+      </id>
+      <property name="uid" column="uid" type="int"/>
+      <property name="parent" column="parent" type="int"></property>
+      <property name="name" column="name" type="string"/>
+      <component name="schedule" class="domain.Schedule">
+         <property name="startTime" column="start_time" type="timestamp"/>
+         <property name="endTime" column="end_time" type="timestamp"/>
+      </component>
+      <component name="location" class="domain.Location">
+         <property name="place" column="location" type="string"/>
+      </component>
+      <component name="note" class="domain.Note">
+         <property name="note" column="note" type="string"/>
+      </component>
+   </class>
+</hibernate-mapping>

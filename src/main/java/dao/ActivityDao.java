@@ -1,17 +1,13 @@
 package dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 
 import util.MybatisFactory;
-import application.Account;
 import domain.Activity;
 import domain.ActivityId;
 import domain.ActivitySet;
-import domain.Location;
-import domain.Note;
 
 public class ActivityDao {
 	public Activity getById(ActivityId aid,int uid){		
