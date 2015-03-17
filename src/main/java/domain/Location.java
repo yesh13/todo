@@ -10,7 +10,15 @@ public class Location {
 
 	public Location(String place) {
 		super();
-		this.place = place;
+		if(place==null){
+			this.place="";
+		}else{
+			this.place = place;
+		}
+	}
+
+	public String getPlace() {
+		return place;
 	}
 
 	public Location() {

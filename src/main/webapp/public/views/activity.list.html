@@ -8,8 +8,8 @@
 					{{actPath[$index].name}} </a>
 					</li>
 		</ol>
-		<a href="javascript:void(0)" ng-click="setActivity(-1)"><span
-			class="glyphicon glyphicon-plus" aria-hidden="true"></span> new</a>
+		<a href="javascript:void(0)" ng-click="setActivity(-1)" droppable-activity="1"><span
+			class="glyphicon" ng-class="{'glyphicon-plus':!isDragging,'glyphicon-trash':isDragging}" aria-hidden="true"></span>{{isDragging?'Drop':'New'}}</a>
 	</div>
 	<ul class="nav nav-stacked">
 

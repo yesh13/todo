@@ -1,6 +1,5 @@
 package application;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -8,34 +7,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import dao.ActivityDao;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
 import domain.Activity;
-import domain.ActivityId;
 import domain.Location;
 import domain.Note;
+import domain.Schedule;
 
 public class ActivityService {
 	int user=1;
-	private ActivityDTO activity2Dto(Activity act,boolean withNote){
-		ActivityDTO dto=new ActivityDTO();
-		if(act!=null){
-			dto.setAid(act.getAid().toString());
-			dto.setLocation(act.getLocation().toString());
-			dto.setName(act.getName());
-			DateFormat df=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-			if (act.getSchedule().getStartTime() != null) {
-				dto.setStartTime(df.format(act.getSchedule().getStartTime()));
-			}
-			if (act.getSchedule().getEndTime() != null) {
-				dto.setEndTime(df.format(act.getSchedule().getEndTime()));
-			}
-			if(withNote==true){
-				dto.setNote(act.getNote().toString());	
-			}
-			dto.setParent(act.getParent().toString());
-			}
-		return dto;
-	}
+
 	public List<String> getNameList(){
 		ArrayList<String> ar = new ArrayList<String>();
 		ar.add("ye");
@@ -44,90 +27,149 @@ public class ActivityService {
 		return ar;
 	}
 
-	public ActivityDTO getActivity(String aidString,boolean withNote) {
-		Activity act=(new ActivityDao()).getById(new ActivityId(aidString),user);
-		return activity2Dto(act,withNote);
+	public ActivityDTO getActivity(String aidString,int uid,boolean withNote) {
+		int aid=Integer.parseInt(aidString);
+		Activity act=Activity.getById(aid,uid);
+		return new ActivityDTO(act,withNote);
 	}
-	public int addActivity(ActivityDTO dto){
-		Activity act=new Activity();
-		act.setName(dto.getName());
-		act.setNote(new Note(dto.getNote()));
-		act.setLocation(new Location(dto.getLocation()));
-		act.setParent(new ActivityId(dto.getParent()));
-		DateFormat df=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-		if(dto.getStartTime()!=null) {
-			try{
-				long time=df.parse(dto.getStartTime()).getTime();
-				act.getSchedule().setStartTime(new Timestamp(time));
-			}
-			catch(java.text.ParseException e){
-				
-			}
-		}
-		if(dto.getEndTime()!=null) {
-			try{
-				long time=df.parse(dto.getEndTime()).getTime();
-				act.getSchedule().setEndTime(new Timestamp(time));
-			}
-			catch(java.text.ParseException e){
-				
-			}
-		}	
-		(new ActivityDao()).insert(act, user);
+	public int addActivity(ActivityDTO dto,int uid){
+		Session session = util.HibernateFactory.get().openSession();
+	      Transaction tx = null;
+	      try{
+	         tx = session.beginTransaction();
+	        Activity act=new Activity();
+	 		act.setName(dto.getName());
+	 		act.setNote(new Note(dto.getNote()));
+	 		act.setLocation(new Location(dto.getLocation()));
+	 		act.setParent(Integer.parseInt(dto.getParent()));
+	 		act.setUid(uid);
+	 		DateFormat df=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+	 		if(dto.getStartTime()!=null) {
+	 			try{
+	 				long time=df.parse(dto.getStartTime()).getTime();
+	 				act.getSchedule().setStartTime(new Timestamp(time));
+	 			}
+	 			catch(java.text.ParseException e){
+	 				
+	 			}
+	 		}
+	 		if(dto.getEndTime()!=null) {
+	 			try{
+	 				long time=df.parse(dto.getEndTime()).getTime();
+	 				act.getSchedule().setEndTime(new Timestamp(time));
+	 			}
+	 			catch(java.text.ParseException e){
+	 				
+	 			}
+	 		}
+	         session.save(act);
+	         tx.commit();
+	      }catch (HibernateException e) {
+	         if (tx!=null) tx.rollback();
+	         e.printStackTrace(); 
+	      }finally {
+	         session.close(); 
+	      }
+			
 		return 0;
 	}
-	public int deleteActivity(ActivityDTO dto){
-		Activity act=new Activity();
-		act.setName(dto.getName());
-		act.setNote(new Note(dto.getNote()));
-		act.setLocation(new Location(dto.getLocation()));
-		act.setParent(new ActivityId(dto.getParent()));
-		(new ActivityDao()).insert(act, user);
-		return 0;
+//	public int deleteActivity(ActivityDTO dto){
+//		Activity act=new Activity();
+//		act.setName(dto.getName());
+//		act.setNote(new Note(dto.getNote()));
+//		act.setLocation(new Location(dto.getLocation()));
+//		act.setParent(new ActivityId(dto.getParent()));
+//		(new ActivityDao()).insert(act, user);
+//		return 0;
+//	}
+	
+	
+	//return number of rows affected
+	public int editActivity(ActivityDTO dto,int uid){
+		Session session = util.HibernateFactory.get().openSession();
+	      Transaction tx = null;
+	      List<Activity> alist = null;
+	      try{
+	         tx = session.beginTransaction();
+	         alist = session.createQuery("from Activity act where act.aid = :aid and act.uid = :uid")
+	        		 .setInteger("aid", Integer.valueOf(dto.getAid()))
+	        		 .setInteger("uid", uid).list();
+	         if(alist.size()==0){
+	        	 return 0;
+	         }
+	         Activity act=alist.get(0);
+	 		if(dto.getName()!=null) act.setName(dto.getName());
+	 		if(dto.getNote()!=null) act.setNote(new Note(dto.getNote()));
+	 		if(dto.getLocation()!=null) act.setLocation(new Location(dto.getLocation()));
+	 		if(dto.getParent()!=null) act.setParent(Integer.parseInt(dto.getParent()));
+	 		if(dto.getUid()!=null) act.setUid(uid);
+	 		DateFormat df=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+	 		if(dto.getStartTime()!=null) {
+	 			try{
+	 				long time=df.parse(dto.getStartTime()).getTime();
+	 				if(act.getSchedule()!=null){
+		 				act.getSchedule().setStartTime(new Timestamp(time));
+	 				}else{
+	 					Schedule schedule=new Schedule();
+	 					schedule.setStartTime(new Timestamp(time));
+	 					act.setSchedule(schedule);
+	 				}
+	 			}
+	 			catch(java.text.ParseException e){
+	 				
+	 			}
+	 		}
+	 		if(dto.getEndTime()!=null) {
+	 			try{
+	 				long time=df.parse(dto.getEndTime()).getTime();
+	 				if(act.getSchedule()!=null){
+		 				act.getSchedule().setEndTime(new Timestamp(time));
+	 				}else{
+	 					Schedule schedule=new Schedule();
+	 					schedule.setEndTime(new Timestamp(time));
+	 					act.setSchedule(schedule);
+	 				}
+	 			}
+	 			catch(java.text.ParseException e){
+	 				
+	 			}
+	 		}
+	         tx.commit();
+	      }catch (HibernateException e) {
+	         if (tx!=null) tx.rollback();
+	         e.printStackTrace(); 
+	      }finally {
+	         session.close(); 
+	      }
+		return 1;
 	}
-	public int editActivity(ActivityDTO dto){
-		Activity act=(new ActivityDao()).getById(new ActivityId(dto.getAid()),user);
-		if(dto.getName()!=null) act.setName(dto.getName());
-		if(dto.getNote()!=null) act.setNote(new Note(dto.getNote()));
-		if(dto.getLocation()!=null) act.setLocation(new Location(dto.getLocation()));
-		if(dto.getParent()!=null) act.setParent(new ActivityId(dto.getParent()));
-		DateFormat df=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-		if(dto.getStartTime()!=null) {
-			try{
-				long time=df.parse(dto.getStartTime()).getTime();
-				act.getSchedule().setStartTime(new Timestamp(time));
-			}
-			catch(java.text.ParseException e){
-				
-			}
-		}
-		if(dto.getEndTime()!=null) {
-			try{
-				long time=df.parse(dto.getEndTime()).getTime();
-				act.getSchedule().setEndTime(new Timestamp(time));
-			}
-			catch(java.text.ParseException e){
-				
-			}
-		}
-		(new ActivityDao()).update(act, user);
-		return 0;
-	}
-	public List<ActivityDTO> getChild(String aidString){
+	public List<ActivityDTO> getChild(String aidString,int uid){
 		ArrayList<ActivityDTO> dlist=new ArrayList<ActivityDTO>();
-		ArrayList<Activity> alist = (new ActivityDao()).
-				getChildById(new ActivityId(aidString), user).getRealList();
+		Session session = util.HibernateFactory.get().openSession();
+	      Transaction tx = null;
+	      List<Activity> alist = null;
+	      try{
+	         tx = session.beginTransaction();
+	         alist = session.createQuery("from Activity act where act.parent = :aid and act.uid = :uid")
+	        		 .setInteger("aid", Integer.parseInt(aidString)).setInteger("uid", uid).list();
+	         tx.commit();
+	      }catch (HibernateException e) {
+	         if (tx!=null) tx.rollback();
+	         e.printStackTrace(); 
+	      }finally {
+	         session.close(); 
+	      }
 		for(Activity act:alist){
-			ActivityDTO dto=activity2Dto(act,false);
+			ActivityDTO dto=new ActivityDTO(act,false);
 			dlist.add(dto);
 		}
 		return dlist;
 	}
-	public List<ActivityDTO> getPath(String aidString){
+	public List<ActivityDTO> getPath(String aidString,int uid){
 		ArrayList<ActivityDTO> dlist=new ArrayList<ActivityDTO>();
 		String curId=aidString;
 		while(!curId.equals("0")){
-			ActivityDTO dto = getActivity(curId,false);
+			ActivityDTO dto = getActivity(curId,uid,false);
 			if(dto.getParent()!=null){
 				dlist.add(dto);
 				curId=dto.getParent();

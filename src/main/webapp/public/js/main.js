@@ -1,6 +1,6 @@
 var app = angular.module("mainApp", [ "ui.router", "ui.bootstrap",
 		"ngQuickDate" ]);
-app.config(function($stateProvider,$urlRouterProvider) {
+app.config(function($stateProvider, $urlRouterProvider) {
 	$stateProvider.state('activity', {
 		url : '/activity/:aid',
 		templateUrl : 'activity.html',
@@ -36,6 +36,14 @@ var actList = app
 							var actListCtrl = this;
 							$scope.activity = {};
 							$scope.actNum = 0;
+							$scope.isDragging=false;
+							$scope.setIsDragging=function(b){
+								$scope.isDragging=b;
+								$scope.$digest();//trigger data-binding
+							}
+							$scope.digestAll=function(){
+								$scope.$digest();
+							}
 							$scope.initList = function() {
 								console.log("build list");
 								$http
@@ -107,6 +115,7 @@ var actList = app
 							};
 							$scope.setBeingDragged = function(n) {
 								$scope.beingDragged = n;
+								$scope.$digest();
 							}
 						} ]);
 app.directive('draggableActivity', function() {
@@ -115,6 +124,13 @@ app.directive('draggableActivity', function() {
 			console.log("dragstart");
 			// Prevent default dragging of selected content
 			scope.setBeingDragged(scope.$eval(attr.draggableActivity));
+			scope.setIsDragging(true);
+		});
+		element.on('dragend', function(event) {
+			console.log("dragend");
+			// Prevent default dragging of selected content
+			console.log(scope.isDragging);
+			scope.setIsDragging(false);
 		});
 	};
 });

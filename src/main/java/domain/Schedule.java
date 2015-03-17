@@ -1,7 +1,6 @@
 package domain;
 
 import java.sql.Timestamp;
-import java.util.Date;;
 
 public class Schedule {
 	private Timestamp startTime;

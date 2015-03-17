@@ -7,6 +7,10 @@ public class Note {
 		super();
 	}
 
+	public String getNote() {
+		return note;
+	}
+
 	public void setNote(String note) {
 		this.note = note;
 	}
@@ -18,7 +22,11 @@ public class Note {
 
 	public Note(String note) {
 		super();
-		this.note = note;
+		if(note==null){
+			this.note="";
+		}else{
+			this.note = note;
+		}
 	}
 	
 }

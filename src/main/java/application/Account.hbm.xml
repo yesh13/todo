@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="application.Account" table="account">
+      <meta attribute="class-description">
+         This class contains the account detail. 
+      </meta>
+      <id name="uid" type="int" column="uid">
+         <generator class="native"/>
+      </id>
+      <property name="name" column="name" type="string"/>
+      <property name="nickName" column="nick_name" type="string"/>
+      <property name="passwd" column="passwd" type="string"/>
+   </class>
+</hibernate-mapping>
