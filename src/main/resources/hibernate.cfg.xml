@@ -16,16 +16,6 @@
 			com.mysql.jdbc.Driver
 		</property>
 
-		<!-- Assume test is the database name -->
-		<property name="hibernate.connection.url">
-			jdbc:mysql://localhost:3306/todo?useUnicode=true&amp;characterEncoding=UTF8&amp;zeroDateTimeBehavior=convertToNull
-		</property>
-		<property name="hibernate.connection.username">
-			todo
-		</property>
-		<property name="hibernate.connection.password">
-			1520
-		</property>
 
 		<!-- mapping files -->
 		<mapping resource="application/Account.hbm.xml" />

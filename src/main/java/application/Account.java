@@ -60,7 +60,7 @@ public class Account {
 		this.uid = uid;
 	}
 	public void update(){
-	      Session session = util.HibernateFactory.get().openSession();
+	      Session session = util.hibernate.HibernateFactory.getInstance().buildSessionFactory().openSession();
 	      Transaction tx = null;
 	      try{
 	         tx = session.beginTransaction();
@@ -74,7 +74,7 @@ public class Account {
 	      }
 	}
 	public void delete(){
-		Session session = util.HibernateFactory.get().openSession();
+		Session session = util.hibernate.HibernateFactory.getInstance().buildSessionFactory().openSession();
 	      Transaction tx = null;
 	      try{
 	         tx = session.beginTransaction();
@@ -88,7 +88,7 @@ public class Account {
 	      }	
 	}
 	public void create(){
-	      Session session = util.HibernateFactory.get().openSession();
+	      Session session = util.hibernate.HibernateFactory.getInstance().buildSessionFactory().openSession();
 	      Transaction tx = null;
 	      try{
 	         tx = session.beginTransaction();
@@ -108,7 +108,7 @@ public class Account {
 	}
 	public static List<Account> readList(String s){
 		if(s==null) s="";
-	      Session session = util.HibernateFactory.get().openSession();
+	      Session session = util.hibernate.HibernateFactory.getInstance().buildSessionFactory().openSession();
 	      Transaction tx = null;
 	      List<Account> alist = null;
 	      try{

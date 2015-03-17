@@ -33,7 +33,7 @@ public class ActivityService {
 		return new ActivityDTO(act,withNote);
 	}
 	public int addActivity(ActivityDTO dto,int uid){
-		Session session = util.HibernateFactory.get().openSession();
+		Session session = util.hibernate.HibernateFactory.getInstance().buildSessionFactory().openSession();
 	      Transaction tx = null;
 	      try{
 	         tx = session.beginTransaction();
@@ -86,7 +86,7 @@ public class ActivityService {
 	
 	//return number of rows affected
 	public int editActivity(ActivityDTO dto,int uid){
-		Session session = util.HibernateFactory.get().openSession();
+		Session session = util.hibernate.HibernateFactory.getInstance().buildSessionFactory().openSession();
 	      Transaction tx = null;
 	      List<Activity> alist = null;
 	      try{
@@ -145,7 +145,7 @@ public class ActivityService {
 	}
 	public List<ActivityDTO> getChild(String aidString,int uid){
 		ArrayList<ActivityDTO> dlist=new ArrayList<ActivityDTO>();
-		Session session = util.HibernateFactory.get().openSession();
+		Session session = util.hibernate.HibernateFactory.getInstance().buildSessionFactory().openSession();
 	      Transaction tx = null;
 	      List<Activity> alist = null;
 	      try{

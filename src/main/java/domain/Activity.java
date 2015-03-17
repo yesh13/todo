@@ -85,7 +85,7 @@ public class Activity {
 		this.uid = uid;
 	}
 	public static Activity getById(int aid,int uid){
-		Session session = util.HibernateFactory.get().openSession();
+		Session session = util.hibernate.HibernateFactory.getInstance().buildSessionFactory().openSession();
 	      Transaction tx = null;
 	      List<Activity> alist = null;
 	      try{
