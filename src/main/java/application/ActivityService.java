@@ -13,6 +13,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import domain.Activity;
+import domain.ActivityFilter;
 import domain.Location;
 import domain.Note;
 import domain.Schedule;
@@ -20,25 +21,19 @@ import domain.Schedule;
 public class ActivityService {
 	int user = 1;
 
-	public List<String> getNameList() {
-		ArrayList<String> ar = new ArrayList<String>();
-		ar.add("ye");
-		ar.add("shu");
-		ar.add("hao");
-		return ar;
-	}
-
 	public ActivityDTO getActivity(String aidString, int uid, boolean withNote) {
 		int aid = Integer.parseInt(aidString);
 		Activity act = Activity.getById(aid, uid);
 		return new ActivityDTO(act, withNote);
 	}
-	private Calendar string2calendar(String s) throws ParseException{
+
+	private Calendar string2calendar(String s) throws ParseException {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-		Calendar cal=Calendar.getInstance();
+		Calendar cal = Calendar.getInstance();
 		cal.setTime(df.parse(s));
 		return cal;
 	}
+
 	public int addActivity(ActivityDTO dto, int uid) {
 		Session session = util.hibernate.HibernateFactory.getInstance()
 				.buildSessionFactory().openSession();
@@ -53,17 +48,19 @@ public class ActivityService {
 			act.setUid(uid);
 			if (dto.getStartTime() != null) {
 				try {
-					act.getSchedule().setStartTime(string2calendar(dto.getStartTime()));
+					act.getSchedule().setStartTime(
+							string2calendar(dto.getStartTime()));
 				} catch (java.text.ParseException e) {
 
 				}
-			}else{
+			} else {
 				act.getSchedule().setStartTime(Calendar.getInstance());
 			}
 			if (dto.getEndTime() != null) {
 				try {
-					act.getSchedule().setEndTime(string2calendar(dto.getEndTime()));
-					
+					act.getSchedule().setEndTime(
+							string2calendar(dto.getEndTime()));
+
 				} catch (java.text.ParseException e) {
 
 				}
@@ -121,10 +118,12 @@ public class ActivityService {
 			if (dto.getStartTime() != null) {
 				try {
 					if (act.getSchedule() != null) {
-						act.getSchedule().setStartTime(string2calendar(dto.getStartTime()));
+						act.getSchedule().setStartTime(
+								string2calendar(dto.getStartTime()));
 					} else {
 						Schedule schedule = new Schedule();
-						schedule.setStartTime(string2calendar(dto.getStartTime()));
+						schedule.setStartTime(string2calendar(dto
+								.getStartTime()));
 						act.setSchedule(schedule);
 					}
 				} catch (java.text.ParseException e) {
@@ -134,8 +133,9 @@ public class ActivityService {
 			if (dto.getEndTime() != null) {
 				try {
 					if (act.getSchedule() != null) {
-						act.getSchedule().setEndTime(string2calendar(dto.getEndTime()));
-						} else {
+						act.getSchedule().setEndTime(
+								string2calendar(dto.getEndTime()));
+					} else {
 						Schedule schedule = new Schedule();
 						schedule.setEndTime(string2calendar(dto.getEndTime()));
 						act.setSchedule(schedule);
@@ -154,25 +154,45 @@ public class ActivityService {
 		}
 		return 1;
 	}
-	public list<activitydto> getchild(string aidstring,int uid){
-		arraylist<activitydto> dlist=new arraylist<activitydto>();
-		session session = util.hibernate.hibernatefactory.getinstance().buildsessionfactory().opensession();
-	      transaction tx = null;
-	      list<activity> alist = null;
-	      try{
-	         tx = session.begintransaction();
-	         alist = session.createquery("from activity act where act.parent = :aid and act.uid = :uid")
-	        		 .setinteger("aid", integer.parseint(aidstring)).setinteger("uid", uid).list();
-	         tx.commit();
-	      }catch (hibernateexception e) {
-	         if (tx!=null) tx.rollback();
-	         e.printstacktrace(); 
-	      }finally {
-	         session.close(); 
-	      }
-		for(Activity act:alist){
-			ActivityDTO dto=new ActivityDTO(act,false);
-			dlist.add(dto);
+
+	public List<ActivityDTO> getChild(String aidString, int uid,
+			List<ActivityFilter> filters) {
+		ArrayList<ActivityDTO> dlist = new ArrayList<ActivityDTO>();
+		HibernateFactory instance = util.hibernate.HibernateFactory
+				.getInstance();
+		SessionFactory sessionFactory = instance.buildSessionFactory();
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		List<Activity> alist = null;
+		try {
+			tx = session.beginTransaction();
+			alist = session
+					.createQuery(
+							"from Activity act where act.parent = :aid and act.uid = :uid")
+					.setInteger("aid", Integer.parseInt(aidString))
+					.setInteger("uid", uid).list();
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		for (Activity act : alist) {
+			boolean pass = true;
+			if (filters != null) {
+				for (ActivityFilter filter : filters) {
+					if (!filter.test(act)) {
+						pass = false;
+						break;
+					}
+				}
+			}
+			if (pass) {
+				ActivityDTO dto = new ActivityDTO(act, false);
+				dlist.add(dto);
+			}
 		}
 		return dlist;
 	}
@@ -193,8 +213,8 @@ public class ActivityService {
 		return dlist;
 	}
 
-
-	public List<ActivityDTO> getLeaves(String aidString,int uid) {
+	public List<ActivityDTO> getLeaves(String aidString, int uid,
+			List<ActivityFilter> filters) {
 		ArrayList<ActivityDTO> dlist = new ArrayList<ActivityDTO>();
 		HibernateFactory instance = util.hibernate.HibernateFactory
 				.getInstance();
@@ -216,17 +236,29 @@ public class ActivityService {
 		} finally {
 			session.close();
 		}
-		int parent=Integer.parseInt(aidString);
+		int parent = Integer.parseInt(aidString);
 		for (Activity act : alist) {
-			if(act.isDeepChildOf(parent)){
-				ActivityDTO dto = new ActivityDTO(act, false);
-				dlist.add(dto);
+			boolean pass = true;
+			if (filters != null) {
+				for (ActivityFilter filter : filters) {
+					if (!filter.test(act)) {
+						pass = false;
+						break;
+					}
+				}
 			}
+			if (pass) {
+				if (act.isDeepChildOf(parent)) {
+					ActivityDTO dto = new ActivityDTO(act, false);
+					dlist.add(dto);
+				}
+			}
+
 		}
 		return dlist;
 	}
 	public List<ActivityDTO> getAll(int uid) {
-		List<ActivityDTO> dlist=new ArrayList<ActivityDTO>();
+		List<ActivityDTO> dlist = new ArrayList<ActivityDTO>();
 		HibernateFactory instance = util.hibernate.HibernateFactory
 				.getInstance();
 		SessionFactory sessionFactory = instance.buildSessionFactory();
@@ -236,8 +268,7 @@ public class ActivityService {
 		try {
 			tx = session.beginTransaction();
 			alist = session
-					.createQuery(
-							"from Activity act where act.uid = :uid")
+					.createQuery("from Activity act where act.uid = :uid")
 					.setInteger("uid", uid).list();
 			tx.commit();
 		} catch (HibernateException e) {

@@ -5,13 +5,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1.0,user-scalable=no">
+<meta name="viewport" content="minimal-ui,initial-scale=1.0,user-scalable=no">
 <title>Todo</title>
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/datepicker.css">
 <link rel="stylesheet" type="text/css" href="/resources/css/main.css">
+<link rel="stylesheet" type="text/css" href="/resources/css/mobile.css">
 </head>
 <body ng-app="mainApp">
 	<script type="text/javascript" src="/resources/js/angular.min.js"></script>
@@ -24,8 +25,8 @@
 	<script type="text/javascript" src="/resources/js/main.js"></script>
 		<script type="text/ng-template" id="activity.html">
   <tabset class="bottom-tab">
-    <tab heading="List"><div class="col-xs-12 full-height-flow" ng-include="'/resources/views/activity.list.html'"></div></tab>
-    <tab heading="Detail"><div class="col-xs-12 full-height-flow" ng-include="'/resources/views/activity.detail.html'"></div></tab>
+    <tab heading="List"><div ng-include="'/resources/views/activity.list.html'"></div></tab>
+    <tab heading="Detail"><div ng-include="'/resources/views/activity.detail.html'"></div></tab>
   </tabset>
 
 </script>
@@ -35,8 +36,7 @@
 		</div>
 	</div>
 	</nav>
-	<div class="container-fluid full-height" ng-controller="sideTabCtrl as sideTab">
-		<div class="row full-height">
+	<div ng-controller="sideTabCtrl as sideTab">
 <!-- 			<div class="col-xs-2 side-nav full-height-flow"> -->
 <!-- 				<ul class="nav nav-stacked"> -->
 <!-- 					<li><a ui-sref="activity({aid:0})">Activity</a></li> -->
@@ -44,8 +44,9 @@
 <!-- 					<li><a ui-sref="today">Calendar</a></li> -->
 <!-- 				</ul> -->
 <!-- 			</div> -->
-	<div class="full-height" ui-view></div>
+<div style="height:50px"></div>
+	<div ui-view></div>
+<div style="height:50px"></div>
 		</div>
-	</div>
 </body>
 </html>

@@ -11,6 +11,7 @@
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/datepicker.css">
 <link rel="stylesheet" type="text/css" href="/resources/css/main.css">
+<link rel="stylesheet" type="text/css" href="/resources/css/desk.css">
 </head>
 <body ng-app="mainApp">
 	<script type="text/javascript" src="/resources/js/angular.min.js"></script>
@@ -45,9 +46,8 @@
 		<div class="row full-height">
 			<div class="col-xs-2 side-nav full-height-flow">
 				<ul class="nav nav-stacked">
-					<li><a ui-sref="activity({aid:0})">Activity</a></li>
-					<li><a ui-sref="today">Today</a></li>
-					<li><a ui-sref="today">Calendar</a></li>
+					<li><a ui-sref="activity({aid:$stateParams.aid})">Activity</a></li>
+					<li><a ui-sref="leaves({aid:$stateParams.aid})">Today</a></li>
 				</ul>
 			</div>
 			<div class="full-height" ui-view></div>

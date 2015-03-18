@@ -1,6 +1,9 @@
 package controller;
 
 
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -9,6 +12,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import domain.Activity;
+import domain.ActivityFilter;
+import domain.DateActivityFilter;
 import domain.Todo;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -36,7 +41,7 @@ public class ActivityCtrl {
 			List<ActivityDTO> nameList = (new ActivityService()).getAll(user);
 			return nameList;
 		}
-		List<ActivityDTO> nameList = (new ActivityService()).getChild(parentString,user);
+		List<ActivityDTO> nameList = (new ActivityService()).getChild(parentString,user,null);
 		return nameList;
 	}
 	@RequestMapping(value="/api/activity/all", method=RequestMethod.GET)
@@ -45,8 +50,14 @@ public class ActivityCtrl {
 		return nameList;
 	}
 	@RequestMapping(value="/api/activity/leaves/{parentString}", method=RequestMethod.GET)
-	public List<ActivityDTO> list1(@PathVariable String parentString){
-		List<ActivityDTO> nameList = (new ActivityService()).getLeaves(parentString,user);
+	public List<ActivityDTO> list1(@PathVariable String parentString,@RequestParam(required=false) String early,@RequestParam(required=false) int span){
+		List<ActivityFilter> filters=new ArrayList<ActivityFilter>();
+		Calendar ec=util.CalendarUtil.string2calendar(early);
+		Calendar lc=util.CalendarUtil.string2calendar(early);
+		lc.add(Calendar.HOUR, span);
+			ActivityFilter filter=new DateActivityFilter(ec,lc);
+			filters.add(filter);
+		List<ActivityDTO> nameList = (new ActivityService()).getLeaves(parentString,user,filters);
 		return nameList;
 	}
 	@RequestMapping(value="/api/activity/detail/{aidString}", method=RequestMethod.GET)
