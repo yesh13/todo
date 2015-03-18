@@ -12,6 +12,7 @@ body{
 .side-nav{
 	padding-left:0px;
 	padding-right:0px;
+	background-color:#f5f5f5;
 }
 
 div.full-height{
@@ -20,4 +21,15 @@ div.full-height{
 div.full-height-flow{
 	height:100%;
 	overflow:auto;
+}
+.side-nav>ul>li.active>a, .side-bar>ul>li.active>a:hover{
+	color: #fff;
+	background-color: #428bca;
+}
+.act-detail{
+	background-color:#f5f5f5;
+}
+.col-xs-4{
+	padding-left:0px;
+	padding-right:0px;
 }

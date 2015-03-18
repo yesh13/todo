@@ -3,6 +3,7 @@ div.bottom-tab{
 }
 div.bottom-tab>.tab-content {
 	width:100%;
+	padding-left:10px;
 }
 div.bottom-tab>.nav-tabs {
 	position:fixed;

@@ -14,3 +14,14 @@ div.list-header>a{
 	padding-bottom:8px;
 }
 
+li>a>.glyphicon{
+	float:right;
+	padding-left:10px;
+	padding-right:10px;
+}
+ul>li.active>a{
+	background-color: #eee;
+}
+.list-header{
+	padding-right:15px;
+}

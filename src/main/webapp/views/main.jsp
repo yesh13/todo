@@ -21,9 +21,9 @@
 	<script type="text/javascript" src="/resources/js/ui-bootstrap.min.js"></script>
 	<script type="text/javascript" src="/resources/js/main.js"></script>
 	<script type="text/ng-template" id="activity.html" ng-include="'/resources/views/activity-desktop.html'">
-<div class="col-xs-4 full-height-flow" ng-include="'/resources/views/activity.list.html'">
+<div class="act-list col-xs-4 full-height-flow" ng-include="'/resources/views/activity.list.html'">
 </div>
-<div class="col-xs-5 full-height-flow" ng-include="'/resources/views/activity.detail.html'">
+<div class="act-detail col-xs-5 full-height-flow" ng-include="'/resources/views/activity.detail.html'">
 </div>
 </script>
 	<nav class="navbar navbar-inverse navbar-fixed-top">
@@ -46,8 +46,8 @@
 		<div class="row full-height">
 			<div class="col-xs-2 side-nav full-height-flow">
 				<ul class="nav nav-stacked">
-					<li><a ui-sref="activity({aid:$stateParams.aid})">Activity</a></li>
-					<li><a ui-sref="leaves({aid:$stateParams.aid})">Today</a></li>
+					<li ui-sref-active="active"><a ui-sref="activity({aid:$stateParams.aid})">Activity</a></li>
+					<li ui-sref-active="active"><a ui-sref="leaves({aid:$stateParams.aid})">Today</a></li>
 				</ul>
 			</div>
 			<div class="full-height" ui-view></div>

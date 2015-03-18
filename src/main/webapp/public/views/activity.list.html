@@ -15,8 +15,10 @@
 
 		<li ng-repeat="item in actList track by $index" draggable="true"
 		draggable-activity="actList[$index].aid"
-		droppable-activity="actList[$index].aid"><a 
+		droppable-activity="actList[$index].aid" ng-class="{active:$index==actNum}"><a 
 			href="javascript:void(0)" ng-click="setActivity($index)">{{item.name}}
+				<span ng-click="moveToTrash(actList[$index].aid)"
+				class="glyphicon glyphicon-trash show-when-hover"></span>
 				<span ui-sref="activity({aid:actList[$index].aid})"
 				class="glyphicon glyphicon-menu-right show-when-hover"></span>
 		</a></li>

@@ -69,10 +69,10 @@ app.controller("actListCtrl",
 							};
 							$scope.initList();
 							$scope.setActivity = function(n) {
+								$scope.actNum = n;
 								if (n < 0) {
 									$scope.activity = {};
 								} else {
-									$scope.actNum = n;
 									var aid = $scope.actList[n].aid;
 									$http
 											.get("/api/activity/detail/" + aid)
@@ -115,6 +115,13 @@ app.controller("actListCtrl",
 							$scope.setBeingDragged = function(n) {
 								$scope.beingDragged = n;
 								$scope.$digest();
+							}
+							$scope.moveToTrash=function(aid){
+								console.log("move "+aid+" to trash");
+								$http.post("/api/activity/" + aid,{parent:1})
+								.success(function() {
+									$scope.initList();
+								});
 							}
 						} ]);
 
@@ -169,10 +176,10 @@ app.controller("leavesCtrl",
 					};
 					$scope.initList();
 					$scope.setActivity = function(n) {
+						$scope.actNum = n;
 						if (n < 0) {
 							$scope.activity = {};
 						} else {
-							$scope.actNum = n;
 							var aid = $scope.actList[n].aid;
 							$http
 									.get("/api/activity/detail/" + aid)
@@ -215,6 +222,13 @@ app.controller("leavesCtrl",
 					$scope.setBeingDragged = function(n) {
 						$scope.beingDragged = n;
 						$scope.$digest();
+					}
+					$scope.moveToTrash=function(aid){
+						console.log("move "+aid+" to trash");
+						$http.post("/api/activity/" + aid,{parent:1})
+						.success(function() {
+							$scope.initList();
+						});
 					}
 				} ]);
 
