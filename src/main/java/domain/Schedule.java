@@ -1,10 +1,10 @@
 package domain;
 
-import java.sql.Timestamp;
+import java.util.Calendar;
 
 public class Schedule {
-	private Timestamp startTime;
-	private Timestamp endTime;
+	private Calendar startTime;
+	private Calendar endTime;
 	private String type;
 	public String getType() {
 		return type;
@@ -12,16 +12,16 @@ public class Schedule {
 	public void setType(String type) {
 		this.type = type;
 	}
-	public Timestamp getStartTime() {
+	public Calendar getStartTime() {
 		return startTime;
 	}
-	public void setStartTime(Timestamp startTime) {
+	public void setStartTime(Calendar startTime) {
 		this.startTime = startTime;
 	}
-	public Timestamp getEndTime() {
+	public Calendar getEndTime() {
 		return endTime;
 	}
-	public void setEndTime(Timestamp endTime) {
+	public void setEndTime(Calendar endTime) {
 		this.endTime = endTime;
 	}
 }

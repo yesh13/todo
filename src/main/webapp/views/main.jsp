@@ -20,12 +20,10 @@
 	<script type="text/javascript" src="/resources/js/ui-bootstrap.min.js"></script>
 	<script type="text/javascript" src="/resources/js/main.js"></script>
 	<script type="text/ng-template" id="activity.html" ng-include="'/resources/views/activity-desktop.html'">
-
 <div class="col-xs-4 full-height-flow" ng-include="'/resources/views/activity.list.html'">
 </div>
 <div class="col-xs-5 full-height-flow" ng-include="'/resources/views/activity.detail.html'">
 </div>
-
 </script>
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container-fluid">

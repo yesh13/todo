@@ -1,6 +1,8 @@
 package domain;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -8,6 +10,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import application.Account;
+import application.ActivityDTO;
 
 public class Activity {
 	private int aid;
@@ -104,5 +107,19 @@ public class Activity {
 	      } else{
 	    	  return alist.get(0);
 	      }
+	}
+	public boolean isDeepChildOf(int root) {
+		int curId = aid;
+		while (curId!=0) {
+			Activity act = Activity.getById(curId, uid);
+			if(act==null){
+				return false;
+			}
+			curId=act.getParent();
+			if (curId==root) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

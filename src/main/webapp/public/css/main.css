@@ -52,6 +52,7 @@ div.bottom-tab>.nav-tabs {
 	position:fixed;
 	bottom:0px;
 	width:100%;
+	z-index:1;
 }
 div.bottom-tab>.nav-tabs>li {
 	text-align:center;

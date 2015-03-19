@@ -5,8 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1.0">
-<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="initial-scale=1.0,user-scalable=no">
 <title>Todo</title>
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/bootstrap.min.css">

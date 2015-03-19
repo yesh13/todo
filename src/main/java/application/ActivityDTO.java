@@ -92,10 +92,10 @@ public class ActivityDTO {
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 			if (act.getSchedule() != null) {
 				if (act.getSchedule().getStartTime() != null) {
-					setStartTime(df.format(act.getSchedule().getStartTime()));
+					setStartTime(df.format(act.getSchedule().getStartTime().getTime()));
 				}
 				if (act.getSchedule().getEndTime() != null) {
-					setEndTime(df.format(act.getSchedule().getEndTime()));
+					setEndTime(df.format(act.getSchedule().getEndTime().getTime()));
 				}
 			}
 			if (withNote == true) {
@@ -109,30 +109,5 @@ public class ActivityDTO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public static Activity getActivity(ActivityDTO dto) {
-		// TODO Auto-generated method stub
-		Activity act = new Activity();
-		act.setName(dto.getName());
-		act.setNote(new Note(dto.getNote()));
-		act.setLocation(new Location(dto.getLocation()));
-		act.setParent(Integer.parseInt(dto.getParent()));
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-		if (dto.getStartTime() != null) {
-			try {
-				long time = df.parse(dto.getStartTime()).getTime();
-				act.getSchedule().setStartTime(new Timestamp(time));
-			} catch (java.text.ParseException e) {
 
-			}
-		}
-		if (dto.getEndTime() != null) {
-			try {
-				long time = df.parse(dto.getEndTime()).getTime();
-				act.getSchedule().setEndTime(new Timestamp(time));
-			} catch (java.text.ParseException e) {
-
-			}
-		}
-		return null;
-	}
 }

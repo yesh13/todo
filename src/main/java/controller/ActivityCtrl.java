@@ -32,7 +32,21 @@ public class ActivityCtrl {
 	//parentString is 0 to show top level activities
 	@RequestMapping(value="/api/activity/list/{parentString}", method=RequestMethod.GET)
 	public List<ActivityDTO> list(@PathVariable String parentString){
+		if(parentString.equals("-1")){
+			List<ActivityDTO> nameList = (new ActivityService()).getAll(user);
+			return nameList;
+		}
 		List<ActivityDTO> nameList = (new ActivityService()).getChild(parentString,user);
+		return nameList;
+	}
+	@RequestMapping(value="/api/activity/all", method=RequestMethod.GET)
+	public List<ActivityDTO> list(){
+		List<ActivityDTO> nameList = (new ActivityService()).getAll(user);
+		return nameList;
+	}
+	@RequestMapping(value="/api/activity/leaves/{parentString}", method=RequestMethod.GET)
+	public List<ActivityDTO> list1(@PathVariable String parentString){
+		List<ActivityDTO> nameList = (new ActivityService()).getLeaves(parentString,user);
 		return nameList;
 	}
 	@RequestMapping(value="/api/activity/detail/{aidString}", method=RequestMethod.GET)

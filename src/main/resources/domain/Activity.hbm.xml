@@ -15,8 +15,8 @@
       <property name="parent" column="parent" type="int"></property>
       <property name="name" column="name" type="string"/>
       <component name="schedule" class="domain.Schedule">
-         <property name="startTime" column="start_time" type="timestamp"/>
-         <property name="endTime" column="end_time" type="timestamp"/>
+         <property name="startTime" column="start_time" type="calendar"/>
+         <property name="endTime" column="end_time" type="calendar"/>
       </component>
       <component name="location" class="domain.Location">
          <property name="place" column="location" type="string"/>
