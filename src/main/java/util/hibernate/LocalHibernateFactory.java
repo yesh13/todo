@@ -1,6 +1,8 @@
 package util.hibernate;
 
 
+import java.util.Properties;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -14,7 +16,7 @@ public class LocalHibernateFactory extends HibernateFactory{
 			prop.setProperty("hibernate.connection.username", "todo");
 			prop.setProperty("hibernate.connection.password", "1520");
 		      try{
-		         factory = new Configuration().configure().buildSessionFactory();
+		         factory = new Configuration().setProperties(prop).configure().buildSessionFactory();
 		      }catch (Throwable ex) { 
 		         System.err.println("Failed to create sessionFactory object." + ex);
 		         throw new ExceptionInInitializerError(ex); 

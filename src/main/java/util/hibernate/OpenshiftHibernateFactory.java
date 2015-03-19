@@ -19,13 +19,13 @@ public class OpenshiftHibernateFactory extends HibernateFactory{
 			prop.setProperty("hibernate.connection.username", System.getenv("OPENSHIFT_MYSQL_DB_USERNAME"));
 			prop.setProperty("hibernate.connection.password", System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD"));
 		      try{
-		         factory = new Configuration().configure()
-		        		 .setProperties(prop).buildSessionFactory();
+		         factory = new Configuration().setProperties(prop).configure()
+		        		 .buildSessionFactory();
 		      }catch (Throwable ex) { 
 		         System.err.println("Failed to create sessionFactory object." + ex);
 		         throw new ExceptionInInitializerError(ex); 
 		      }
 		}
-		return null;
+		return factory;
 	}
 }
