@@ -1,6 +1,8 @@
 package application;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -9,13 +11,31 @@ import org.hibernate.Transaction;
 public class Account {
 	private int uid;
 	private String nickName;
+	private boolean enabled;
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
 	public Account() {
 		super();
 	}
 
 	public Account(String name, String nickName, String passwd) {
-		this.name = name;
+		this.username = name;
 		this.nickName = nickName;
 		this.passwd = passwd;
 	}
@@ -32,7 +52,7 @@ public class Account {
 		this.uid = uid;
 	}
 
-	private String name;
+	private String username;
 	private String passwd;
 
 	public int getUid() {
@@ -40,11 +60,11 @@ public class Account {
 	}
 
 	public String getName() {
-		return name;
+		return username;
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.username = name;
 	}
 
 	public String getPasswd() {
@@ -102,8 +122,22 @@ public class Account {
 	      }	
 	}
 	public static Account read(String name){
-		String hql="where Account.name = "+name;
-		List<Account> alist=readList(hql);
+		if(name==null){
+			return null;
+		}
+	      Session session = util.hibernate.HibernateFactory.getInstance().buildSessionFactory().openSession();
+	      Transaction tx = null;
+	      List<Account> alist = null;
+	      try{
+	         tx = session.beginTransaction();
+	         alist = session.createQuery("FROM Account as account where account.username = :name").setParameter("name",name).list();
+	         tx.commit();
+	      }catch (HibernateException e) {
+	         if (tx!=null) tx.rollback();
+	         e.printStackTrace(); 
+	      }finally {
+	         session.close(); 
+	      }
 		return alist.size()==0?null:alist.get(0);
 	}
 	public static List<Account> readList(String s){
@@ -113,8 +147,7 @@ public class Account {
 	      List<Account> alist = null;
 	      try{
 	         tx = session.beginTransaction();
-	         alist = session.createQuery("FROM Account "+s).list();
-	         alist.get(0).setName("yujingxiang");
+	         alist = session.createQuery("FROM Account as account "+s).list();
 	         tx.commit();
 	      }catch (HibernateException e) {
 	         if (tx!=null) tx.rollback();

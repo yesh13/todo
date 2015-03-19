@@ -277,7 +277,15 @@ app.directive('droppableActivity', [
 				});
 			};
 		} ]);
-
+app.directive('signOut', ["$http","$location","$window",function($http,$location,$window) {
+	return function(scope, element, attr) {
+		element.on("click",function(){
+			//$http.post("/j_spring_security_logout").success(function() {
+				$window.location.href="/j_spring_security_logout";
+			//});
+		})
+	};
+}]);
 // for test
 app.directive('showSize', function() {
 	return function(scope, element, attr) {

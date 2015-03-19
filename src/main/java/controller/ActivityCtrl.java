@@ -16,6 +16,8 @@ import domain.ActivityFilter;
 import domain.DateActivityFilter;
 import domain.Todo;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +31,8 @@ import application.ActivityService;
 
 @RestController
 public class ActivityCtrl {
-	private int user=1;
+	int user=1;
+
 	@ModelAttribute
 	public void header(HttpServletResponse response){
 		response.setHeader("Cache-Control", "no-cache");
