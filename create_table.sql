@@ -1,18 +1,18 @@
 create table if not exists account (
-uid int unsigned not null auto_increment primary key,
-name varchar(20) unique not null,
+uid int not null auto_increment primary key,
+name varchar(20) unique,
 nick_name varchar(20),
 enabled TINYINT NOT NULL DEFAULT 1 ,
-passwd varchar(20)) character set=utf8;
+passwd varchar(60)) character set=utf8;
 
 CREATE TABLE user_roles (
   user_role_id INT(11) NOT NULL AUTO_INCREMENT,
-  username VARCHAR(45) NOT NULL,
+  uid int not null,
   ROLE VARCHAR(45) NOT NULL,
   PRIMARY KEY (user_role_id),
-  UNIQUE KEY uni_username_role (ROLE,username),
-  KEY fk_username_idx (username),
-  CONSTRAINT fk_username FOREIGN KEY (username) REFERENCES account (name));
+  UNIQUE KEY uni_uid_role (ROLE,uid),
+  KEY fk_uid_idx (uid),
+  CONSTRAINT fk_uid FOREIGN KEY (uid) REFERENCES account (uid));
 
 drop table users;
 drop table user_roles;

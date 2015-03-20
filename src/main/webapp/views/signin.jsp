@@ -38,12 +38,6 @@ body {
   margin: 0 auto;
 }
 .form-signin .form-signin-heading,
-.form-signin .checkbox {
-  margin-bottom: 10px;
-}
-.form-signin .checkbox {
-  font-weight: normal;
-}
 .form-signin .form-control {
   position: relative;
   height: auto;
@@ -56,15 +50,12 @@ body {
 .form-signin .form-control:focus {
   z-index: 2;
 }
-.form-signin input[type="email"] {
-  margin-bottom: -1px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-}
 .form-signin input[type="password"] {
-  margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+button[type="submit"]{
+	margin-top:10px;
 }
 }
 </style>
@@ -91,6 +82,8 @@ body {
 <!--           </label> -->
 <!--         </div> -->
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+      <a class="btn btn-lg btn-info btn-block" href="/register" role="button">Join</a>
+      <a class="btn btn-lg btn-info btn-block" href="/" role="button">Guest</a>
       </form>
 
     </div> <!-- /container -->

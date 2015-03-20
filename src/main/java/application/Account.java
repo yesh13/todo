@@ -13,6 +13,14 @@ public class Account {
 	private String nickName;
 	private boolean enabled;
 
+	public Account(String username, String passwd,String nickName ) {
+		super();
+		this.nickName = nickName;
+		this.username = username;
+		this.passwd = passwd;
+		enabled=true;
+	}
+
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -34,11 +42,6 @@ public class Account {
 		super();
 	}
 
-	public Account(String name, String nickName, String passwd) {
-		this.username = name;
-		this.nickName = nickName;
-		this.passwd = passwd;
-	}
 
 	public String getNickName() {
 		return nickName;
@@ -107,7 +110,7 @@ public class Account {
 	         session.close(); 
 	      }	
 	}
-	public void create(){
+	public void save(){
 	      Session session = util.hibernate.HibernateFactory.getInstance().buildSessionFactory().openSession();
 	      Transaction tx = null;
 	      try{

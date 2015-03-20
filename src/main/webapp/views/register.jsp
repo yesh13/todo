@@ -62,9 +62,12 @@ body {
   border-bottom-left-radius: 0;
 }
 .form-signin input[type="password"] {
-  margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+button[type="submit"]{
+	margin-top:10px;
+}
 }
 }
 </style>
@@ -73,7 +76,7 @@ body {
 
     <div class="container">
 
-      <form class="form-signin"/>' method="POST">
+      <form class="form-signin" method="POST">
         <h2 class="form-signin-heading">Welcome</h2>
          		<c:if test="${not empty error}">
 			<div class="error">${error}</div>
@@ -81,17 +84,20 @@ body {
 		<c:if test="${not empty msg}">
 			<div class="msg">${msg}</div>
 		</c:if>
-        <label for="inputEmail" class="sr-only">Email address</label>
+        <label for="inputEmail" class="sr-only">User Name</label>
         <input type="text" name="username" class="form-control" placeholder="User Name" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
         <input type="password" name="password" class="form-control" placeholder="Password" required>
+        <label for="inputNickname" class="sr-only">Nick Name</label>
         <input type="text" name="nickname" class="form-control" placeholder="Nick Name" required>
 <!--         <div class="checkbox"> -->
 <!--           <label> -->
 <!--             <input type="checkbox" value="remember-me"> Remember me -->
 <!--           </label> -->
 <!--         </div> -->
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Join</button>
+      <a class="btn btn-lg btn-info btn-block" href="/signin" role="button">Signin</a>
+      <a class="btn btn-lg btn-info btn-block" href="/" role="button">Guest</a>
       </form>
 
     </div> <!-- /container -->

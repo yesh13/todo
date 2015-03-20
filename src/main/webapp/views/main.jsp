@@ -46,7 +46,7 @@
 					</c:when>
 
 					<c:otherwise>
-						<li><a href="#"><span
+						<li><a href="/register"><span
 								class="glyphicon glyphicon-user"></span> Join</a></li>
 						<li><a href="/private"><span
 								class="glyphicon glyphicon-log-in"></span> Sign in</a></li>
