@@ -1,11 +1,7 @@
 package util.hibernate;
 
 
-import java.util.Properties;
-
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 
 abstract public class HibernateFactory {
 	public static HibernateFactory factory=null;

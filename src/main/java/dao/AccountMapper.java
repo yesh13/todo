@@ -1,7 +1,8 @@
 package dao;
 
-import application.Account;
 import org.apache.ibatis.annotations.Param;
+
+import application.Account;
 
 public interface AccountMapper {
 

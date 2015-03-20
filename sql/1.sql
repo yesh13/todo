@@ -1,8 +1,18 @@
+create table history(
+version int
+);
+insert into history (version) valuse (1);
+
+
 create table if not exists account (
-uid int unsigned not null auto_increment primary key,
+uid int not null auto_increment primary key,
 name varchar(20) unique,
 nick_name varchar(20),
-passwd varchar(20)) character set=utf8;
+enabled TINYINT NOT NULL DEFAULT 1 ,
+passwd varchar(60)) character set=utf8;
+alter table account auto_increment=101;
+
+
 
 create table if not exists activity (
 aid int unsigned not null auto_increment,
@@ -15,4 +25,4 @@ end_time datetime,
 note text,
 primary key (aid,uid)
 ) character set=utf8;
-alter table activity auto_increment=101
+alter table activity auto_increment=101;

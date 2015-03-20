@@ -1,12 +1,9 @@
 package application;
 
-import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import domain.Activity;
-import domain.Location;
-import domain.Note;
 
 public class ActivityDTO {
 	String name;

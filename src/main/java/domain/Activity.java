@@ -1,16 +1,10 @@
 package domain;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
-import application.Account;
-import application.ActivityDTO;
 
 public class Activity {
 	private int aid;

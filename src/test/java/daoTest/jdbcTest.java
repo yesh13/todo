@@ -6,15 +6,10 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
 
 import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
-
-import util.MybatisFactory;
-import dao.AccountMapper;
 
 public class jdbcTest {
 	  private Connection connect = null;
