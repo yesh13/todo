@@ -1,8 +1,10 @@
 package dao;
 
 import java.util.List;
-import domain.Activity;
+
 import org.apache.ibatis.annotations.Param;
+
+import domain.Activity;
 
 public interface ActivityMapper {
 

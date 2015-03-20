@@ -1,10 +1,10 @@
 package domain;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.TimeZone;
 
 import org.junit.Test;
 

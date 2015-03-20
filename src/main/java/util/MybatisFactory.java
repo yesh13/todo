@@ -5,7 +5,8 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.*;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 public class MybatisFactory {
 	private static SqlSessionFactory factory=null;

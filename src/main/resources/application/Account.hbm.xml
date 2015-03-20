@@ -11,8 +11,12 @@
       <id name="uid" type="int" column="uid">
          <generator class="native"/>
       </id>
-      <property name="name" column="name" type="string"/>
+      <property name="username" column="name" type="string"/>
       <property name="nickName" column="nick_name" type="string"/>
       <property name="passwd" column="passwd" type="string"/>
+      
+        <property name="enabled" type="boolean">
+            <column name="enabled" not-null="true" />
+        </property>
    </class>
 </hibernate-mapping>

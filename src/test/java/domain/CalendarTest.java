@@ -1,8 +1,7 @@
 package domain;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 
-import java.sql.Timestamp;
 import java.util.Calendar;
 
 import org.junit.Test;
