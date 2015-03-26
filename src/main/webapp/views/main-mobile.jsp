@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="viewport" content="minimal-ui,initial-scale=1.0,user-scalable=no">
+<meta name="viewport" content="initial-scale=1.0,user-scalable=no">
 <title>Todo</title>
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/bootstrap.min.css">
@@ -25,8 +25,7 @@
 	<script type="text/javascript" src="/resources/js/main.js"></script>
 		<script type="text/ng-template" id="activity.html">
   <tabset class="bottom-tab">
-    <tab heading="List"><div ng-include="'/resources/views/activity.list.html'"></div></tab>
-    <tab heading="Detail"><div ng-include="'/resources/views/activity.detail.html'"></div></tab>
+    <tab heading="List"><div ng-include="'/resources/views/activity.mobile.html'"></div></tab>
   </tabset>
 
 </script>

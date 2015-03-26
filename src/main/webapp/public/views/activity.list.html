@@ -2,10 +2,10 @@
 		<ol class="breadcrumb">
 			<li><a ui-sref="activity({aid:0})"
 			droppable-activity="0"> Root </a></li>
-			<li ng-repeat="item in actPath track by $index" 
-			droppable-activity="actPath[$index].aid">
-			<a ui-sref="activity({aid:actPath[$index].aid})">
-					{{actPath[$index].name}} </a>
+			<li ng-repeat="item in actList.actPath track by $index" 
+			droppable-activity="item.aid">
+			<a ui-sref="activity({aid:item.aid})">
+					{{item.name}} </a>
 					</li>
 		</ol>
 		<a href="javascript:void(0)" ng-click="setActivity(-1)" droppable-activity="1"><span
@@ -13,13 +13,13 @@
 	</div>
 	<ul class="nav nav-stacked">
 
-		<li ng-repeat="item in actList track by $index" draggable="true"
-		draggable-activity="actList[$index].aid"
-		droppable-activity="actList[$index].aid" ng-class="{active:$index==actNum}"><a 
-			href="javascript:void(0)" ng-click="setActivity($index)">{{item.name}}
-				<span ng-click="moveToTrash(actList[$index].aid)"
+		<li ng-repeat="item in actList.activities track by $index" draggable="true"
+		draggable-activity="item.aid"
+		droppable-activity="item.aid" ng-class="{active:$index==actList.actNum}"><a 
+			href="javascript:void(0)" ng-click="actList.setActivity($index)">{{item.name.length>0?item.name:"unnamed"}}
+				<span ng-click="actList.moveToTrash(item.aid)"
 				class="glyphicon glyphicon-trash show-when-hover"></span>
-				<span ui-sref="activity({aid:actList[$index].aid})"
+				<span ui-sref="activity({aid:item.aid})"
 				class="glyphicon glyphicon-menu-right show-when-hover"></span>
 		</a></li>
 	</ul>

@@ -27,7 +27,8 @@
 		ng-include="'/resources/views/activity-desktop.html'">
 <div class="act-list col-xs-4 full-height-flow" ng-include="'/resources/views/activity.list.html'">
 </div>
-<div class="act-detail col-xs-5 full-height-flow" ng-include="'/resources/views/activity.detail.html'">
+<div class="act-detail col-xs-5 full-height-flow">
+<activity-detail activity-index="actList.activeActNum"></activity-detail>
 </div>
 </script>
 	<nav class="navbar navbar-inverse navbar-fixed-top">

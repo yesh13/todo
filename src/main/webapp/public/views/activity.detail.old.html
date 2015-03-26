@@ -1,0 +1,22 @@
+	aid: {{activity.aid}}
+	<form novalidate>
+	<table class="table">
+  <tr>
+		<th>Name</th><th> <input type="text" ng-model="activity.name"></th>
+  </tr>
+    <tr>
+		<td>Location</td><td> <input type="text"
+			ng-model="activity.location"></td>
+  </tr>
+    <tr>
+		<td>From</td><td> <quick-datepicker ng-model='activity.startTime'></quick-datepicker></td>
+  </tr>
+    <tr>
+		<td>To</td><td> <quick-datepicker ng-model='activity.endTime'></quick-datepicker></td>
+  </tr>
+    <tr>
+		<td>Note</td><td> <textarea rows="10" id="note-edit" ng-model="activity.note"></textarea></td>
+  </tr>
+</table>
+		<button ng-click="sumbit()">submit</button>
+	</form>
