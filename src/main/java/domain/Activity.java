@@ -1,5 +1,6 @@
 package domain;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -11,6 +12,10 @@ public class Activity {
 	private Location location=new Location("");
 	private String name;
 
+	
+	public void setType(int type) {
+		this.schedule.setType(type);
+	}
 	private Note note=new Note("");
 
 	private int parent;
@@ -20,6 +25,7 @@ public class Activity {
 	private int uid;
 	public Activity() {
 		super();
+		schedule=new Schedule();
 	}
 	public Activity(int aid) {
 		super();
@@ -115,5 +121,12 @@ public class Activity {
 			}
 		}
 		return false;
+	}
+	public int getType() {
+		// TODO Auto-generated method stub
+		return this.schedule.getType();
+	}
+	public boolean withinTime(Calendar t1,Calendar t2){
+		return schedule.withinTime(t1,t2);
 	}
 }

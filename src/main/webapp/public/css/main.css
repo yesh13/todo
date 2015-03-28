@@ -25,3 +25,14 @@ ul>li.active>a{
 .list-header{
 	padding-right:15px;
 }
+table.schedule>tbody>tr>td{
+	padding-right:30px;
+}
+div.type-check{
+	margin-bottom:20px;
+}
+input.text,textarea.text,input.text:focus,textarea.text:focus{
+	border:0px;
+	background-color:transparent;
+	outline:0px;
+}

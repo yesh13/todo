@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -25,13 +26,34 @@
 	<script type="text/javascript" src="/resources/js/main.js"></script>
 		<script type="text/ng-template" id="activity.html">
   <tabset class="bottom-tab">
-    <tab heading="List"><div ng-include="'/resources/views/activity.mobile.html'"></div></tab>
+    <tab heading="Activity" ui-sref-active="active" ui-sref="activity({aid:$stateParams.aid})"><div ng-include="'/resources/views/activity.mobile.html'"></div></tab>
+<tab heading="Date" ui-sref-active="active" ui-sref="leaves({aid:$stateParams.aid})"><div ng-include="'/resources/views/activity.mobile.html'"></div></tab>
   </tabset>
+
+
+
 
 </script>
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container-fluid">
-		<div>
+				<div>
+			<ul class="nav navbar-nav navbar-right">
+				<c:choose>
+					<c:when test="${account!=null}">
+						<li><a href="#"><span
+								class="glyphicon glyphicon-user"></span> ${account.getNickName()}</a></li>
+						<li sign-out><a href="#"><span
+								class="glyphicon glyphicon-log-out"></span> Sign out</a></li>
+					</c:when>
+
+					<c:otherwise>
+						<li><a href="/register"><span
+								class="glyphicon glyphicon-user"></span> Join</a></li>
+						<li><a href="/private"><span
+								class="glyphicon glyphicon-log-in"></span> Sign in</a></li>
+					</c:otherwise>
+				</c:choose>
+			</ul>
 		</div>
 	</div>
 	</nav>

@@ -29,11 +29,8 @@ public class ActivityService {
 		return new ActivityDTO(act, withNote);
 	}
 
-	private Calendar string2calendar(String s) throws ParseException {
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(df.parse(s));
-		return cal;
+	private Calendar string2calendar(String s) {
+		return util.CalendarUtil.string2calendar(s);
 	}
 
 	public int addActivity(ActivityDTO dto, int uid) {
@@ -48,25 +45,13 @@ public class ActivityService {
 			act.setLocation(new Location(dto.getLocation()));
 			act.setParent(Integer.parseInt(dto.getParent()));
 			act.setUid(uid);
-			if (dto.getStartTime() != null) {
-				try {
+			act.setType(Integer.valueOf(dto.getType()));
 					act.getSchedule().setStartTime(
 							string2calendar(dto.getStartTime()));
-				} catch (java.text.ParseException e) {
-
-				}
-			} else {
-				act.getSchedule().setStartTime(Calendar.getInstance());
-			}
-			if (dto.getEndTime() != null) {
-				try {
+			
 					act.getSchedule().setEndTime(
 							string2calendar(dto.getEndTime()));
-
-				} catch (java.text.ParseException e) {
-
-				}
-			}
+			
 			session.save(act);
 			tx.commit();
 		} catch (HibernateException e) {
@@ -117,35 +102,19 @@ public class ActivityService {
 				act.setParent(Integer.parseInt(dto.getParent()));
 			if (dto.getUid() != null)
 				act.setUid(uid);
-			if (dto.getStartTime() != null) {
-				try {
-					if (act.getSchedule() != null) {
+			if(dto.getType()!=null) act.setType(Integer.valueOf(dto.getType()));
+			
+				
+					
 						act.getSchedule().setStartTime(
 								string2calendar(dto.getStartTime()));
-					} else {
-						Schedule schedule = new Schedule();
-						schedule.setStartTime(string2calendar(dto
-								.getStartTime()));
-						act.setSchedule(schedule);
-					}
-				} catch (java.text.ParseException e) {
-
-				}
-			}
-			if (dto.getEndTime() != null) {
-				try {
-					if (act.getSchedule() != null) {
+					
+				
+		
 						act.getSchedule().setEndTime(
 								string2calendar(dto.getEndTime()));
-					} else {
-						Schedule schedule = new Schedule();
-						schedule.setEndTime(string2calendar(dto.getEndTime()));
-						act.setSchedule(schedule);
-					}
-				} catch (java.text.ParseException e) {
-
-				}
-			}
+				
+			
 			tx.commit();
 		} catch (HibernateException e) {
 			if (tx != null)

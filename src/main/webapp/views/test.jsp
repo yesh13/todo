@@ -7,12 +7,23 @@
 <meta name="viewport" content="initial-scale=1.0">
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="/resources/css/test.css">
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/datepicker.css">
+<link rel="stylesheet" type="text/css" href="/resources/css/main.css">
+<link rel="stylesheet" type="text/css" href="/resources/css/desk.css">
 <title>About Secretary</title>
 	<script type="text/javascript" src="/resources/js/angular.min.js"></script>
-	<script type="text/javascript" src="/resources/js/test.js"></script>
+	<script type="text/javascript"
+		src="/resources/js/angular-ui-router.min.js"></script>
+	<script type="text/javascript" src="/resources/js/datepicker.js"></script>
+	<script type="text/javascript" src="/resources/js/ui-bootstrap.min.js"></script>
+	<script type="text/javascript" src="/resources/js/main.js"></script>
+	
 </head>
-<body ng-app="testApp" ng-controller="testCtrl as test">
-<div style="height:100%" show-size>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
+<body ng-app="mainApp" ng-controller="actListCtrl as test">
+
+
+asdfasdf
+
 </body>
 </html>

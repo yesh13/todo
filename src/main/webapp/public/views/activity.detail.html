@@ -1,20 +1,18 @@
-	aid: {{actList.activities[activeActNum].aid}}<br>
-	<ng-form name="detail" novalidate>
+	aid: {{model.aid}}<br>
+	<ng-form ng-show="activeActNum!=-1" name="detail" novalidate>
 	<table class="table">
   <tr>
-		<th>Name</th><th> <input type="text" ng-model="actList.activities[activeActNum].name" autofocus="true"></th>
+		<th colspan="2"> <input class="text" type="text" ng-model="model.name" placeholder="title"></th>
   </tr>
-    <tr>
-		<td>From</td><td><timepicker ng-model='actList.activities[activeActNum].startTime'></timepicker>
-		<my-date-picker ng-model='actList.activities[activeActNum].startTime'></my-date-picker>
-		</td>
+  <tr><td colspan="2">
+  <schedule-picker ng-model='model' is-open="open"></schedule-picker>
+  </td>
   </tr>
+		
+
     <tr>
-		<td>To</td><td> <quick-datepicker ng-model='actList.activities[activeActNum].endTime'></quick-datepicker></td>
-  </tr>
-    <tr>
-		<td>Note</td><td> <textarea rows="10" id="note-edit" ng-model="actList.activities[activeActNum].note"></textarea></td>
+		<td colspan="2"> <textarea class="text" placeholder="note" rows="10" id="note-edit" ng-model="model.note"></textarea></td>
   </tr>
 </table>
-		<button ng-click="alert(actList.activities[activeActNum].note)">submit</button>
+<!-- 		<button ng-click="alert(model.note)">submit</button> -->
 	</ng-form>

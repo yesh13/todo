@@ -15,6 +15,7 @@
       <property name="parent" column="parent" type="int"></property>
       <property name="name" column="name" type="string"/>
       <component name="schedule" class="domain.Schedule">
+      	<property name="type" column="schedule_type" type="int"/>
          <property name="startTime" column="start_time" type="calendar"/>
          <property name="endTime" column="end_time" type="calendar"/>
       </component>

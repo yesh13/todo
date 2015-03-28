@@ -38,6 +38,9 @@ public class ActivityCtrl {
 	}
 	@RequestMapping(value="/api/activity/detail/{aidString}", method=RequestMethod.GET)
 	public ActivityDTO getActivity(@PathVariable String aidString){
+		if(aidString.equals("new")){
+			return ActivityDTO.getNewInstance();
+		}
 		ActivityDTO adto=(new ActivityService()).getActivity(aidString,getUid(),true);
 		return adto;
 	}
@@ -64,11 +67,11 @@ public class ActivityCtrl {
 		return nameList;
 	}
 	@RequestMapping(value="/api/activity/leaves/{parentString}", method=RequestMethod.GET)
-	public List<ActivityDTO> list1(@PathVariable String parentString,@RequestParam(required=false) String early,@RequestParam(required=false) int span){
+	public List<ActivityDTO> list1(@PathVariable String parentString,@RequestParam(required=false) String t1,@RequestParam(required=false) String t2){
 		List<ActivityFilter> filters=new ArrayList<ActivityFilter>();
-		Calendar ec=util.CalendarUtil.string2calendar(early);
-		Calendar lc=util.CalendarUtil.string2calendar(early);
-		lc.add(Calendar.HOUR, span);
+		Calendar ec=util.CalendarUtil.string2calendar(t1);
+		Calendar lc=util.CalendarUtil.string2calendar(t2);
+		
 			ActivityFilter filter=new DateActivityFilter(ec,lc);
 			filters.add(filter);
 		List<ActivityDTO> nameList = (new ActivityService()).getLeaves(parentString,getUid(),filters);

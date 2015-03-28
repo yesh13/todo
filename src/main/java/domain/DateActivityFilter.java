@@ -13,11 +13,7 @@ public class DateActivityFilter implements ActivityFilter {
 	//return true when pass
 	@Override
 	public boolean test(Activity act) {
-		if(act.getSchedule().getStartTime().before(late)){
-			if(act.getSchedule().getEndTime()==null||act.getSchedule().getEndTime().after(early)){
-				return true;
-			}
-		}
-		return false;
+		if(act==null) return false;
+		return act.withinTime(early, late);
 	}
 }

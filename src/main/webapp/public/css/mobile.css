@@ -9,7 +9,7 @@ div.bottom-tab>.nav-tabs {
 	position:fixed;
 	bottom:0px;
 	width:100%;
-	z-index:1;
+	z-index:100;
 	background-color:rgba(255,255,255,255);
 }
 div.bottom-tab>.nav-tabs>li {
@@ -18,3 +18,11 @@ div.bottom-tab>.nav-tabs>li {
 }
 div.bottom-tab>.tab-content>.tab-pane {
 }
+
+  .navbar-right {
+    float: right !important;
+    margin-right: -15px;
+  }
+  .navbar-right li{
+  
+    display:inline-block;}

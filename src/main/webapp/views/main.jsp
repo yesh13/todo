@@ -14,7 +14,7 @@
 <link rel="stylesheet" type="text/css" href="/resources/css/main.css">
 <link rel="stylesheet" type="text/css" href="/resources/css/desk.css">
 </head>
-<body ng-app="mainApp">
+<body ng-app="mainApp"> 
 	<form action="/j_spring_security_logout" method="post" id="logoutForm">
 	</form>
 	<script type="text/javascript" src="/resources/js/angular.min.js"></script>
@@ -28,7 +28,7 @@
 <div class="act-list col-xs-4 full-height-flow" ng-include="'/resources/views/activity.list.html'">
 </div>
 <div class="act-detail col-xs-5 full-height-flow">
-<activity-detail activity-index="actList.activeActNum"></activity-detail>
+<activity-detail ng-show="actList.activeActNum!=-1" model="actList.activities[actList.activeActNum].data" is-open="true"></activity-detail>
 </div>
 </script>
 	<nav class="navbar navbar-inverse navbar-fixed-top">
@@ -65,7 +65,7 @@
 					<li ui-sref-active="active"><a
 						ui-sref="activity({aid:$stateParams.aid})">Activity</a></li>
 					<li ui-sref-active="active"><a
-						ui-sref="leaves({aid:$stateParams.aid})">Today</a></li>
+						ui-sref="leaves({aid:$stateParams.aid})">Date</a></li>
 				</ul>
 			</div>
 			<div class="full-height" ui-view></div>
