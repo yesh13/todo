@@ -1,6 +1,4 @@
-	<div ng-switch="stateName">
-	<div ng-switch-when="activity">
-		<div class="list-header">
+		<div ng-show="stateInfo.type=='list'" class="list-header">
 		<ol class="breadcrumb">
 			<li><a ui-sref="activity({aid:0})"
 			droppable-activity="0"> Root </a></li>
@@ -11,9 +9,6 @@
 					</li>
 		</ol>
 	</div>
-	</div>
-	<div ng-switch-when="leaves">
-	<my-date-picker model="filter.date"></my-date-picker>
-	</div>
+	<my-date-picker ng-show="stateInfo.date" model="filter.date"></my-date-picker>
 	
 	

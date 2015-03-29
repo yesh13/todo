@@ -41,7 +41,13 @@ input.text,textarea.text,input.text:focus,textarea.text:focus{
 	border:0px;
 	background-color:transparent;
 	outline:0px;
-}
+};
 #detail-table td{
 	vertical-align:middle;
+}
+.list-title .description{
+	padding-left:15px;
+	padding-top: 10px;
+	font-size:90%;
+	font-weight:normal;
 }

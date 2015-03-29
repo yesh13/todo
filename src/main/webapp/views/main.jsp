@@ -30,7 +30,7 @@
 <div class="act-list col-xs-4 full-height-flow" ng-include="'/resources/views/activity.list.html'">
 </div>
 <div class="act-detail col-xs-5 full-height-flow">
-<activity-detail ng-show="actList.activeActNum!=-1" model="actList.activities[actList.activeActNum]" is-open="true"></activity-detail>
+<activity-detail ng-show="actList.activeActNum!=-1" model="actList.activities[actList.activeActNum]" is-open="true" default-date="filter.date"></activity-detail>
 </div>
 </script>
 
@@ -65,11 +65,8 @@
 		ng-controller="sideTabCtrl as sideTab">
 		<div class="row full-height">
 			<div class="col-xs-2 side-nav full-height-flow">
-				<ul class="nav nav-stacked">
-					<li ui-sref-active="active"><a
-						ui-sref="activity({aid:$stateParams.aid})">Activity</a></li>
-					<li ui-sref-active="active"><a
-						ui-sref="leaves({aid:$stateParams.aid})">Date</a></li>
+				<ul class="nav nav-stacked" ng-repeat="group in routerState.states">
+				<li ui-sref-active="active" ng-repeat="item in group.data"><a ui-sref="{{item.ref}}">{{item.name}}</a></li>
 				</ul>
 			</div>
 			<div class="full-height" ui-view></div>

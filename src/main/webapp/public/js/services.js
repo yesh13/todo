@@ -21,6 +21,27 @@ app.service("dateService",function(){
 			act.startTime)
 			: null;
 	};
+	this.shift=function(date,n,type){
+		date=new Date(date);
+		switch(type){
+		case "day":
+			return d=new Date(date.setDate(date.getDate()+n));
+		case "week":
+			return new Date(date.setDate(date.getDate()+7*n));
+		case "month":
+			return new Date(date.setMonth(date.getMonth()+n));
+		}
+	}
+	this.empty=function(date,type){
+		switch(type){
+		case "day":
+			return this.emptyTime(date);
+		case "week":
+			return this.emptyDay(date);
+		case "month":
+			return this.emptyDate(date);
+		}
+	}
 	this.emptyTime=function(date){
 		date=new Date(date);
 		date.setHours(0);
@@ -31,15 +52,23 @@ app.service("dateService",function(){
 	}
 	this.emptyDate=function(date){
 		date=new Date(date);
-		date=this.emptyTime(date);
+		date=this.emptyTime(date)[0];
 		date.setDate(0);
 		return [new Date(date),new Date(date.setMonth(date.getMonth()+1))];
 	}
 	this.emptyDay=function(date){
 		date=new Date(date);
-		date=this.emptyTime(date);
-		date.setDate(date.getDate()-date.getDay());
+		date=this.emptyTime(date)[0];
+		date.setDate(date.getDate()-(date.getDay()+6)%7);
 		return [new Date(date),new Date(date.setDate(date.getDate()+7))];
+	}
+	this.abbreviate=function(date){
+		today=new Date();
+		if(this.sameDate(date,today)){
+			return date.getHours()+":"+date.getMinutes();
+		}else{
+			return date.toLocaleDateString();
+		}
 	}
 	
 })
@@ -55,7 +84,7 @@ app.service("activityService",[ '$http','dateService',function($http,dateService
 		}).success(function() {
 			context.buildList();
 		})}else{
-			context.activities[context.activities.length-2].loaded=false;
+			context.activities[1].loaded=false;
 			context.buildList();
 		}
 	}
@@ -118,12 +147,12 @@ app.service("activityService",[ '$http','dateService',function($http,dateService
 	}
 	this.pushNew=function(alist){
 		console.log("pushNew alist");
-		alist.push({data:{
+		alist.unshift({data:{
 			name : "New"
 		},loaded:false,open:false});
 	}
 	//context: actListCtrl
-	this.buildList=function(context,req,rootAid,withoutNew){
+	this.buildList=function(context,req,rootAid,withoutNew,callback){
 		req.method="GET";
 		$http(req)
 			.success(
@@ -140,7 +169,7 @@ app.service("activityService",[ '$http','dateService',function($http,dateService
 					for(iter in response){
 						context.activities.push({data:response[iter],loaded:false,open:false});
 					}
-					if(typeof(withoutNew)=="undefined"){
+					if(!withoutNew){
 						service.pushNew(context.activities);
 					}
 					// read ISO string
@@ -163,8 +192,10 @@ app.service("activityService",[ '$http','dateService',function($http,dateService
 								context.activeActNum = i;
 								context.activities[i] = actStore[iter];
 								// recover new
-								if (i == context.activities.length - 1) {
+								if (i == 0) {
+									console.log("recover new");
 									service.pushNew(context.activities);
+									context.activeActNum=1;
 								}
 								exist = true;
 								break;
@@ -175,6 +206,9 @@ app.service("activityService",[ '$http','dateService',function($http,dateService
 						context.activeActNum = -1;
 					}
 					console.log("build success");
+					if(callback instanceof Function){
+						callback();
+					}
 				});
 	}
 }])
