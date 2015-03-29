@@ -3,15 +3,12 @@
 			class="glyphicon" ng-class="{'glyphicon-plus':!isDragging,'glyphicon-trash':isDragging}" aria-hidden="true"></span>{{isDragging?'Drop':'New'}}</a> -->
 
 	<accordion close-others="true">
-    <accordion-group is-open="item.open"  ng-repeat="item in actList.activities track by $index">
+    <accordion-group is-open="item.open" ng-repeat="item in actList.activities track by $index">
       <accordion-heading>
-      <div>{{item.data.name.length>0?item.data.name:"untitled"}}
-      <span ng-click="actList.moveToTrash(item.data.aid,$event)" style="float:right" ng-show="item.data.aid" 
-				class="glyphicon glyphicon-trash"></span>
-      </div>
+<list-title></list-title>
       </accordion-heading>
       <activity-accordion model="item" build-list="actList.buildList()" push-new="actList.pushNew()">
-      <activity-detail model="item.data" is-open="item.open"></activity-detail>
+      <activity-detail model="item"></activity-detail>
       </activity-accordion>
     </accordion-group>
   </accordion>

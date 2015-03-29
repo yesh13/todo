@@ -22,15 +22,19 @@
 		src="/resources/js/angular-ui-router.min.js"></script>
 	<script type="text/javascript" src="/resources/js/datepicker.js"></script>
 	<script type="text/javascript" src="/resources/js/ui-bootstrap.min.js"></script>
+	<script type="text/javascript" src="/resources/js/services.js"></script>
+	<script type="text/javascript" src="/resources/js/ui-lib.js"></script>
 	<script type="text/javascript" src="/resources/js/main.js"></script>
 	<script type="text/ng-template" id="activity.html"
 		ng-include="'/resources/views/activity-desktop.html'">
 <div class="act-list col-xs-4 full-height-flow" ng-include="'/resources/views/activity.list.html'">
 </div>
 <div class="act-detail col-xs-5 full-height-flow">
-<activity-detail ng-show="actList.activeActNum!=-1" model="actList.activities[actList.activeActNum].data" is-open="true"></activity-detail>
+<activity-detail ng-show="actList.activeActNum!=-1" model="actList.activities[actList.activeActNum]" is-open="true"></activity-detail>
 </div>
 </script>
+
+
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container-fluid">
 		<div class="navbar-header">

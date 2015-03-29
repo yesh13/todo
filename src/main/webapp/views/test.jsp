@@ -13,17 +13,15 @@
 <link rel="stylesheet" type="text/css" href="/resources/css/desk.css">
 <title>About Secretary</title>
 	<script type="text/javascript" src="/resources/js/angular.min.js"></script>
-	<script type="text/javascript"
-		src="/resources/js/angular-ui-router.min.js"></script>
-	<script type="text/javascript" src="/resources/js/datepicker.js"></script>
 	<script type="text/javascript" src="/resources/js/ui-bootstrap.min.js"></script>
-	<script type="text/javascript" src="/resources/js/main.js"></script>
+	<script type="text/javascript" src="/resources/js/services.js"></script>
+	<script type="text/javascript" src="/resources/js/ui-lib.js"></script>
+	<script type="text/javascript" src="/resources/js/test.js"></script>
 	
 </head>
-<body ng-app="mainApp" ng-controller="actListCtrl as test">
-
-
-asdfasdf
+<body ng-app="testApp" ng-controller="testCtrl as test">
+<parent-select model="parent"></parent-select>
+{{parent}}
 
 </body>
 </html>

@@ -1,0 +1,11 @@
+
+<div class="list-title">
+	{{item.data.name.length>0?item.data.name:"untitled"}} <span
+		ng-click="actList.moveToTrash(item.data.aid,$event)"
+		style="float: right" ng-show="$index!=actList.activities.length-1"
+		class="glyphicon glyphicon-trash"></span> <span
+		ng-show="stateName=='activity'"
+		ng-click="actList.enter(item.data.aid,$event)"
+		class="glyphicon glyphicon-menu-right" style="float: right"></span>
+
+</div>

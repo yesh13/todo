@@ -23,12 +23,12 @@
 		src="/resources/js/datepicker.js"></script>
 			<script type="text/javascript"
 		src="/resources/js/ui-bootstrap.min.js"></script>
+	<script type="text/javascript" src="/resources/js/services.js"></script>
+	<script type="text/javascript" src="/resources/js/ui-lib.js"></script>
 	<script type="text/javascript" src="/resources/js/main.js"></script>
 		<script type="text/ng-template" id="activity.html">
-  <tabset class="bottom-tab">
-    <tab heading="Activity" ui-sref-active="active" ui-sref="activity({aid:$stateParams.aid})"><div ng-include="'/resources/views/activity.mobile.html'"></div></tab>
-<tab heading="Date" ui-sref-active="active" ui-sref="leaves({aid:$stateParams.aid})"><div ng-include="'/resources/views/activity.mobile.html'"></div></tab>
-  </tabset>
+<div ng-include="'/resources/views/activity.mobile.html'"></div>
+  
 
 
 
@@ -57,17 +57,17 @@
 		</div>
 	</div>
 	</nav>
-	<div ng-controller="sideTabCtrl as sideTab">
-<!-- 			<div class="col-xs-2 side-nav full-height-flow"> -->
-<!-- 				<ul class="nav nav-stacked"> -->
-<!-- 					<li><a ui-sref="activity({aid:0})">Activity</a></li> -->
-<!-- 					<li><a ui-sref="today">Today</a></li> -->
-<!-- 					<li><a ui-sref="today">Calendar</a></li> -->
-<!-- 				</ul> -->
-<!-- 			</div> -->
+
 <div style="height:50px"></div>
 	<div ui-view></div>
+	<div ng-controller="sideTabCtrl">
+	<tabset class="bottom-tab">
+    <tab heading="Activity" ui-sref-active="active" ui-sref="activity({aid:$stateParams.aid})"></tab>
+<tab heading="Date" ui-sref-active="active" ui-sref="leaves({aid:$stateParams.aid})"></tab>
+  </tabset>
+  </div>
 <div style="height:50px"></div>
 		</div>
+
 </body>
 </html>

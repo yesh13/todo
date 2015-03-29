@@ -1,0 +1,17 @@
+<div class="modal-body">
+	<ul>
+			<li ng-show="actPath.length==1" ><a  style="font:green"
+			ng-click="choose(rootParent)">
+			{{rootParent.name}}</a></li>
+		<li ng-show="actPath.length>1"><a 
+			ng-click="choose(actPath[actPath.length-2])">
+			{{actPath[actPath.length-2].name}}</a></li>
+		<li ng-repeat="item in activities"><a
+			ng-click="choose(item.data)">{{ item.data.name?item.data.name:"untitled" }}</a></li>
+	</ul>
+	Selected: <b>{{ currentParent.name }}</b>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-primary" ng-click="ok()">OK</button>
+	<button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>

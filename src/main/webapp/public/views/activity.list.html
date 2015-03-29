@@ -4,10 +4,7 @@
 		<li ng-repeat="item in actList.activities track by $index" draggable="true"
 		draggable-activity="item.aid"
 		droppable-activity="item.aid" ng-class="{active:$index==actList.activeActNum}"><a 
-			href="javascript:void(0)" ng-click="actList.setActivity($index)">{{item.data.name.length>0?item.data.name:"untitled"}}
-				<span ng-show="$index!=actList.activities.length-1" ng-click="actList.moveToTrash(item.data.aid,$event)"
-				class="glyphicon glyphicon-trash show-when-hover"></span>
-				<span ng-show="stateName=='activity'" ui-sref="activity({aid:item.data.aid})"
-				class="glyphicon glyphicon-menu-right show-when-hover"></span>
+			href="javascript:void(0)" ng-click="actList.setActivity($index)">
+			<list-title></list-title>
 		</a></li>
 	</ul>

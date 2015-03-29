@@ -26,12 +26,13 @@ public class ActivityCtrl {
 
 	@RequestMapping(value="/api/activity", method=RequestMethod.POST)
 	public String add(@RequestBody ActivityDTO dto){
-		System.out.println("act add post received");
+		System.out.println("act add post received "+ dto.getAid()+" "+dto.getName());
 		int ret=(new ActivityService()).addActivity(dto,getUid());
 		return String.valueOf(ret);
 	}
 	@RequestMapping(value="/api/activity/{aidString}", method=RequestMethod.POST)
 	public String edit(@RequestBody ActivityDTO dto,@PathVariable String aidString){
+		System.out.println("act edit post received "+ dto.getAid()+" "+dto.getName());
 		dto.setAid(aidString);
 		int ret=(new ActivityService()).editActivity(dto,getUid());
 		return String.valueOf(ret);

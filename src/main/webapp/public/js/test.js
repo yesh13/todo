@@ -1,15 +1,28 @@
-var app=angular.module("testApp",[]);
+var app=angular.module("testApp",["ui.bootstrap","ui-lib","services"]);
 console.log("testApp");
 app.controller("testCtrl",['$scope','$http',function($scope,$http){
 	$scope.title="Hello World";
+	$scope.parent=0;
 	$scope.setWidth=function(){
 		$scope.width=0;
 	}
+	$scope.td=new Date();
+	$scope.o=[{data:"aa"},{data:"bb"}]
+	
 }]);
-app.directive('showSize',function() {
-	return function(scope, element, attr) {
-		element.on("click",function(){
-			element[0].innerHTML="height:"+element[0].offsetHeight+", width: "+element[0].offsetWidth;
+
+
+app.directive("detectOpen", function() {
+	return {
+		scope:{
+			model:"=?"
+		},
+	link:link,
+	template:"{{model.data}}{{model.open}}"
+	}
+	function link(scope,elem,attr){
+		scope.$watch("model.open",function(nv,ov){
+			console.log(scope.model.open);
 		})
-	};
-});
+	}
+})

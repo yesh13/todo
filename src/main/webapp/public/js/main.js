@@ -1,176 +1,6 @@
-var app = angular.module("mainApp", [ "ui.router", "ui.bootstrap",
-	"ngQuickDate" ]);
-
-app.service("dateService",function(){
-	this.sameDate=function(d1,d2){
-		return d1.getFullYear()==d2.getFullYear()
-		&&d1.getDate()==d2.getDate()
-		&&d1.getMonth()==d2.getMonth();
-	};
-	this.setSameDate=function(d1,d2){
-		d1.setFullYear(d2.getFullYear());
-		d1.setMonth(d2.getMonth());
-		d1.setDate(d2.getDate());
-		return new Date(d1.getTime());
-	};
-	this.stringToDate=function(act){
-		act.endTime = act.endTime!=null ? new Date(
-			act.endTime)
-			: null;
-		act.startTime = act.startTime!=null ? new Date(
-			act.startTime)
-			: null;
-	};
-	this.emptyTime=function(date){
-		date=new Date(date);
-		date.setHours(0);
-		date.setMinutes(0);
-		date.setSeconds(0);
-		date.setMilliseconds(0);
-		return [new Date(date),new Date(date.setDate(date.getDate()+1))];
-	}
-	this.emptyDate=function(date){
-		date=new Date(date);
-		date=this.emptyTime(date);
-		date.setDate(0);
-		return [new Date(date),new Date(date.setMonth(date.getMonth()+1))];
-	}
-	this.emptyDay=function(date){
-		date=new Date(date);
-		date=this.emptyTime(date);
-		date.setDate(date.getDate()-date.getDay());
-		return [new Date(date),new Date(date.setDate(date.getDate()+7))];
-	}
-	
-})
+var app = angular.module("mainApp", [ "ui.router", "ui.bootstrap","services","ui-lib"]);
 
 
-app.service("activityService",[ '$http','$stateParams','dateService',function($http,$stateParams,dateService){
-	var service=this;
-	this.moveToTrash=function(context,aid){
-		console.log("move " + aid + " to trash");
-		if(aid!=null){
-		$http.post("/api/activity/" + aid, {
-			parent : 1
-		}).success(function() {
-			context.buildList();
-		})}else{
-			context.activities[context.activities.length-2].loaded=false;
-			context.buildList();
-		}
-	}
-	this.submit=function(context,callback){
-		console.log("submittest:" + context.loaded+"from "+context.data.aid);
-		if (context.loaded) {
-			context.loaded = false;
-
-			if (context.data.aid == null) {
-				context.data.parent = $stateParams.aid;
-				console.log("new: "
-					+ JSON.stringify(context.data));
-				$http.post("/api/activity", context.data)
-					.success(function() {
-						callback();
-					});
-			} else {
-				console.log("edit: "
-					+ JSON.stringify(context.data));
-				$http.post(
-					"/api/activity/" + context.data.aid,
-					context.data).success(function() {
-						console.log("submit success");
-					callback();
-				});
-			}
-		}
-	}
-	
-	//context: activity
-	this.loadActivity=function(context){
-		console.log(JSON.stringify(context));
-		var aidString;
-		// new item
-		if (typeof(context.data.aid)==="undefined"||context.data.aid==null) {
-			console.log("load new");
-			aidString = "new";
-		} else {
-			console.log("load exist:" + context.data.aid);
-			aidString = context.data.aid;
-		}
-		$http
-			.get("/api/activity/detail/" + aidString)
-			.success(
-				function(response) {
-					// detail=true means it has been loaded, must be
-					// submited
-					console.log("load success");
-					context.loaded = true;
-					context.data.note = response.note;
-					if(aidString=="new"){
-						dateService.stringToDate(response);
-						context.data=response;
-					}
-				});
-	}
-	this.pushNew=function(alist){
-		console.log("pushNew alist");
-		alist.push({data:{
-			name : "New"
-		},loaded:false});
-	}
-	//context: actListCtrl
-	this.buildList=function(context,req){
-		req.method="GET";
-		$http(req)
-			.success(
-				function(response) {
-					// store active activity
-					var actStore=[];
-					for(iter in context.activities){
-						if(context.activities[iter].loaded==true){
-							actStore.push(context.activities[iter]);
-						}
-					}
-					console.log("activity stored "+actStore.length);
-					context.activities=[];
-					for(iter in response){
-						context.activities.push({data:response[iter],loaded:false});
-					}
-					service.pushNew(context.activities);
-					// read ISO string
-					for(iter in context.activities){
-						dateService.stringToDate(context.activities[iter].data);
-					}
-					$http.get(
-						"/api/activity/path/" + $stateParams.aid)
-						.success(function(response) {
-							context.actPath = response;
-						});
-					// recover active activity
-					//loaded item exist
-					var exist = false;
-					for (iter in actStore) {
-						console.log("recover:" + actStore[iter].data.aid);
-						for (i = 0; i < context.activities.length; i++) {
-							if (context.activities[i].data.aid == actStore[iter].data.aid) {
-								context.activeActNum = i;
-								context.activities[i] = actStore[iter];
-								// recover new
-								if (i == context.activities.length - 1) {
-									service.pushNew(context.activities);
-								}
-								exist = true;
-								break;
-							}
-						}
-					}
-					if (!exist) {
-						context.activeActNum = -1;
-					}
-					console.log("build success");
-				});
-	}
-}])
 
 
 app.directive('myDatePicker', function() {
@@ -207,7 +37,7 @@ app.directive('schedulePicker', function(dateService) {
 				console.log("schedule type from "+ov+" to "+nv);
 				switch(nv[0]){
 				case '0':
-					if(nv[1]==ov[1]){
+					if(nv[1]==ov[1]&&nv[2]==ov[2]){
 						scope.model.endTime=null;
 						scope.model.startTime=new Date();
 					}else{
@@ -219,7 +49,7 @@ app.directive('schedulePicker', function(dateService) {
 //					}
 					break;
 				case '1':
-					if(nv[1]==ov[1]){
+					if(nv[1]==ov[1]&&nv[2]==ov[2]){
 						scope.model.startTime=new Date();
 						scope.model.endTime=new Date();
 					}else{
@@ -241,7 +71,7 @@ app.directive('schedulePicker', function(dateService) {
 					}
 					break;
 				case '2':
-					if(nv[1]==ov[1]){
+					if(nv[1]==ov[1]&&nv[2]==ov[2]){
 						scope.model.startTime=null;
 						var x=new Date();
 						x.setDate(x.getDate()+1)
@@ -281,7 +111,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
 	$stateProvider.state('activity', {
 		url : '/activity/:aid',
 		templateUrl : 'activity.html',
-		controller : 'actListCtrl as actList'
+		controller : 'actListCtrl as actList',
 	});
 	$stateProvider.state('leaves', {
 		url : '/leaves/:aid',
@@ -322,21 +152,17 @@ app
 				$scope.$watch('listUpdated',function(nv,ov){
 					if(nv==false){
 						$scope.listUpdated=true;
+						console.log("listUpdate");
 						actListCtrl.buildList();
 					}
 				});
-				$scope.ashow=function(){
-					console.log(actListCtrl.activities);
+				this.enter=function(aid,$event){
+					$event.preventDefault();
+					$event.stopPropagation();
+					$state.go("activity",{aid:aid})
 				}
-				this.isDragging = false;
-				this.setIsDragging = function(b) {
-					this.isDragging = b;
-					$scope.$digest();// trigger data-binding
-				}
-				this.digestAll = function() {
-					$scope.$digest();
-				}
-
+				
+//
 				this.buildList = function() {
 					switch($scope.stateName){
 					case "activity":
@@ -356,7 +182,7 @@ app
 					};
 						break;
 					}
-					activityService.buildList(actListCtrl, req);
+					activityService.buildList(actListCtrl, req,$stateParams.aid);
 				};
 				this.pushNew=function(){
 					activityService.pushNew(actListCtrl.activities);
@@ -370,82 +196,40 @@ app
 							activityService.pushNew(this.activities);
 						}
 						if(this.activeActNum>=0){
-							activityService.submit(actListCtrl.activities[this.activeActNum],actListCtrl.buildList);
+							activityService.submit(actListCtrl.activities[this.activeActNum],actListCtrl.buildList,$stateParams.aid);
 						}
 						activityService.loadActivity(actListCtrl.activities[n]);
 						this.activeActNum = n;
 					}
 				}
 				this.submit = function(n) {
-					activityService.submit(actListCtrl.activities[n],null);
+					activityService.submit(actListCtrl.activities[n],null,$stateParams.aid);
 				};
-				$scope.setBeingDragged = function(n) {
-					$scope.beingDragged = n;
-					$scope.$digest();
-				}
 				this.moveToTrash = function(aid,$event) {
 					$event.preventDefault();
 					$event.stopPropagation();
 					activityService.moveToTrash(this,aid);
 				}
+				$scope.$on("$destroy",function(){
+					for(i in actListCtrl.activities){
+						activityService.submit(actListCtrl.activities[i],function(){},$stateParams.aid);
+					}
+				})
+				window.onbeforeunload = function(){
+					console.log("submitall");
+					var needSubmit=false;
+					for(i in actListCtrl.activities){
+						if(actListCtrl.activities[i].loaded==true){
+							needSubmit=true;
+						}
+						activityService.submit(actListCtrl.activities[i],function(){},$stateParams.aid);
+					}
+					if(needSubmit){
+						return "Please wait a second for saving.";
+					}
+				}
 			} ]);
 
-
-/*app
-.controller(
-	"leavesCtrl",
-	[
-		'$scope',
-		'$http',
-		'$stateParams','dateService','activityService',
-		function($scope, $http, $stateParams,dateService,activityService) {
-			$scope.td={startTime:(new Date()),type:"RANGE"};
-			console.log("initLeavesCtrl");
-			var actListCtrl = this;
-			this.activeActNum = -1;
-			this.activities = [];
-			this.isDragging = false;
-			this.setIsDragging = function(b) {
-				this.isDragging = b;
-				$scope.$digest();// trigger data-binding
-			}
-			this.digestAll = function() {
-				$scope.$digest();
-			}
-			this.pushNew = function() {
-				actListCtrl.activities.push({
-					name : "New"
-				});
-			}
-			this.buildList = function() {
-				activityService.buildList(this, "/api/activity/leaves/"+$stateParams.aid+"?early="+(new Date()).toISOString()+"&span=24")
-			};
-			this.buildList();
-			this.loadActivity = function(n) {
-				activityService.loadActivity(this, n);
-
-			};
-			this.setActivity = function(n) {
-				if (n != this.activeActNum) {
-					this.submit(this.activeActNum);
-					this.activeActNum = n;
-					this.loadActivity(n);
-				}
-
-			}
-			this.submit = function(n) {
-				activityService.submit(this,n);
-			};
-			$scope.setBeingDragged = function(n) {
-				$scope.beingDragged = n;
-				$scope.$digest();
-			}
-			this.moveToTrash = function(aid,$event) {
-				$event.preventDefault();
-				$event.stopPropagation();
-				activityService.moveToTrash(this,aid);
-			}
-		} ]);*/
 
 
 app.directive('draggableActivity', function() {
@@ -496,8 +280,7 @@ app.directive('activityDetail', function() {
 		templateUrl : "/resources/views/activity.detail.html",
 		controller : "activityDetailCtrl as detailCtrl",
 		scope:{
-			model:"=model",
-				open:"=isOpen"
+			model:"=model"
 		},
 		link : function(scope, element, attr) {
 		}
@@ -508,22 +291,24 @@ app.controller('activityDetailCtrl', [ '$scope', '$http',
 		var ctrl = this;
 
 	} ]);
-app.directive('activityAccordion', function(activityService) {
+app.directive('activityAccordion', function(activityService,$stateParams) {
 	function link(scope, element, attr) {
 		scope.$watch('item.open', function(nv, ov) {
-			console.log("open nv:"+nv+" ov:"+ov);
+			if(nv!=ov){
+			console.log("open nv:"+nv+" ov:"+ov+" from "+scope.item.data.aid);
 			
 			// close from hand or buildList
-			if (nv == false) {
-				activityService.submit(scope.item,scope.buildList);
+			if (nv == false&&ov==true) {
+				activityService.submit(scope.item,scope.buildList,$stateParams.aid);
 				// open
 			} else if(nv==true){
-				console.log("load:" + scope.item.aid);
-				if(scope.item.aid==null){
-					console.log("pushNew");
+				console.log("load:" + scope.item.data.aid);
+				if(scope.item.data.aid==null){
+					console.log("pushNew "+scope.item.loaded);
 					scope.pushNew();
 				}
 				activityService.loadActivity(scope.item);
+			}
 			}
 		})
 	}
@@ -575,8 +360,22 @@ app.directive('listHeader',['$state',function($state){
 		link : link
 	}
 	function link(scope, element, attr) {
-		scope.$watch("filter.date",function(){
-			scope.actList.buildList();
+		scope.$watch("filter.date",function(nv,ov){
+			if(nv!=ov){
+				scope.actList.buildList();
+			}
 		})
 	}
 }])
+
+
+app.directive("listTitle",function(){
+	return {
+		restrict :'EA',
+		templateUrl:'/resources/views/list-title.html',
+		link : link
+	}
+	function link(scope, element, attr) {
+
+	}
+})
