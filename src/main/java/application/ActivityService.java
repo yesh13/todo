@@ -169,6 +169,7 @@ public class ActivityService {
 			}
 		}
 		ListComparator comp=new ListComparator();
+		Collections.sort(uslist, comp);
 		//uslist.sort(comp);
 		for (Activity act:uslist){
 			dlist.add(new ActivityDTO(act,false));
@@ -236,6 +237,7 @@ public class ActivityService {
 			}
 		}
 		LeavesComparator comp=new LeavesComparator();
+		Collections.sort(uslist, comp);
 		//uslist.sort(comp);
 		for (Activity act:uslist){
 			dlist.add(new ActivityDTO(act,false));
