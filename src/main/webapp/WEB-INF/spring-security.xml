@@ -18,7 +18,10 @@
 			authentication-failure-url="/signin?error" 
 			username-parameter="username"
 			password-parameter="password" />
-		<logout logout-success-url="/signin?signout" />
+		<logout logout-success-url="/signin?signout" delete-cookies="JSESSIONID"/>
+		
+		<remember-me key="todoKey"
+        token-validity-seconds="1209600"/>
 	</http>
  
 	<authentication-manager>

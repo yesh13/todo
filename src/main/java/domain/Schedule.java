@@ -1,6 +1,7 @@
 package domain;
 
 import java.util.Calendar;
+import util.TimeHisFut;
 
 public class Schedule {
 	private Calendar startTime;
@@ -25,19 +26,27 @@ public class Schedule {
 		this.endTime = endTime;
 	}
 	public boolean withinTime(Calendar t1, Calendar t2) {
+		Calendar today=Calendar.getInstance();
+		boolean future=t1.after(today);
+		boolean history=t2.before(today);
 		switch(type){
 		case 0:
 			if(endTime==null){
-				return t2.after(startTime);			}
+				//unfinished
+				return !history&&(!future||t1.before(startTime))&&t2.after(startTime);	
+				}
 			else{
+				//finished
 				return endTime.before(t2)&&endTime.after(t1);
 			}
 		case 1:
 			return t1.before(endTime)&&startTime.before(t2);
 		case 2:
+			//unfinished
 			if(startTime==null){
-				return t1.before(endTime);
+				return !history&&t1.before(endTime);
 			}else{
+				//finish
 				return endTime.before(t2)&&endTime.after(t1);
 			}
 			default:

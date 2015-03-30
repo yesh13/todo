@@ -46,12 +46,7 @@ app
 									case '0':
 										if (nv[1] == ov[1] && nv[2] == ov[2]) {
 											scope.model.endTime = null;
-											scope.model.startTime = scope.defaultDate;
-										} else {
-											console.log(JSON.stringify(scope.model));
-											console.log(scope.defaultDate);
-											scope.model.startTime = (scope.model.startTime != null) ? scope.model.startTime
-												: scope.defaultDate;
+											scope.model.startTime = null;
 										}
 										scope.sameDate = false;
 										// if(typeof(ov[0])!="undefined"){
@@ -59,6 +54,7 @@ app
 										// }
 										break;
 									case '1':
+										console.log("shedule picker");
 										if (nv[1] == ov[1] && nv[2] == ov[2]) {
 											scope.model.startTime = scope.defaultDate;
 											scope.model.endTime = scope.defaultDate;
@@ -129,6 +125,9 @@ app
 							}
 							break;
 						}
+					}
+					scope.schedule=function(){
+						scope.model.startTime = scope.defaultDate;
 					}
 
 				}
@@ -215,7 +214,7 @@ app.controller("actListCtrl",
 
 			//
 			this.buildList = function() {
-				var req={url:"/api/activity/"+$scope.stateInfo.type+"/" + $stateParams.aid};
+				var req={url:"/api/activity/"+$scope.stateInfo.type+"/" + $stateParams.aid,params:{}};
 				if($scope.stateInfo.date){
 					var t=dateService.empty($scope.filter.date,$scope.stateInfo.date.type);
 					console.log(t[0]);
@@ -223,7 +222,10 @@ app.controller("actListCtrl",
 					req.params={
 						t1 : t[0],
 						t2 : t[1]}
-				}		
+				}
+				if($scope.stateInfo.unscheduled){
+					req.params.unscheduled=$scope.stateInfo.unscheduled;
+				}
 				
 				activityService.buildList(actListCtrl, req, $stateParams.aid,
 					false, function() {
@@ -244,7 +246,9 @@ app.controller("actListCtrl",
 				console.log("set activity " + n + "in")
 				console.log(actListCtrl.activities[n].loaded);
 				if (n != this.activeActNum) {
+					console.log(this.activeActNum);
 					if (this.activeActNum >= 0) {
+						console.log(this.activeActNum);
 						activityService.submit(
 							actListCtrl.activities[this.activeActNum],
 							actListCtrl.buildList, $stateParams.aid);
@@ -279,7 +283,7 @@ app.controller("actListCtrl",
 				console.log("submitall");
 				var needSubmit = false;
 				for (i in actListCtrl.activities) {
-					if (actListCtrl.activities[i].loaded == true) {
+					if (actListCtrl.activities[i].dirty == true) {
 						needSubmit = true;
 					}
 					activityService.submit(actListCtrl.activities[i],
@@ -335,7 +339,7 @@ app.directive('droppableActivity', [
 		};
 	} ]);
 
-app.directive('activityDetail', function(dateService) {
+app.directive('activityDetail', function(dateService,activityService) {
 	return {
 		templateUrl : "/resources/views/activity.detail.html",
 		controller : "activityDetailCtrl as detailCtrl",
@@ -344,35 +348,15 @@ app.directive('activityDetail', function(dateService) {
 			defaultDate:"=?"
 		},
 		link : function(scope, element, attr) {
-			scope.descriptionFunc=function(){
-				switch(scope.model.data.type){
-				case "0":
-					if(scope.model.data.endTime!=null){
-						return "Finished at "+dateService.abbreviate(scope.model.data.endTime);
-					}
-					return "unfinished";
-				case "1":
-					if(dateService.sameDate(scope.model.data.startTime,scope.model.data.endTime)){
-						return "at "+dateService.abbreviate(scope.model.data.startTime);
-					}
-					return "from "+dateService.abbreviate(scope.model.data.startTime)+" to "+dateService.abbreviate(scope.model.data.endTime);
-				case "2":
-					if(scope.model.data.startTime!=null){
-						return "Finished at "+dateService.abbreviate(scope.model.data.startTime);
-					}else{
-						return "Deadline at "+dateService.abbreviate(scope.model.data.endTime);
-					}
+			scope.$watch("model",function(nv,ov){
+				console.log("detail change");
+				console.log(JSON.stringify(ov));
+				console.log(JSON.stringify(nv));
+				if(nv.data.aid==ov.data.aid&&ov.loaded){
+					scope.model.dirty=true;
 				}
-				return scope.model.data.type;
-			}
-			scope.$watch("descriptionFunc()",function(nv){
-				if(scope.model.description!=nv){
-					scope.model.description=nv;
-				}
-			})
-			scope.$watch("model.description",function(){
-				scope.model.description=scope.descriptionFunc();
-			})
+				scope.model.description=activityService.getDescription(scope.model.data);
+			},true);
 		}
 	}
 });

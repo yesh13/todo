@@ -18,6 +18,13 @@ public class ActivityDTO {
 	String type;
 
 	String uid;
+	String priority;
+	public String getPriority() {
+		return priority;
+	}
+	public void setPriority(String priority) {
+		this.priority = priority;
+	}
 	static public ActivityDTO getNewInstance(){
 		ActivityDTO dto=new ActivityDTO();
 		dto.setType("0");
@@ -46,6 +53,7 @@ public class ActivityDTO {
 			}
 			setParent(String.valueOf(act.getParent()));
 			setType(String.valueOf(act.getType()));
+			setPriority(String.valueOf(act.getPriority()));
 		}
 	}
 

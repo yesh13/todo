@@ -129,4 +129,65 @@ public class Activity {
 	public boolean withinTime(Calendar t1,Calendar t2){
 		return schedule.withinTime(t1,t2);
 	}
+	private int priority=-1;
+	public int getPriority() {
+		// TODO Auto-generated method stub
+		if(priority==-1){
+			switch(getSchedule().getType()){
+			case 0:
+				if(getSchedule().getEndTime()!=null){
+					priority=50;
+				}else if(getSchedule().getStartTime()!=null){
+					priority=30;
+				}else{
+					priority=100;
+				}
+				break;
+			case 1:
+				priority=11;
+				break;
+			case 2:
+				if(getSchedule().getStartTime()!=null){
+					priority=50;
+				}else{
+					Calendar c=Calendar.getInstance();
+					c.add(Calendar.HOUR_OF_DAY, 24);
+					if(getSchedule().getEndTime().after(c)){
+						priority=40;
+					}else {
+						priority=0;
+					}	
+				}
+				break;
+			}
+		}
+		return priority;
+	}
+	private long sortTime=-100;
+	public long getSortTime() {
+		if(sortTime==-100){
+			switch(getSchedule().getType()){
+			case 0:
+				if(getSchedule().getEndTime()!=null){
+					sortTime=getSchedule().getEndTime().getTimeInMillis();
+				}else if(getSchedule().getStartTime()!=null){
+					sortTime=getSchedule().getStartTime().getTimeInMillis();
+				}else{
+					sortTime=aid;
+				}
+				break;
+			case 1:
+				sortTime=getSchedule().getStartTime().getTimeInMillis();
+				break;
+			case 2:
+				if(getSchedule().getStartTime()!=null){
+					sortTime=getSchedule().getStartTime().getTimeInMillis();
+				}else{
+					sortTime=getSchedule().getEndTime().getTimeInMillis();
+				}
+				break;
+			}
+		}
+		return sortTime;
+	}
 }

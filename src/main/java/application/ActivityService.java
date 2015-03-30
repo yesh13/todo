@@ -16,6 +16,7 @@ import org.hibernate.Transaction;
 import util.hibernate.HibernateFactory;
 import domain.Activity;
 import domain.ActivityFilter;
+import domain.LeavesComparator;
 import domain.Location;
 import domain.Note;
 import domain.Schedule;
@@ -186,7 +187,10 @@ public class ActivityService {
 
 	public List<ActivityDTO> getLeaves(String aidString, int uid,
 			List<ActivityFilter> filters) {
+		//unfilteredList
 		ArrayList<ActivityDTO> dlist = new ArrayList<ActivityDTO>();
+		//unsortedList
+		ArrayList<Activity> uslist = new ArrayList<Activity>();
 		HibernateFactory instance = util.hibernate.HibernateFactory
 				.getInstance();
 		SessionFactory sessionFactory = instance.buildSessionFactory();
@@ -220,11 +224,14 @@ public class ActivityService {
 			}
 			if (pass) {
 				if (act.isDeepChildOf(parent)) {
-					ActivityDTO dto = new ActivityDTO(act, false);
-					dlist.add(dto);
+					uslist.add(act);
 				}
 			}
-
+		}
+		LeavesComparator comp=new LeavesComparator();
+		uslist.sort(comp);
+		for (Activity act:uslist){
+			dlist.add(new ActivityDTO(act,false));
 		}
 		return dlist;
 	}

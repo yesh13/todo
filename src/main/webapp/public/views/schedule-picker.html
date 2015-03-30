@@ -9,12 +9,25 @@ Deadline
 </div>
 <div ng-switch="model.type">
 	<div ng-switch-when=0>
+	<table class="schedule">
+		<tr>
+		<th>Schedule</th>
+		<th>Finish</th>
+		</tr>
+			<tr>
+				<td><button class="btn btn-success" ng-if="model.startTime==null" ng-click="schedule()">Schedule</button>
+				<timepicker ng-if="model.startTime!=null" minute-step="30" ng-model='model.startTime'><timepicker></td>
+				<td>
+				<button class="btn btn-success" ng-show="model.endTime==null" ng-click="finish()">Finish</button>
+				<timepicker ng-show="model.endTime!=null" minute-step="30" ng-model='model.endTime'><timepicker>
+				</td>
+			</tr>
+			<tr>
+				<td><my-date-picker ng-if="model.startTime!=null" model="model.startTime"></my-date-picker></td>
+				<td><my-date-picker ng-if="model.endTime!=null" model="model.endTime"></my-date-picker></td>
+			</tr>
+		</table>
 
-		<button class="btn btn-success" ng-show="model.endTime==null" ng-click="finish()">Finish</button>
-		<div ng-show="model.endTime!=null">
-			<timepicker minute-step="30" ng-model='model.endTime'><timepicker>
-			<my-date-picker style="width:100px" model="model.endTime"></my-date-picker>
-		</div>
 	</div>
 	<div ng-switch-when=1>
 		<table class="schedule">

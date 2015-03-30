@@ -2,11 +2,24 @@ var app=angular.module("services", [])
 
 
 app.service("dateService",function(){
+	this.formatInt=function(value,size){
+		var s=value+"";
+		while(s.length<size)
+			s="0"+s;
+		return s;
+	}
+	this.week=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 	this.sameDate=function(d1,d2){
+		if(d1==null||d2==null) return false;
 		return d1.getFullYear()==d2.getFullYear()
 		&&d1.getDate()==d2.getDate()
 		&&d1.getMonth()==d2.getMonth();
 	};
+	this.diffInDays=function(d1,d2){
+		if(d1==null||d2==null) return 0;
+		return Math.round((this.emptyTime(d1)[0]-this.emptyTime(d2)[0])/86400000);
+		
+	}
 	this.setSameDate=function(d1,d2){
 		d1.setFullYear(d2.getFullYear());
 		d1.setMonth(d2.getMonth());
@@ -62,12 +75,29 @@ app.service("dateService",function(){
 		date.setDate(date.getDate()-(date.getDay()+6)%7);
 		return [new Date(date),new Date(date.setDate(date.getDate()+7))];
 	}
-	this.abbreviate=function(date){
+	this.abbreviate=function(date,forbitTime){
+		if(date==null) return "";
 		today=new Date();
 		if(this.sameDate(date,today)){
-			return date.getHours()+":"+date.getMinutes();
+			if(forbitTime){
+				return "today";
+			}else{
+				return date.getHours()+":"+this.formatInt(date.getMinutes(), 2);
+			}
 		}else{
-			return date.toLocaleDateString();
+			var diff=this.diffInDays(date,today);
+			var absdiff=diff>0?diff:-diff;
+			if(absdiff<10){
+				if(diff>0){
+					return absdiff+" days later";
+				}else{
+					return absdiff+" days before";
+				}
+			}else if(absdiff<60){
+				return (date.getMonth()+1)+"/"+date.getDate();
+			}else{
+				return date.getFullYear()+"/"+(date.getMonth()+1)+"/"+date.getDate();
+			}
 		}
 	}
 	
@@ -76,6 +106,29 @@ app.service("dateService",function(){
 
 app.service("activityService",[ '$http','dateService',function($http,dateService){
 	var service=this;
+	this.getDescription=function(act){
+		switch(act.type){
+		case "0":
+			if(act.endTime!=null){
+				return "Finished "+dateService.abbreviate(act.endTime,true);
+			}else if(act.startTime!=null){
+				return dateService.abbreviate(act.startTime);
+			}else{
+				return "";
+			}
+		case "1":
+			if(dateService.sameDate(act.startTime,act.endTime)){
+				return dateService.abbreviate(act.startTime);
+			}
+			return "from "+dateService.abbreviate(act.startTime)+" to "+dateService.abbreviate(act.endTime);
+		case "2":
+			if(act.startTime!=null){
+				return "Finished "+dateService.abbreviate(act.startTime);
+			}else{
+				return "Deadline "+dateService.abbreviate(act.endTime);
+			}
+		}
+	}
 	this.moveToTrash=function(context,aid){
 		console.log("move " + aid + " to trash");
 		if(aid!=null){
@@ -89,11 +142,15 @@ app.service("activityService",[ '$http','dateService',function($http,dateService
 		}
 	}
 	this.submit=function(context,callback,parentAid){
-		if (context.loaded) {
-			context.loaded = false;
+		console.log(JSON.stringify(context));
+		context.loaded=false;
+		if (context.dirty) {
+			context.dirty = false;
 
 			if (context.data.aid == null) {
-				context.data.parent = parentAid;
+				if(context.data.parent==null){
+					context.data.parent = parentAid;
+				}
 				console.log("new: "
 					+ JSON.stringify(context.data));
 				$http.post("/api/activity", context.data)
@@ -204,6 +261,9 @@ app.service("activityService",[ '$http','dateService',function($http,dateService
 					}
 					if (!exist) {
 						context.activeActNum = -1;
+					}
+					for (i in context.activities){
+						context.activities[i].description=service.getDescription(context.activities[i].data);
 					}
 					console.log("build success");
 					if(callback instanceof Function){

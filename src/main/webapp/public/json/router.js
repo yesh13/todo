@@ -36,16 +36,13 @@
 			}
 			}
 			},
-			{"name":"week","state":{
-				"url" : "/week/:aid",
+			{"name":"wait","state":{
+				"url" : "/wait/:aid",
 				"templateUrl" : "activity.html",
 				"controller" : "actListCtrl as actList",
 				"data":{
 					"type":"leaves",
-					"date":{
-						"type":"week",
-						"shift":0
-					}
+					"unscheduled":"1"
 				}
 				}
 				}

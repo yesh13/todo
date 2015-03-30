@@ -7,8 +7,8 @@
       <accordion-heading>
 <list-title></list-title>
       </accordion-heading>
-      <activity-accordion model="item" build-list="actList.buildList()" push-new="actList.pushNew()">
-      <activity-detail model="item" default-date="filter.date"></activity-detail>
+      <activity-accordion  model="item" build-list="actList.buildList()" push-new="actList.pushNew()">
+      <activity-detail ng-if="item.open" model="item" default-date="filter.date"></activity-detail>
       </activity-accordion>
     </accordion-group>
   </accordion>

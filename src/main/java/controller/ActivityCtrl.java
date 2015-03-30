@@ -20,6 +20,8 @@ import application.ActivityDTO;
 import application.ActivityService;
 import domain.ActivityFilter;
 import domain.DateActivityFilter;
+import domain.LeavesComparator;
+import domain.OnlyUnscheduledFilter;
 
 @RestController
 public class ActivityCtrl {
@@ -68,13 +70,19 @@ public class ActivityCtrl {
 		return nameList;
 	}
 	@RequestMapping(value="/api/activity/leaves/{parentString}", method=RequestMethod.GET)
-	public List<ActivityDTO> list1(@PathVariable String parentString,@RequestParam(required=false) String t1,@RequestParam(required=false) String t2){
+	public List<ActivityDTO> list1(@PathVariable String parentString,@RequestParam(required=false) String t1,@RequestParam(required=false) String t2,@RequestParam(required=false) String unscheduled){
 		List<ActivityFilter> filters=new ArrayList<ActivityFilter>();
-		Calendar ec=util.CalendarUtil.string2calendar(t1);
-		Calendar lc=util.CalendarUtil.string2calendar(t2);
-		
+		if(t1!=null&&t2!=null){
+			Calendar ec=util.CalendarUtil.string2calendar(t1);
+			Calendar lc=util.CalendarUtil.string2calendar(t2);
 			ActivityFilter filter=new DateActivityFilter(ec,lc);
 			filters.add(filter);
+			filters.add(new OnlyUnscheduledFilter(true));
+		}
+		if(unscheduled!=null&&unscheduled.equals("1")){
+			filters.add(new OnlyUnscheduledFilter(false));
+		}
+		LeavesComparator comp=new LeavesComparator();
 		List<ActivityDTO> nameList = (new ActivityService()).getLeaves(parentString,getUid(),filters);
 		return nameList;
 	}

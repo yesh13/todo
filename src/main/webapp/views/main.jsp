@@ -30,7 +30,7 @@
 <div class="act-list col-xs-4 full-height-flow" ng-include="'/resources/views/activity.list.html'">
 </div>
 <div class="act-detail col-xs-5 full-height-flow">
-<activity-detail ng-show="actList.activeActNum!=-1" model="actList.activities[actList.activeActNum]" is-open="true" default-date="filter.date"></activity-detail>
+<activity-detail ng-if="actList.activeActNum!=-1" model="actList.activities[actList.activeActNum]" is-open="true" default-date="filter.date"></activity-detail>
 </div>
 </script>
 

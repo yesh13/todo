@@ -81,6 +81,7 @@ button[type="submit"]{
 <!--             <input type="checkbox" value="remember-me"> Remember me -->
 <!--           </label> -->
 <!--         </div> -->
+<input style="display:none" type="checkbox" name="_spring_security_remember_me" checked/>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
       <a class="btn btn-lg btn-info btn-block" href="/register" role="button">Join</a>
       <a class="btn btn-lg btn-info btn-block" href="/" role="button">Guest</a>

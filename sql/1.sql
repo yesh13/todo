@@ -1,7 +1,7 @@
 create table history(
 version int
 );
-insert into history (version) valuse (1);
+insert into history (version) values (1);
 
 
 create table if not exists account (
