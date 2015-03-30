@@ -57,12 +57,12 @@ Deadline
 		</tr>
 			<tr>
 				<td><timepicker minute-step="30" ng-model='model.endTime'><timepicker></td>
-				<td style="vertical-align:middle"><button class="btn btn-success" ng-show="model.startTime==null" ng-click="finish()">Finish</button>
-				<timepicker minute-step="30" ng-show="model.startTime!=null" ng-model='model.startTime'><timepicker></td>
+				<td style="vertical-align:middle"><button class="btn btn-success" ng-show="model.finishTime==null" ng-click="finish()">Finish</button>
+				<timepicker minute-step="30" ng-show="model.finishTime!=null" ng-model='model.finishTime'><timepicker></td>
 			</tr>
 			<tr>
 				<td><my-date-picker model="model.endTime"></my-date-picker></td>
-				<td><my-date-picker ng-show="model.startTime!=null" model="model.startTime"></my-date-picker></td>
+				<td><my-date-picker ng-show="model.finishTime!=null" model="model.finishTime"></my-date-picker></td>
 			</tr>
 		</table>
 

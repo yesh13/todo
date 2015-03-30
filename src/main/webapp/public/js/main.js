@@ -54,7 +54,6 @@ app
 										// }
 										break;
 									case '1':
-										console.log("shedule picker");
 										if (nv[1] == ov[1] && nv[2] == ov[2]) {
 											scope.model.startTime = scope.defaultDate;
 											scope.model.endTime = scope.defaultDate;
@@ -96,6 +95,7 @@ app
 										break;
 									case '2':
 										if (nv[1] == ov[1] && nv[2] == ov[2]) {
+											scope.model.finishTime = null;
 											scope.model.startTime = null;
 											var x = new Date(scope.defaultDate);
 											x.setDate(x.getDate() + 1);
@@ -105,9 +105,6 @@ app
 												: scope.defaultDate;
 										}
 										scope.sameDate = false;
-										if (typeof (ov[0]) != "undefined") {
-											scope.model.startTime = null;
-										}
 										break;
 									}
 								}
@@ -120,8 +117,8 @@ app
 							}
 							break;
 						case "2":
-							if (scope.model.startTime == null) {
-								scope.model.startTime = new Date();
+							if (scope.model.finishTime == null) {
+								scope.model.finishTime = new Date();
 							}
 							break;
 						}

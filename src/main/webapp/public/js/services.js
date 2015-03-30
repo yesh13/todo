@@ -21,6 +21,7 @@ app.service("dateService",function(){
 		
 	}
 	this.setSameDate=function(d1,d2){
+		console.log(d1);
 		d1.setFullYear(d2.getFullYear());
 		d1.setMonth(d2.getMonth());
 		d1.setDate(d2.getDate());
@@ -30,9 +31,12 @@ app.service("dateService",function(){
 		act.endTime = act.endTime!=null ? new Date(
 			act.endTime)
 			: null;
-		act.startTime = act.startTime!=null ? new Date(
-			act.startTime)
-			: null;
+			act.startTime = act.startTime!=null ? new Date(
+				act.startTime)
+				: null;
+				act.finishTime = act.finishTime!=null ? new Date(
+					act.finishTime)
+					: null;
 	};
 	this.shift=function(date,n,type){
 		date=new Date(date);
@@ -76,6 +80,7 @@ app.service("dateService",function(){
 		return [new Date(date),new Date(date.setDate(date.getDate()+7))];
 	}
 	this.abbreviate=function(date,forbitTime){
+		console.log(date instanceof Date);
 		if(date==null) return "";
 		today=new Date();
 		if(this.sameDate(date,today)){
@@ -122,8 +127,8 @@ app.service("activityService",[ '$http','dateService',function($http,dateService
 			}
 			return "from "+dateService.abbreviate(act.startTime)+" to "+dateService.abbreviate(act.endTime);
 		case "2":
-			if(act.startTime!=null){
-				return "Finished "+dateService.abbreviate(act.startTime);
+			if(act.finishTime!=null){
+				return "Finished "+dateService.abbreviate(act.finishTime);
 			}else{
 				return "Deadline "+dateService.abbreviate(act.endTime);
 			}

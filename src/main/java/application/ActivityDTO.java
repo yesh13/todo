@@ -14,6 +14,14 @@ public class ActivityDTO {
 	String parent;
 
 	String startTime;
+	String finishTime;
+
+	public String getFinishTime() {
+		return finishTime;
+	}
+	public void setFinishTime(String finishTime) {
+		this.finishTime = finishTime;
+	}
 
 	String type;
 
@@ -46,6 +54,9 @@ public class ActivityDTO {
 				}
 				if (act.getSchedule().getEndTime() != null) {
 					setEndTime(df.format(act.getSchedule().getEndTime().getTime()));
+				}
+				if (act.getSchedule().getFinishTime() != null) {
+					setFinishTime(df.format(act.getSchedule().getFinishTime().getTime()));
 				}
 			}
 			if (withNote == true) {

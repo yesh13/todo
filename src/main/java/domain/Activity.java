@@ -152,7 +152,7 @@ public class Activity {
 				}
 				break;
 			case 2:
-				if(getSchedule().getStartTime()!=null){
+				if(getSchedule().getFinishTime()!=null){
 					priority=49;
 				}else{
 					Calendar c=Calendar.getInstance();
@@ -185,8 +185,8 @@ public class Activity {
 				sortTime=getSchedule().getStartTime().getTimeInMillis();
 				break;
 			case 2:
-				if(getSchedule().getStartTime()!=null){
-					sortTime=getSchedule().getStartTime().getTimeInMillis();
+				if(getSchedule().getFinishTime()!=null){
+					sortTime=getSchedule().getFinishTime().getTimeInMillis();
 				}else{
 					sortTime=getSchedule().getEndTime().getTimeInMillis();
 				}

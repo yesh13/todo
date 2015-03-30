@@ -18,6 +18,7 @@
       	<property name="type" column="schedule_type" type="int"/>
          <property name="startTime" column="start_time" type="calendar"/>
          <property name="endTime" column="end_time" type="calendar"/>
+         <property name="finishTime" column="finish_time" type="calendar"/>
       </component>
       <component name="location" class="domain.Location">
          <property name="place" column="location" type="string"/>

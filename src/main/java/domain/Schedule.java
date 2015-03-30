@@ -6,6 +6,13 @@ import util.TimeHisFut;
 public class Schedule {
 	private Calendar startTime;
 	private Calendar endTime;
+	private Calendar finishTime;
+	public Calendar getFinishTime() {
+		return finishTime;
+	}
+	public void setFinishTime(Calendar finishTime) {
+		this.finishTime = finishTime;
+	}
 	private int type=0;
 	public int getType() {
 		return type;
@@ -43,11 +50,15 @@ public class Schedule {
 			return t1.before(endTime)&&startTime.before(t2);
 		case 2:
 			//unfinished
-			if(startTime==null){
-				return !history&&t1.before(endTime);
+			if(finishTime==null){
+				boolean b=true;
+				if(startTime!=null){
+					startTime.before(t2);
+				}
+				return b&&!history&&t1.before(endTime);
 			}else{
 				//finish
-				return endTime.before(t2)&&endTime.after(t1);
+				return finishTime.before(t2)&&finishTime.after(t1);
 			}
 			default:
 				return false;

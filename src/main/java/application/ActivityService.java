@@ -53,6 +53,8 @@ public class ActivityService {
 			
 					act.getSchedule().setEndTime(
 							string2calendar(dto.getEndTime()));
+					act.getSchedule().setFinishTime(
+							string2calendar(dto.getFinishTime()));
 			
 			session.save(act);
 			tx.commit();
@@ -115,6 +117,8 @@ public class ActivityService {
 		
 						act.getSchedule().setEndTime(
 								string2calendar(dto.getEndTime()));
+						act.getSchedule().setFinishTime(
+								string2calendar(dto.getFinishTime()));
 				
 			
 			tx.commit();
