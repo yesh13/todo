@@ -136,7 +136,7 @@ public class Activity {
 			switch(getSchedule().getType()){
 			case 0:
 				if(getSchedule().getEndTime()!=null){
-					priority=50;
+					priority=49;
 				}else if(getSchedule().getStartTime()!=null){
 					priority=30;
 				}else{
@@ -144,11 +144,16 @@ public class Activity {
 				}
 				break;
 			case 1:
-				priority=11;
+				Calendar ca=Calendar.getInstance();
+				if(ca.before(getSchedule().getEndTime())){
+					priority=11;
+				}else{
+					return 49;
+				}
 				break;
 			case 2:
 				if(getSchedule().getStartTime()!=null){
-					priority=50;
+					priority=49;
 				}else{
 					Calendar c=Calendar.getInstance();
 					c.add(Calendar.HOUR_OF_DAY, 24);

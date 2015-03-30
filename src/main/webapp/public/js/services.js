@@ -112,7 +112,7 @@ app.service("activityService",[ '$http','dateService',function($http,dateService
 			if(act.endTime!=null){
 				return "Finished "+dateService.abbreviate(act.endTime,true);
 			}else if(act.startTime!=null){
-				return dateService.abbreviate(act.startTime);
+				return dateService.abbreviate(act.startTime,true);
 			}else{
 				return "";
 			}

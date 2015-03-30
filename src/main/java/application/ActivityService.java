@@ -17,6 +17,7 @@ import util.hibernate.HibernateFactory;
 import domain.Activity;
 import domain.ActivityFilter;
 import domain.LeavesComparator;
+import domain.ListComparator;
 import domain.Location;
 import domain.Note;
 import domain.Schedule;
@@ -151,6 +152,8 @@ public class ActivityService {
 		} finally {
 			session.close();
 		}
+		//unsortedList
+		ArrayList<Activity> uslist = new ArrayList<Activity>();
 		for (Activity act : alist) {
 			boolean pass = true;
 			if (filters != null) {
@@ -162,9 +165,13 @@ public class ActivityService {
 				}
 			}
 			if (pass) {
-				ActivityDTO dto = new ActivityDTO(act, false);
-				dlist.add(dto);
+					uslist.add(act);
 			}
+		}
+		ListComparator comp=new ListComparator();
+		uslist.sort(comp);
+		for (Activity act:uslist){
+			dlist.add(new ActivityDTO(act,false));
 		}
 		return dlist;
 	}
@@ -189,8 +196,6 @@ public class ActivityService {
 			List<ActivityFilter> filters) {
 		//unfilteredList
 		ArrayList<ActivityDTO> dlist = new ArrayList<ActivityDTO>();
-		//unsortedList
-		ArrayList<Activity> uslist = new ArrayList<Activity>();
 		HibernateFactory instance = util.hibernate.HibernateFactory
 				.getInstance();
 		SessionFactory sessionFactory = instance.buildSessionFactory();
@@ -212,6 +217,8 @@ public class ActivityService {
 			session.close();
 		}
 		int parent = Integer.parseInt(aidString);
+		//unsortedList
+		ArrayList<Activity> uslist = new ArrayList<Activity>();
 		for (Activity act : alist) {
 			boolean pass = true;
 			if (filters != null) {

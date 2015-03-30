@@ -82,7 +82,6 @@ public class ActivityCtrl {
 		if(unscheduled!=null&&unscheduled.equals("1")){
 			filters.add(new OnlyUnscheduledFilter(false));
 		}
-		LeavesComparator comp=new LeavesComparator();
 		List<ActivityDTO> nameList = (new ActivityService()).getLeaves(parentString,getUid(),filters);
 		return nameList;
 	}
