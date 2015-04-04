@@ -77,3 +77,74 @@ module.controller('parentSelectModalCtrl', function ($scope, $modalInstance,acti
     $modalInstance.dismiss('cancel');
   };
 });
+
+
+
+
+
+module.controller("datepickerCtrl", function(activityService,dateService,$scope,$modal) {
+	$scope.$watch("model",function(nv){
+		$scope.title=nv?dateService.abbreviate(nv, false):$scope.invalidText;
+	})
+
+	  $scope.open = function (size) {
+		console.log($scope.defaultDate);
+		if($scope.model==null){
+			$scope.model=$scope.defaultDate?$scope.defaultDate:new Date();
+			return;
+		}
+
+	    var modalInstance = $modal.open({
+	      templateUrl: '/resources/views/date-picker-modal.html',
+	      controller: 'datepickerModalCtrl',
+	      size: size,
+	      resolve: {
+	        model: function () {
+	          return $scope.model;
+	        },
+	        setNull:function () {
+	          return $scope.setNull;
+	        }
+	      }
+	    });
+
+	    modalInstance.result.then(function (setTime) {
+	    	$scope.model=setTime;
+	    }, function () {
+	    });
+	  };
+})
+
+module.directive("modalDatepicker", function() {
+	return {
+		templateUrl:"/resources/views/modal-datepicker.html",
+		scope:{
+			model:"=?",
+			invalidText:"@",
+			setNull:"@",
+			defaultDate:"=?"
+		},
+		controller:"datepickerCtrl"
+		
+	}
+})
+
+
+
+module.controller('datepickerModalCtrl', function ($scope, $modalInstance,activityService, model,setNull) {
+	$scope.setNull=setNull;
+	$scope.model=model;
+	console.log(model);
+
+  $scope.ok = function () {
+    $modalInstance.close($scope.model);
+  };
+  
+  $scope.invalid = function () {
+	    $scope.model=null;
+	  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss();
+  };
+});

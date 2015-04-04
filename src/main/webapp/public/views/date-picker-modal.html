@@ -1,0 +1,9 @@
+<div class="modal-body">
+	<datepicker ng-model="model" is-open="open" custom-class="datepicker" class="datepicker"></datepicker>
+	<timepicker minute-step="30" ng-model='model'><timepicker>
+</div>
+<div class="modal-footer">
+	<button ng-if="setNull" class="btn btn-primary" style="float:left" ng-click="invalid()">Invalid</button>
+	<button class="btn btn-primary" ng-click="ok()">OK</button>
+	<button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>

@@ -26,3 +26,8 @@ div.bottom-tab>.tab-content>.tab-pane {
   .navbar-right li{
   
     display:inline-block;}
+    
+    
+ .datepicker button{
+ padding:4px 8px;
+ }

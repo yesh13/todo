@@ -7,6 +7,8 @@ app.controller("testCtrl",['$scope','$http',function($scope,$http){
 		$scope.width=0;
 	}
 	$scope.td=new Date();
+	$scope.td.setDate(7);
+	$scope.open=false;
 	$scope.o=[{data:"aa"},{data:"bb"}]
 	
 }]);

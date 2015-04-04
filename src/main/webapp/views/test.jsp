@@ -20,8 +20,7 @@
 	
 </head>
 <body ng-app="testApp" ng-controller="testCtrl as test">
-<parent-select model="parent"></parent-select>
-{{parent}}
-
+<button>{{td}}</button>
+<modal-datepicker model="td" set-null="true" invalid-text="Schedule"></modal-datepicker>
 </body>
 </html>
