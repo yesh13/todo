@@ -24,10 +24,15 @@ import domain.Schedule;
 
 public class ActivityService {
 	int user = 1;
+	Account account;
+	public ActivityService(int user){
+		this.user=user;
+		account=Account.read(user);
+	}
 
 	public ActivityDTO getActivity(String aidString, int uid, boolean withNote) {
 		int aid = Integer.parseInt(aidString);
-		Activity act = Activity.getById(aid, uid);
+		Activity act = Activity.getById(aid, user);
 		return new ActivityDTO(act, withNote);
 	}
 
@@ -58,6 +63,7 @@ public class ActivityService {
 			
 			session.save(act);
 			tx.commit();
+			account.setUpdate();
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
@@ -91,7 +97,7 @@ public class ActivityService {
 					.createQuery(
 							"from Activity act where act.aid = :aid and act.uid = :uid")
 					.setInteger("aid", Integer.valueOf(dto.getAid()))
-					.setInteger("uid", uid).list();
+					.setInteger("uid", user).list();
 			if (alist.size() == 0) {
 				return 0;
 			}
@@ -105,7 +111,7 @@ public class ActivityService {
 			if (dto.getParent() != null)
 				act.setParent(Integer.parseInt(dto.getParent()));
 			if (dto.getUid() != null)
-				act.setUid(uid);
+				act.setUid(user);
 			if(dto.getType()!=null) act.setType(Integer.valueOf(dto.getType()));
 			
 				
@@ -122,6 +128,7 @@ public class ActivityService {
 				
 			
 			tx.commit();
+			account.setUpdate();
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
@@ -147,7 +154,7 @@ public class ActivityService {
 					.createQuery(
 							"from Activity act where act.parent = :aid and act.uid = :uid")
 					.setInteger("aid", Integer.parseInt(aidString))
-					.setInteger("uid", uid).list();
+					.setInteger("uid", user).list();
 			tx.commit();
 		} catch (HibernateException e) {
 			if (tx != null)
@@ -185,7 +192,7 @@ public class ActivityService {
 		ArrayList<ActivityDTO> dlist = new ArrayList<ActivityDTO>();
 		String curId = aidString;
 		while (!curId.equals("0")) {
-			ActivityDTO dto = getActivity(curId, uid, false);
+			ActivityDTO dto = getActivity(curId, user, false);
 			if (dto.getParent() != null) {
 				dlist.add(dto);
 				curId = dto.getParent();
@@ -212,7 +219,7 @@ public class ActivityService {
 			alist = session
 					.createQuery(
 							"from Activity act where act.uid = :uid and (select count(*) from Activity where parent=act.aid)=0")
-					.setInteger("uid", uid).list();
+					.setInteger("uid", user).list();
 			tx.commit();
 		} catch (HibernateException e) {
 			if (tx != null)
@@ -260,7 +267,7 @@ public class ActivityService {
 			tx = session.beginTransaction();
 			alist = session
 					.createQuery("from Activity act where act.uid = :uid")
-					.setInteger("uid", uid).list();
+					.setInteger("uid", user).list();
 			tx.commit();
 		} catch (HibernateException e) {
 			if (tx != null)
@@ -274,5 +281,8 @@ public class ActivityService {
 			dlist.add(dto);
 		}
 		return dlist;
+	}
+	public void updateAccount(){
+		account.setUpdate();
 	}
 }

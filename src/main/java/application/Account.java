@@ -1,5 +1,6 @@
 package application;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -10,6 +11,7 @@ public class Account {
 	private int uid;
 	private String nickName;
 	private boolean enabled;
+	private Calendar lastUpdate;
 
 	public Account(String username, String passwd,String nickName ) {
 		super();
@@ -141,6 +143,22 @@ public class Account {
 	      }
 		return alist.size()==0?null:alist.get(0);
 	}
+	public static Account read(int id){
+	      Session session = util.hibernate.HibernateFactory.getInstance().buildSessionFactory().openSession();
+	      Transaction tx = null;
+	      List<Account> alist = null;
+	      try{
+	         tx = session.beginTransaction();
+	         alist = session.createQuery("FROM Account as account where account.uid = :name").setParameter("name",id).list();
+	         tx.commit();
+	      }catch (HibernateException e) {
+	         if (tx!=null) tx.rollback();
+	         e.printStackTrace(); 
+	      }finally {
+	         session.close(); 
+	      }
+		return alist.size()==0?null:alist.get(0);
+	}
 	public static List<Account> readList(String s){
 		if(s==null) s="";
 	      Session session = util.hibernate.HibernateFactory.getInstance().buildSessionFactory().openSession();
@@ -157,5 +175,16 @@ public class Account {
 	         session.close(); 
 	      }
 		return alist;
+	}
+	public void setUpdate(){
+		lastUpdate=Calendar.getInstance();
+		update();
+	}
+	public void setLastUpdate(Calendar lu){
+		lastUpdate=lu;
+	}
+	public Calendar getLastUpdate(){
+		if(lastUpdate==null) lastUpdate=Calendar.getInstance();
+		return lastUpdate;
 	}
 }

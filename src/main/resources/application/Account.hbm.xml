@@ -14,6 +14,7 @@
       <property name="username" column="name" type="string"/>
       <property name="nickName" column="nick_name" type="string"/>
       <property name="passwd" column="passwd" type="string"/>
+      <property name="lastUpdate" column="update_time" type="calendar"/>
       
         <property name="enabled" type="boolean">
             <column name="enabled" not-null="true" />

@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import util.CalendarUtil;
+import application.Account;
 import application.AccountFactory;
 import application.ActivityDTO;
 import application.ActivityService;
@@ -29,14 +31,14 @@ public class ActivityCtrl {
 	@RequestMapping(value="/api/activity", method=RequestMethod.POST)
 	public String add(@RequestBody ActivityDTO dto){
 		System.out.println("act add post received "+ dto.getAid()+" "+dto.getName());
-		int ret=(new ActivityService()).addActivity(dto,getUid());
+		int ret=(new ActivityService(getUid())).addActivity(dto,getUid());
 		return String.valueOf(ret);
 	}
 	@RequestMapping(value="/api/activity/{aidString}", method=RequestMethod.POST)
 	public String edit(@RequestBody ActivityDTO dto,@PathVariable String aidString){
 		System.out.println("act edit post received "+ dto.getAid()+" "+dto.getName());
 		dto.setAid(aidString);
-		int ret=(new ActivityService()).editActivity(dto,getUid());
+		int ret=(new ActivityService(getUid())).editActivity(dto,getUid());
 		return String.valueOf(ret);
 	}
 	@RequestMapping(value="/api/activity/detail/{aidString}", method=RequestMethod.GET)
@@ -44,7 +46,7 @@ public class ActivityCtrl {
 		if(aidString.equals("new")){
 			return ActivityDTO.getNewInstance();
 		}
-		ActivityDTO adto=(new ActivityService()).getActivity(aidString,getUid(),true);
+		ActivityDTO adto=(new ActivityService(getUid())).getActivity(aidString,getUid(),true);
 		return adto;
 	}
 	private int getUid() {
@@ -56,17 +58,17 @@ public class ActivityCtrl {
 	}
 	@RequestMapping(value="/api/activity/all", method=RequestMethod.GET)
 	public List<ActivityDTO> list(){
-		List<ActivityDTO> nameList = (new ActivityService()).getAll(getUid());
+		List<ActivityDTO> nameList = (new ActivityService(getUid())).getAll(getUid());
 		return nameList;
 	}
 	//parentString is 0 to show top level activities
 	@RequestMapping(value="/api/activity/list/{parentString}", method=RequestMethod.GET)
 	public List<ActivityDTO> list(@PathVariable String parentString){
 		if(parentString.equals("-1")){
-			List<ActivityDTO> nameList = (new ActivityService()).getAll(getUid());
+			List<ActivityDTO> nameList = (new ActivityService(getUid())).getAll(getUid());
 			return nameList;
 		}
-		List<ActivityDTO> nameList = (new ActivityService()).getChild(parentString,getUid(),null);
+		List<ActivityDTO> nameList = (new ActivityService(getUid())).getChild(parentString,getUid(),null);
 		return nameList;
 	}
 	@RequestMapping(value="/api/activity/leaves/{parentString}", method=RequestMethod.GET)
@@ -82,13 +84,19 @@ public class ActivityCtrl {
 		if(unscheduled!=null&&unscheduled.equals("1")){
 			filters.add(new OnlyUnscheduledFilter(false));
 		}
-		List<ActivityDTO> nameList = (new ActivityService()).getLeaves(parentString,getUid(),filters);
+		List<ActivityDTO> nameList = (new ActivityService(getUid())).getLeaves(parentString,getUid(),filters);
 		return nameList;
 	}
 	@RequestMapping(value="/api/activity/path/{parentString}", method=RequestMethod.GET)
 	public List<ActivityDTO> path(@PathVariable String parentString){
-		List<ActivityDTO> nameList = (new ActivityService()).getPath(parentString,getUid());
+		List<ActivityDTO> nameList = (new ActivityService(getUid())).getPath(parentString,getUid());
 		return nameList;
+	}
+	@RequestMapping(value="/api/account/lastupdate", method=RequestMethod.GET)
+	public String lastupdate(){
+		Account ac=Account.read(getUid());
+		if(ac==null) return "Unknown User "+getUid();
+		return "\""+CalendarUtil.calendar2string(ac.getLastUpdate())+"\"";
 	}
 
 }

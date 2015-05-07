@@ -150,7 +150,7 @@ app.run(['$q', '$rootScope', '$state', '$http',
 			}
 		}
 		$rootScope.routerState=data;
-		$state.go("activity",{aid:0})
+		$state.go("today",{aid:0})
 	})
 }]);
 
@@ -182,6 +182,16 @@ app.controller("actListCtrl",
 			var actListCtrl = this;
 			this.activeActNum = -1;
 			this.activities = [];
+			this.lastUpdate=1;
+			this.poll=setInterval(function(){
+				$http.get("/api/account/lastupdate").success(function(data){
+					console.log(actListCtrl);
+					if(actListCtrl.lastUpdate!=data){
+						actListCtrl.buildList();
+						actListCtrl.lastUpdate=data;
+					}
+				})
+			},5000);
 			$scope.stateInfo=$state.current.data;
 			$scope.stateName = $state.current.name;
 			$scope.listUpdated = false;
@@ -270,6 +280,7 @@ app.controller("actListCtrl",
 				activityService.moveToTrash(this, aid);
 			}
 			$scope.$on("$destroy", function() {
+				clearInterval(actListCtrl.poll);
 				for (i in actListCtrl.activities) {
 					activityService.submit(actListCtrl.activities[i],
 						function() {

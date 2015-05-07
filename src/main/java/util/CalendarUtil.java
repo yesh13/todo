@@ -19,4 +19,9 @@ public class CalendarUtil {
 		}
 		return cal;
 	}
+	public static String calendar2string(Calendar c) {
+		if(c==null) return null;
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+		return df.format(c.getTime());
+	}
 }

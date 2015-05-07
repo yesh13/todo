@@ -9,6 +9,7 @@ import org.hibernate.cfg.Configuration;
 public class OpenshiftHibernateFactory extends HibernateFactory{
 	private SessionFactory factory=null;
 	
+	@SuppressWarnings("deprecation")
 	public SessionFactory buildSessionFactory(){
 		if(factory==null){
 			Properties prop=new Properties();
@@ -21,8 +22,8 @@ public class OpenshiftHibernateFactory extends HibernateFactory{
 		         factory = new Configuration().setProperties(prop).configure()
 		        		 .buildSessionFactory();
 		      }catch (Throwable ex) { 
-		         System.err.println("Failed to create sessionFactory object." + ex);
-		         throw new ExceptionInInitializerError(ex); 
+		    	  ex.printStackTrace();
+			         throw ex;  
 		      }
 		}
 		return factory;
