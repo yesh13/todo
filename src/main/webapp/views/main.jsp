@@ -8,26 +8,26 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Todo</title>
 <link rel="stylesheet" type="text/css"
-	href="/resources/css/bootstrap.min.css">
+	href="/todo/resources/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css"
-	href="/resources/css/datepicker.css">
-<link rel="stylesheet" type="text/css" href="/resources/css/main.css">
-<link rel="stylesheet" type="text/css" href="/resources/css/desk.css">
+	href="/todo/resources/css/datepicker.css">
+<link rel="stylesheet" type="text/css" href="/todo/resources/css/main.css">
+<link rel="stylesheet" type="text/css" href="/todo/resources/css/desk.css">
 </head>
 <body ng-app="mainApp"> 
 	<form action="/j_spring_security_logout" method="post" id="logoutForm">
 	</form>
-	<script type="text/javascript" src="/resources/js/angular.min.js"></script>
+	<script type="text/javascript" src="/todo/resources/js/angular.min.js"></script>
 	<script type="text/javascript"
-		src="/resources/js/angular-ui-router.min.js"></script>
-	<script type="text/javascript" src="/resources/js/datepicker.js"></script>
-	<script type="text/javascript" src="/resources/js/ui-bootstrap.min.js"></script>
-	<script type="text/javascript" src="/resources/js/services.js"></script>
-	<script type="text/javascript" src="/resources/js/ui-lib.js"></script>
-	<script type="text/javascript" src="/resources/js/main.js"></script>
+		src="/todo/resources/js/angular-ui-router.min.js"></script>
+	<script type="text/javascript" src="/todo/resources/js/datepicker.js"></script>
+	<script type="text/javascript" src="/todo/resources/js/ui-bootstrap.min.js"></script>
+	<script type="text/javascript" src="/todo/resources/js/services.js"></script>
+	<script type="text/javascript" src="/todo/resources/js/ui-lib.js"></script>
+	<script type="text/javascript" src="/todo/resources/js/main.js"></script>
 	<script type="text/ng-template" id="activity.html"
-		ng-include="'/resources/views/activity-desktop.html'">
-<div class="act-list col-xs-4 full-height-flow" ng-include="'/resources/views/activity.list.html'">
+		ng-include="'/todo/resources/views/activity-desktop.html'">
+<div class="act-list col-xs-4 full-height-flow" ng-include="'/todo/resources/views/activity.list.html'">
 </div>
 <div class="act-detail col-xs-5 full-height-flow">
 <activity-detail ng-if="actList.activeActNum!=-1" model="actList.activities[actList.activeActNum]" is-open="true" default-date="filter.date"></activity-detail>
@@ -51,9 +51,9 @@
 					</c:when>
 
 					<c:otherwise>
-						<li><a href="/register"><span
+						<li><a href="/todo/register"><span
 								class="glyphicon glyphicon-user"></span> Join</a></li>
-						<li><a href="/private"><span
+						<li><a href="/todo/private"><span
 								class="glyphicon glyphicon-log-in"></span> Sign in</a></li>
 					</c:otherwise>
 				</c:choose>

@@ -8,8 +8,8 @@
 <title>Todo</title>
 </head>
 <body>
-<script type="text/javascript" src="/resources/js/jquery-1.11.2.min.js"></script>
-<script type="text/javascript" src="/resources/js/test.js"></script>
+<script type="text/javascript" src="/todo/resources/js/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="/todo/resources/js/test.js"></script>
 	<h1>Todo List</h1>
 	<ul>
 	</ul>

@@ -4,7 +4,7 @@
     <title>Sign in</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/todo/resources/css/bootstrap.min.css" rel="stylesheet">
 <style>
 .error {
 	padding: 15px;
@@ -96,8 +96,8 @@ button[type="submit"]{
 <!--           </label> -->
 <!--         </div> -->
         <button class="btn btn-lg btn-primary btn-block" type="submit">Join</button>
-      <a class="btn btn-lg btn-info btn-block" href="/signin" role="button">Signin</a>
-      <a class="btn btn-lg btn-info btn-block" href="/" role="button">Guest</a>
+      <a class="btn btn-lg btn-info btn-block" href="/todo/signin" role="button">Signin</a>
+      <a class="btn btn-lg btn-info btn-block" href="/todo" role="button">Guest</a>
       </form>
 
     </div> <!-- /container -->

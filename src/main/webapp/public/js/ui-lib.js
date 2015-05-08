@@ -18,7 +18,7 @@ module.controller("parentSelectCtrl", function(activityService,$scope,$modal) {
 	  $scope.open = function (size) {
 
 	    var modalInstance = $modal.open({
-	      templateUrl: '/resources/views/parent-select-modal.html',
+	      templateUrl: '/todo/resources/views/parent-select-modal.html',
 	      controller: 'parentSelectModalCtrl',
 	      size: size,
 	      resolve: {
@@ -38,7 +38,7 @@ module.controller("parentSelectCtrl", function(activityService,$scope,$modal) {
 
 module.directive("parentSelect", function() {
 	return {
-		templateUrl:"/resources/views/parent-select.html",
+		templateUrl:"/todo/resources/views/parent-select.html",
 		scope:{
 			model:"=?"
 		},
@@ -56,7 +56,7 @@ module.controller('parentSelectModalCtrl', function ($scope, $modalInstance,acti
 	$scope.lastParent=null;
 	  $scope.buildList=function(){
 		  var req={
-			  url:"/api/activity/list/"+$scope.currentParent.aid
+			  url:"/todo/api/activity/list/"+$scope.currentParent.aid
 		  }
 		  console.log(req.url);
 		  activityService.buildList($scope,req,$scope.currentParent.aid,true);
@@ -95,7 +95,7 @@ module.controller("datepickerCtrl", function(activityService,dateService,$scope,
 		}
 
 	    var modalInstance = $modal.open({
-	      templateUrl: '/resources/views/date-picker-modal.html',
+	      templateUrl: '/todo/resources/views/date-picker-modal.html',
 	      controller: 'datepickerModalCtrl',
 	      size: size,
 	      resolve: {
@@ -117,7 +117,7 @@ module.controller("datepickerCtrl", function(activityService,dateService,$scope,
 
 module.directive("modalDatepicker", function() {
 	return {
-		templateUrl:"/resources/views/modal-datepicker.html",
+		templateUrl:"/todo/resources/views/modal-datepicker.html",
 		scope:{
 			model:"=?",
 			invalidText:"@",

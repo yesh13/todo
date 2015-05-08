@@ -3,7 +3,7 @@ var app = angular.module("mainApp", [ "ui.router", "ui.bootstrap", "services",
 
 app.directive('myDatePicker', function() {
 	return {
-		templateUrl : "/resources/views/my-date-picker.html",
+		templateUrl : "/todo/resources/views/my-date-picker.html",
 		scope : {
 			model : "=model"
 		},
@@ -24,7 +24,7 @@ app
 		'schedulePicker',
 		function(dateService) {
 			return {
-				templateUrl : "/resources/views/schedule-picker.html",
+				templateUrl : "/todo/resources/views/schedule-picker.html",
 				scope : {
 					model : "=ngModel",
 					open : "=isOpen",
@@ -140,7 +140,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
 });
 app.run(['$q', '$rootScope', '$state', '$http',
          function ($q, $rootScope, $state, $http) {
-	$http.get("/resources/json/router.js").success(function(data) {
+	$http.get("/todo/resources/json/router.js").success(function(data) {
 		urlRouterProviderRef.otherwise(data.defaultUrl);
 		for (i in data.states) {
 			for (j in data.states[i].data) {
@@ -163,7 +163,7 @@ app.controller("sideTabCtrl", [ '$scope', '$stateParams', "$http",
 			this.sideTabSelected = item;
 		};
 		this.sideTabUrl = function() {
-			return "/resources/views/" + this.sideTabSelected + ".html";
+			return "/todo/resources/views/" + this.sideTabSelected + ".html";
 		};
 		this.setSideTab("activity");
 	} ]);
@@ -184,7 +184,7 @@ app.controller("actListCtrl",
 			this.activities = [];
 			this.lastUpdate=1;
 			this.poll=setInterval(function(){
-				$http.get("/api/account/lastupdate").success(function(data){
+				$http.get("/todo/api/account/lastupdate").success(function(data){
 					console.log(actListCtrl);
 					if(actListCtrl.lastUpdate!=data){
 						actListCtrl.buildList();
@@ -221,7 +221,7 @@ app.controller("actListCtrl",
 
 			//
 			this.buildList = function() {
-				var req={url:"/api/activity/"+$scope.stateInfo.type+"/" + $stateParams.aid,params:{}};
+				var req={url:"/todo/api/activity/"+$scope.stateInfo.type+"/" + $stateParams.aid,params:{}};
 				if($scope.stateInfo.date){
 					var t=dateService.empty($scope.filter.date,$scope.stateInfo.date.type);
 					console.log(t[0]);
@@ -332,7 +332,7 @@ app.directive('droppableActivity', [
 				var move = {
 					parent : droped
 				};
-				$http.post("/api/activity/" + scope.beingDragged, move)
+				$http.post("/todo/api/activity/" + scope.beingDragged, move)
 					.success(function() {
 						scope.initList();
 					});
@@ -349,7 +349,7 @@ app.directive('droppableActivity', [
 
 app.directive('activityDetail', function(dateService,activityService) {
 	return {
-		templateUrl : "/resources/views/activity.detail.html",
+		templateUrl : "/todo/resources/views/activity.detail.html",
 		controller : "activityDetailCtrl as detailCtrl",
 		scope : {
 			model : "=model",
@@ -409,7 +409,7 @@ app.directive('signOut', [ "$http", "$location", "$window",
 		return function(scope, element, attr) {
 			element.on("click", function() {
 				// $http.post("/j_spring_security_logout").success(function() {
-				$window.location.href = "/j_spring_security_logout";
+				$window.location.href = "/todo/j_spring_security_logout";
 				// });
 			})
 		};
@@ -437,7 +437,7 @@ app.directive('datepickerPopup', function() {
 app.directive('listHeader', [ '$state', function($state) {
 	return {
 		restrict : 'EA',
-		templateUrl : '/resources/views/list-header.html',
+		templateUrl : '/todo/resources/views/list-header.html',
 		link : link
 	}
 	function link(scope, element, attr) {
@@ -452,7 +452,7 @@ app.directive('listHeader', [ '$state', function($state) {
 app.directive("listTitle", function() {
 	return {
 		restrict : 'EA',
-		templateUrl : '/resources/views/list-title.html',
+		templateUrl : '/todo/resources/views/list-title.html',
 		link : link
 	}
 	function link(scope, element, attr) {

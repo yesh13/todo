@@ -137,7 +137,7 @@ app.service("activityService",[ '$http','dateService',function($http,dateService
 	this.moveToTrash=function(context,aid){
 		console.log("move " + aid + " to trash");
 		if(aid!=null){
-		$http.post("/api/activity/" + aid, {
+		$http.post("/todo/api/activity/" + aid, {
 			parent : 1
 		}).success(function() {
 			context.buildList();
@@ -158,7 +158,7 @@ app.service("activityService",[ '$http','dateService',function($http,dateService
 				}
 				console.log("new: "
 					+ JSON.stringify(context.data));
-				$http.post("/api/activity", context.data)
+				$http.post("/todo/api/activity", context.data)
 					.success(function() {
 						callback();
 					});
@@ -166,7 +166,7 @@ app.service("activityService",[ '$http','dateService',function($http,dateService
 				console.log("edit: "
 					+ JSON.stringify(context.data));
 				$http.post(
-					"/api/activity/" + context.data.aid,
+					"/todo/api/activity/" + context.data.aid,
 					context.data).success(function() {
 						console.log("submit success");
 					callback();
@@ -188,7 +188,7 @@ app.service("activityService",[ '$http','dateService',function($http,dateService
 			aidString = context.data.aid;
 		}
 		$http
-			.get("/api/activity/detail/" + aidString)
+			.get("/todo/api/activity/detail/" + aidString)
 			.success(
 				function(response) {
 					// detail=true means it has been loaded, must be
@@ -239,7 +239,7 @@ app.service("activityService",[ '$http','dateService',function($http,dateService
 						dateService.stringToDate(context.activities[iter].data);
 					}
 					$http.get(
-						"/api/activity/path/" + rootAid)
+						"/todo/api/activity/path/" + rootAid)
 						.success(function(response) {
 							console.log(JSON.stringify(response));
 							context.actPath = response;

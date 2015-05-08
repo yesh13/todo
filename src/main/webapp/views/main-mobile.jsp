@@ -10,25 +10,25 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Todo</title>
 <link rel="stylesheet" type="text/css"
-	href="/resources/css/bootstrap.min.css">
+	href="/todo/resources/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css"
-	href="/resources/css/datepicker.css">
-<link rel="stylesheet" type="text/css" href="/resources/css/main.css">
-<link rel="stylesheet" type="text/css" href="/resources/css/mobile.css">
+	href="/todo/resources/css/datepicker.css">
+<link rel="stylesheet" type="text/css" href="/todo/resources/css/main.css">
+<link rel="stylesheet" type="text/css" href="/todo/resources/css/mobile.css">
 </head>
 <body ng-app="mainApp">
-	<script type="text/javascript" src="/resources/js/angular.min.js"></script>
+	<script type="text/javascript" src="/todo/resources/js/angular.min.js"></script>
 	<script type="text/javascript"
-		src="/resources/js/angular-ui-router.min.js"></script>
+		src="/todo/resources/js/angular-ui-router.min.js"></script>
 	<script type="text/javascript"
-		src="/resources/js/datepicker.js"></script>
+		src="/todo/resources/js/datepicker.js"></script>
 			<script type="text/javascript"
-		src="/resources/js/ui-bootstrap.min.js"></script>
-	<script type="text/javascript" src="/resources/js/services.js"></script>
-	<script type="text/javascript" src="/resources/js/ui-lib.js"></script>
-	<script type="text/javascript" src="/resources/js/main.js"></script>
+		src="/todo/resources/js/ui-bootstrap.min.js"></script>
+	<script type="text/javascript" src="/todo/resources/js/services.js"></script>
+	<script type="text/javascript" src="/todo/resources/js/ui-lib.js"></script>
+	<script type="text/javascript" src="/todo/resources/js/main.js"></script>
 		<script type="text/ng-template" id="activity.html">
-<div ng-include="'/resources/views/activity.mobile.html'"></div>
+<div ng-include="'/todo/resources/views/activity.mobile.html'"></div>
   
 
 

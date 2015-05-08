@@ -4,7 +4,7 @@
     <title>Sign in</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/todo/resources/css/bootstrap.min.css" rel="stylesheet">
 <style>
 .error {
 	padding: 15px;
@@ -64,7 +64,7 @@ button[type="submit"]{
 
     <div class="container">
 
-      <form class="form-signin" action='<c:url value='j_spring_security_check' />' method="POST">
+      <form class="form-signin" action='<c:url value='/todo/j_spring_security_check' />' method="POST">
         <h2 class="form-signin-heading">Please sign in</h2>
          		<c:if test="${not empty error}">
 			<div class="error">${error}</div>
@@ -83,8 +83,8 @@ button[type="submit"]{
 <!--         </div> -->
 <input style="display:none" type="checkbox" name="_spring_security_remember_me" checked/>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-      <a class="btn btn-lg btn-info btn-block" href="/register" role="button">Join</a>
-      <a class="btn btn-lg btn-info btn-block" href="/" role="button">Guest</a>
+      <a class="btn btn-lg btn-info btn-block" href="/todo/register" role="button">Join</a>
+      <a class="btn btn-lg btn-info btn-block" href="/todo" role="button">Guest</a>
       </form>
 
     </div> <!-- /container -->
