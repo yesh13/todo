@@ -1,9 +1,12 @@
 package util;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import com.google.gson.stream.JsonWriter;
 
 public class CalendarUtil {
 	public static Calendar string2calendar(String s) {
@@ -23,5 +26,9 @@ public class CalendarUtil {
 		if(c==null) return null;
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 		return df.format(c.getTime());
+	}
+	public static void calendar2Gson(JsonWriter writer,Calendar t) throws IOException{
+		if(t==null)writer.nullValue();
+		else writer.value(t.getTimeInMillis());
 	}
 }

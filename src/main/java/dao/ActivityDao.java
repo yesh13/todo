@@ -6,16 +6,14 @@ import org.apache.ibatis.session.SqlSession;
 
 import util.MybatisFactory;
 import domain.Activity;
-import domain.ActivityId;
-import domain.ActivitySet;
 
 public class ActivityDao {
-	public Activity getById(ActivityId aid,int uid){		
+	public Activity getById(int aid,int uid){		
 		SqlSession session = MybatisFactory.get().openSession();
 		ActivityMapper mapper;
 		try {
 		  mapper = session.getMapper(ActivityMapper.class);
-		  Activity act=mapper.getById(aid.mainId(),uid);
+		  Activity act=mapper.getById(aid,uid);
 		  return act;
 		}
 		finally {
@@ -47,17 +45,5 @@ public class ActivityDao {
 		  session.close();
 		}
 	}
-	public ActivitySet getChildById(ActivityId aid,int uid){
-		SqlSession session = MybatisFactory.get().openSession();
-		ActivityMapper mapper;
-		try {
-		  mapper = session.getMapper(ActivityMapper.class);
-		List<Activity> list=mapper.getRealChildById(uid, aid.mainId());
-		  return (new ActivitySet()).setRealList(list);
-		}
-		finally {
-		session.commit();
-		  session.close();
-		}
-	}
+
 }

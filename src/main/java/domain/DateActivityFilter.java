@@ -14,6 +14,6 @@ public class DateActivityFilter implements ActivityFilter {
 	@Override
 	public boolean test(Activity act) {
 		if(act==null) return false;
-		return act.withinTime(early, late);
+		return true;//act.withinTime(early, late);
 	}
 }

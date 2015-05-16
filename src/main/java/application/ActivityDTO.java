@@ -2,42 +2,43 @@ package application;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import domain.Activity;
+import domain.Schedule;
 
 public class ActivityDTO {
+	class BasicActivityDTO {
+		String aid;
+		String title;
+	}
+
 	String aid;
-	String endTime;
-	String location;
-	String name;
-	String note;
+	String title;
+	String description;
 	String parent;
 
-	String startTime;
-	String finishTime;
-
-	public String getFinishTime() {
-		return finishTime;
-	}
-	public void setFinishTime(String finishTime) {
-		this.finishTime = finishTime;
-	}
-
 	String type;
-
 	String uid;
 	String priority;
+	Schedule schedule;
+	ArrayList<BasicActivityDTO> subacts;
+
+
 	public String getPriority() {
 		return priority;
 	}
+
 	public void setPriority(String priority) {
 		this.priority = priority;
 	}
-	static public ActivityDTO getNewInstance(){
-		ActivityDTO dto=new ActivityDTO();
+
+	static public ActivityDTO getNewInstance() {
+		ActivityDTO dto = new ActivityDTO();
 		dto.setType("0");
 		return dto;
 	}
+
 	public ActivityDTO() {
 		// TODO Auto-generated constructor stub
 	}
@@ -45,55 +46,55 @@ public class ActivityDTO {
 	public ActivityDTO(Activity act, boolean withNote) {
 		if (act != null) {
 			setAid(String.valueOf(act.getAid()));
-			setLocation(act.getLocation().toString());
-			setName(act.getName());
+			setTitle(act.getName());
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-			if (act.getSchedule() != null) {
-				if (act.getSchedule().getStartTime() != null) {
-					setStartTime(df.format(act.getSchedule().getStartTime().getTime()));
-				}
-				if (act.getSchedule().getEndTime() != null) {
-					setEndTime(df.format(act.getSchedule().getEndTime().getTime()));
-				}
-				if (act.getSchedule().getFinishTime() != null) {
-					setFinishTime(df.format(act.getSchedule().getFinishTime().getTime()));
-				}
-			}
+			setSchedule(act);
 			if (withNote == true) {
-				setNote(act.getNote().toString());
+				setDescription(act.getDescription());
 			}
-			setParent(String.valueOf(act.getParent()));
+			setParent(String.valueOf(act.getParentId()));
 			setType(String.valueOf(act.getType()));
 			setPriority(String.valueOf(act.getPriority()));
 		}
+	}
+
+	public Schedule getSchedule() {
+		return schedule;
+	}
+
+	public void setSchedule(Schedule schedule) {
+		this.schedule = schedule;
 	}
 
 	public String getAid() {
 		return aid;
 	}
 
-	public String getEndTime() {
-		return endTime;
+
+	public String getDescription() {
+		return description;
 	}
 
-	public String getLocation() {
-		return location;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-	public String getName() {
-		return name;
+	public ArrayList<BasicActivityDTO> getSubacts() {
+		return subacts;
 	}
 
-	public String getNote() {
-		return note;
+	public void setSubacts(ArrayList<BasicActivityDTO> subacts) {
+		this.subacts = subacts;
 	}
+
+	public String getTitle() {
+		return title;
+	}
+
 	public String getParent() {
 		return parent;
 	}
 
-	public String getStartTime() {
-		return startTime;
-	}
 
 	public String getType() {
 		return type;
@@ -107,29 +108,16 @@ public class ActivityDTO {
 		this.aid = aid;
 	}
 
-	public void setEndTime(String endTime) {
-		this.endTime = endTime;
-	}
 
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void setNote(String note) {
-		this.note = note;
+	public void setTitle(String name) {
+		this.title = name;
 	}
 
 	public void setParent(String parent) {
 		this.parent = parent;
 	}
 
-	public void setStartTime(String startTime) {
-		this.startTime = startTime;
-	}
+
 
 	public void setType(String type) {
 		this.type = type;
@@ -138,6 +126,5 @@ public class ActivityDTO {
 	public void setUid(String uid) {
 		this.uid = uid;
 	}
-
 
 }

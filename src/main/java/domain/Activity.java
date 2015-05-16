@@ -1,91 +1,92 @@
 package domain;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-public class Activity {
-	private int aid;
-	private Location location=new Location("");
-	private String name;
+import util.hibernate.HibernateFactory;
+import application.ActivityDTO;
 
-	
-	public void setType(int type) {
-		this.schedule.setType(type);
-	}
-	private Note note=new Note("");
+public abstract class Activity extends BasicActivity implements Schedule{
+	private String description;
+	private ArrayList<Activity> subAppt=new ArrayList<Activity>();
+	private ArrayList<Activity> subTask=new ArrayList<Activity>();
+	private ArrayList<Activity> subNote=new ArrayList<Activity>();
 
-	private int parent;
-
-	private Schedule schedule=new Schedule();
-
-	private int uid;
 	public Activity() {
 		super();
-		schedule=new Schedule();
 	}
-	public Activity(int aid) {
-		super();
-		this.aid = aid;
-	}
-	public int getAid() {
-		return aid;
-	}
+	public abstract String getType();
 
-	public Location getLocation() {
-		return location;
+	public ArrayList< Activity> getSubAppt() {
+		return subAppt;
 	}
-
-	public String getName() {
-		return name;
+	public void setSubAppt(ArrayList< Activity> subAppt) {
+		this.subAppt = subAppt;
 	}
-
-	public Note getNote() {
-		return note;
+	public ArrayList<Activity> getSubTask() {
+		return subTask;
 	}
-
-
-	public int getParent() {
-		return parent;
+	public void setSubTask(ArrayList<Activity> subTask) {
+		this.subTask = subTask;
 	}
-
-	public Schedule getSchedule() {
-		return schedule;
+	public ArrayList<Activity> getSubNote() {
+		return subNote;
 	}
-
-	public int getUid() {
-		return uid;
+	public void setSubNote(ArrayList< Activity> subNote) {
+		this.subNote = subNote;
 	}
-
-	public void setAid(int aid) {
-		this.aid = aid;
+	public String getDescription() {
+		return description;
 	}
-
-	public void setLocation(Location location) {
-		this.location = location;
+	public void setDescription(String description) {
+		this.description = description;
 	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void setNote(Note note) {
-		this.note = note;
-	}
-
-	public void setParent(int parent) {
-		this.parent = parent;
-	}
-
-	public void setSchedule(Schedule schedule) {
-		this.schedule = schedule;
-	}
-
-	public void setUid(int uid) {
-		this.uid = uid;
+	public void fetchChild(Calendar t1,Calendar t2){
+		HibernateFactory instance = util.hibernate.HibernateFactory
+				.getInstance();
+		SessionFactory sessionFactory = instance.buildSessionFactory();
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		List<Activity> alist = null;
+		try {
+			tx = session.beginTransaction();
+			alist = session
+					.createQuery(
+							"from Activity act where act.parentId = :aid and act.uid = :uid")
+					.setInteger("aid", getAid())
+					.setInteger("uid", getUid()).list();
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		//unsortedList
+		for (Activity act : alist) {
+			if(!act.withinTime(t1, t2)) continue;
+			if(act.isFinished()){
+				subNote.add(act);
+			}else if(act.isActive()){
+			if(act.getType().equals("task")){
+					subTask.add(act);
+			}else if(act.getType().equals("appt")){
+				subAppt.add(act);
+			}
+			}
+		}
+		ListComparator comp=new ListComparator();
+		Collections.sort(subTask, comp);
+		Collections.sort(subAppt, comp);
+		Collections.sort(subNote, comp);
 	}
 	public static Activity getById(int aid,int uid){
 		Session session = util.hibernate.HibernateFactory.getInstance().buildSessionFactory().openSession();
@@ -109,90 +110,17 @@ public class Activity {
 	      }
 	}
 	public boolean isDeepChildOf(int root) {
-		int curId = aid;
+		int curId = getAid();
 		while (curId!=0) {
-			Activity act = Activity.getById(curId, uid);
+			Activity act = Activity.getById(curId, getUid());
 			if(act==null){
 				return false;
 			}
-			curId=act.getParent();
+			curId=act.getParentId();
 			if (curId==root) {
 				return true;
 			}
 		}
 		return false;
-	}
-	public int getType() {
-		// TODO Auto-generated method stub
-		return this.schedule.getType();
-	}
-	public boolean withinTime(Calendar t1,Calendar t2){
-		return schedule.withinTime(t1,t2);
-	}
-	private int priority=-1;
-	public int getPriority() {
-		// TODO Auto-generated method stub
-		if(priority==-1){
-			switch(getSchedule().getType()){
-			case 0:
-				if(getSchedule().getEndTime()!=null){
-					priority=49;
-				}else if(getSchedule().getStartTime()!=null){
-					priority=30;
-				}else{
-					priority=100;
-				}
-				break;
-			case 1:
-				Calendar ca=Calendar.getInstance();
-				if(ca.before(getSchedule().getEndTime())){
-					priority=11;
-				}else{
-					return 49;
-				}
-				break;
-			case 2:
-				if(getSchedule().getFinishTime()!=null){
-					priority=49;
-				}else{
-					Calendar c=Calendar.getInstance();
-					c.add(Calendar.HOUR_OF_DAY, 24);
-					if(getSchedule().getEndTime().after(c)){
-						priority=40;
-					}else {
-						priority=0;
-					}	
-				}
-				break;
-			}
-		}
-		return priority;
-	}
-	private long sortTime=-100;
-	public long getSortTime() {
-		if(sortTime==-100){
-			switch(getSchedule().getType()){
-			case 0:
-				if(getSchedule().getEndTime()!=null){
-					sortTime=getSchedule().getEndTime().getTimeInMillis();
-				}else if(getSchedule().getStartTime()!=null){
-					sortTime=getSchedule().getStartTime().getTimeInMillis();
-				}else{
-					sortTime=aid;
-				}
-				break;
-			case 1:
-				sortTime=getSchedule().getStartTime().getTimeInMillis();
-				break;
-			case 2:
-				if(getSchedule().getFinishTime()!=null){
-					sortTime=getSchedule().getFinishTime().getTimeInMillis();
-				}else{
-					sortTime=getSchedule().getEndTime().getTimeInMillis();
-				}
-				break;
-			}
-		}
-		return sortTime;
 	}
 }

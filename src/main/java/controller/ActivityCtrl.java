@@ -15,28 +15,31 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
+
 import util.CalendarUtil;
 import application.Account;
 import application.AccountFactory;
 import application.ActivityDTO;
 import application.ActivityService;
+import application.gson.GsonFactory;
+import domain.Activity;
 import domain.ActivityFilter;
 import domain.DateActivityFilter;
 import domain.LeavesComparator;
-import domain.OnlyUnscheduledFilter;
 
 @RestController
 public class ActivityCtrl {
 
 	@RequestMapping(value="/api/activity", method=RequestMethod.POST)
 	public String add(@RequestBody ActivityDTO dto){
-		System.out.println("act add post received "+ dto.getAid()+" "+dto.getName());
+		System.out.println("act add post received "+ dto.getAid()+" "+dto.getTitle());
 		int ret=(new ActivityService(getUid())).addActivity(dto,getUid());
 		return String.valueOf(ret);
 	}
 	@RequestMapping(value="/api/activity/{aidString}", method=RequestMethod.POST)
 	public String edit(@RequestBody ActivityDTO dto,@PathVariable String aidString){
-		System.out.println("act edit post received "+ dto.getAid()+" "+dto.getName());
+		System.out.println("act edit post received "+ dto.getAid()+" "+dto.getTitle());
 		dto.setAid(aidString);
 		int ret=(new ActivityService(getUid())).editActivity(dto,getUid());
 		return String.valueOf(ret);
@@ -79,10 +82,8 @@ public class ActivityCtrl {
 			Calendar lc=util.CalendarUtil.string2calendar(t2);
 			ActivityFilter filter=new DateActivityFilter(ec,lc);
 			filters.add(filter);
-			filters.add(new OnlyUnscheduledFilter(true));
 		}
 		if(unscheduled!=null&&unscheduled.equals("1")){
-			filters.add(new OnlyUnscheduledFilter(false));
 		}
 		List<ActivityDTO> nameList = (new ActivityService(getUid())).getLeaves(parentString,getUid(),filters);
 		return nameList;
@@ -98,5 +99,24 @@ public class ActivityCtrl {
 		if(ac==null) return "Unknown User "+getUid();
 		return "\""+CalendarUtil.calendar2string(ac.getLastUpdate())+"\"";
 	}
-
+	@RequestMapping(value="/api/activity/aid/{aidString}", method=RequestMethod.GET)
+	public String getActivity1_2(@PathVariable String aidString,@RequestParam(required=false) Long t1,@RequestParam(required=false) Long t2){
+		if(Integer.parseInt(aidString)==-1){
+			return null;
+		}
+		Activity act=Activity.getById(Integer.parseInt(aidString), getUid());
+		Calendar c1=Calendar.getInstance();
+		Calendar c2=Calendar.getInstance();
+		if(t1!=null&&t2!=null){
+		c1.setTimeInMillis(t1);
+		c2.setTimeInMillis(t2);
+		}
+		else{
+			c1.set(Calendar.YEAR, 1970);
+			c2.set(Calendar.YEAR, 2970);
+		}
+		act.fetchChild(c1,c2);
+		Gson gson=new GsonFactory().getActivity();
+		return gson.toJson(act);
+	}
 }

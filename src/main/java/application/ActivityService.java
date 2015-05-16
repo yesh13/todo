@@ -18,8 +18,6 @@ import domain.Activity;
 import domain.ActivityFilter;
 import domain.LeavesComparator;
 import domain.ListComparator;
-import domain.Location;
-import domain.Note;
 import domain.Schedule;
 
 public class ActivityService {
@@ -41,7 +39,7 @@ public class ActivityService {
 	}
 
 	public int addActivity(ActivityDTO dto, int uid) {
-		Session session = util.hibernate.HibernateFactory.getInstance()
+/*		Session session = util.hibernate.HibernateFactory.getInstance()
 				.buildSessionFactory().openSession();
 		Transaction tx = null;
 		try {
@@ -71,7 +69,7 @@ public class ActivityService {
 		} finally {
 			session.close();
 		}
-
+*/
 		return 0;
 	}
 
@@ -87,7 +85,7 @@ public class ActivityService {
 
 	// return number of rows affected
 	public int editActivity(ActivityDTO dto, int uid) {
-		Session session = util.hibernate.HibernateFactory.getInstance()
+/*		Session session = util.hibernate.HibernateFactory.getInstance()
 				.buildSessionFactory().openSession();
 		Transaction tx = null;
 		List<Activity> alist = null;
@@ -135,7 +133,7 @@ public class ActivityService {
 			e.printStackTrace();
 		} finally {
 			session.close();
-		}
+		}*/
 		return 1;
 	}
 

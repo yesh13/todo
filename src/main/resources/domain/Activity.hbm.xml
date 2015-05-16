@@ -5,26 +5,32 @@
 
 <hibernate-mapping>
    <class name="domain.Activity" table="activity">
+   
+
       <meta attribute="class-description">
          This class contains the activity detail. 
       </meta>
       <id name="aid" type="int" column="aid">
          <generator class="native"/>
       </id>
+            <discriminator column="schedule_type" type="string"/>
       <property name="uid" column="uid" type="int"/>
-      <property name="parent" column="parent" type="int"></property>
+      <property name="parentId" column="parent" type="int"></property>
       <property name="name" column="name" type="string"/>
-      <component name="schedule" class="domain.Schedule">
-      	<property name="type" column="schedule_type" type="int"/>
+       <subclass name="domain.Task" discriminator-value="0">
          <property name="startTime" column="start_time" type="calendar"/>
-         <property name="endTime" column="end_time" type="calendar"/>
+         <property name="deadline" column="end_time" type="calendar"/>
          <property name="finishTime" column="finish_time" type="calendar"/>
-      </component>
-      <component name="location" class="domain.Location">
-         <property name="place" column="location" type="string"/>
-      </component>
-      <component name="note" class="domain.Note">
-         <property name="note" column="note" type="string"/>
-      </component>
+         <property name="state" column="task_state" >
+           <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">domain.Task$State</param>
+    </type>
+         </property>
+    	</subclass>
+    	 <subclass name="domain.Appointment" discriminator-value="1">
+         <property name="startTime" column="start_time" type="calendar"/>
+         <property name="finishTime" column="end_time" type="calendar"/>
+    	</subclass>     
+
    </class>
 </hibernate-mapping>
