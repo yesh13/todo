@@ -39,7 +39,7 @@ public class Appointment extends Activity{
 	@Override
 	public boolean isActive() {
 		// TODO Auto-generated method stub
-		return !isFinished();
+		return true;
 	}
 
 	public Calendar getStartTime() {

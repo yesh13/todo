@@ -31,4 +31,9 @@ public class CalendarUtil {
 		if(t==null)writer.nullValue();
 		else writer.value(t.getTimeInMillis());
 	}
+	public static Calendar long2Calendar(long time){
+		Calendar c=Calendar.getInstance();
+		c.setTimeInMillis(time);
+		return c;
+	}
 }

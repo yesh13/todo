@@ -1,18 +1,8 @@
+alter table activity
+add column task_state int;
 
-create table taglist(
-id int not null auto_increment primary key,
-uid int,
-name varchar(16),
-schedule_type int,
-foreign key(uid) references account(uid)
-);
+update activity set task_state=0 where schedule_type=0;
 
+alter table activity
+modify column name text;
 
-
-create table act_tag(
-id int not null auto_increment primary key,
-aid int unsigned,
-tid int,
-foreign key(tid) references taglist(id),
-foreign key(aid) references activity(aid)
-)

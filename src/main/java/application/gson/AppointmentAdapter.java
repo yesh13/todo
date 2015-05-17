@@ -6,16 +6,33 @@ import util.CalendarUtil;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import domain.Appointment;
+import domain.Task;
 
 public class AppointmentAdapter extends TypeAdapter<Appointment> {
 
 	@Override
-	public Appointment read(JsonReader arg0) throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+	public Appointment read(JsonReader reader) throws IOException {
+		Appointment act=new Appointment();
+		new ActivityAdapter().basicRead(reader, act);
+		while(reader.hasNext()){
+			String name=reader.nextName();
+			if(reader.peek()==JsonToken.NULL){
+				reader.nextNull();continue;
+			}
+			switch(name){
+			case "startTime":
+				act.setStartTime(CalendarUtil.long2Calendar(reader.nextLong()));
+				break;
+			case "finishTime":
+				act.setFinishTime(CalendarUtil.long2Calendar(reader.nextLong()));
+				break;
+			}
+		}
+		return act;
 	}
 
 	@Override

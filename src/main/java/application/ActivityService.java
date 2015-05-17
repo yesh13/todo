@@ -15,6 +15,7 @@ import org.hibernate.Transaction;
 
 import util.hibernate.HibernateFactory;
 import domain.Activity;
+import domain.ActivityFactory;
 import domain.ActivityFilter;
 import domain.LeavesComparator;
 import domain.ListComparator;
@@ -30,7 +31,7 @@ public class ActivityService {
 
 	public ActivityDTO getActivity(String aidString, int uid, boolean withNote) {
 		int aid = Integer.parseInt(aidString);
-		Activity act = Activity.getById(aid, user);
+		Activity act = ActivityFactory.getById(aid, user);
 		return new ActivityDTO(act, withNote);
 	}
 

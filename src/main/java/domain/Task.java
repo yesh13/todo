@@ -96,7 +96,7 @@ public class Task extends Activity {
 	@Override
 	public boolean isActive() {
 		// TODO Auto-generated method stub
-		return !isPending()&&!isFinished();
+		return !isPending();
 	}
 
 }

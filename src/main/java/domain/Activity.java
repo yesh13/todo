@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
+import javax.persistence.PostLoad;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -18,7 +20,16 @@ public abstract class Activity extends BasicActivity implements Schedule{
 	private ArrayList<Activity> subAppt=new ArrayList<Activity>();
 	private ArrayList<Activity> subTask=new ArrayList<Activity>();
 	private ArrayList<Activity> subNote=new ArrayList<Activity>();
+	private ArrayList<Activity> subPend=new ArrayList<Activity>();
+	
 
+
+	public ArrayList<Activity> getSubPend() {
+		return subPend;
+	}
+	public void setSubPend(ArrayList<Activity> subPend) {
+		this.subPend = subPend;
+	}
 	public Activity() {
 		super();
 	}
@@ -59,8 +70,7 @@ public abstract class Activity extends BasicActivity implements Schedule{
 			tx = session.beginTransaction();
 			alist = session
 					.createQuery(
-							"from Activity act where act.parentId = :aid and act.uid = :uid")
-					.setInteger("aid", getAid())
+							"from Activity act where act.uid = :uid")
 					.setInteger("uid", getUid()).list();
 			tx.commit();
 		} catch (HibernateException e) {
@@ -73,6 +83,7 @@ public abstract class Activity extends BasicActivity implements Schedule{
 		//unsortedList
 		for (Activity act : alist) {
 			if(!act.withinTime(t1, t2)) continue;
+			if(!act.isDeepChildOf(getAid()))continue;
 			if(act.isFinished()){
 				subNote.add(act);
 			}else if(act.isActive()){
@@ -81,38 +92,21 @@ public abstract class Activity extends BasicActivity implements Schedule{
 			}else if(act.getType().equals("appt")){
 				subAppt.add(act);
 			}
+			}else{
+				subPend.add(act);
 			}
 		}
 		ListComparator comp=new ListComparator();
 		Collections.sort(subTask, comp);
 		Collections.sort(subAppt, comp);
 		Collections.sort(subNote, comp);
-	}
-	public static Activity getById(int aid,int uid){
-		Session session = util.hibernate.HibernateFactory.getInstance().buildSessionFactory().openSession();
-	      Transaction tx = null;
-	      List<Activity> alist = null;
-	      try{
-	         tx = session.beginTransaction();
-	         alist = session.createQuery("from Activity act where act.aid = :aid and act.uid = :uid")
-	        		 .setInteger("aid", aid).setInteger("uid", uid).list();
-	         tx.commit();
-	      }catch (HibernateException e) {
-	         if (tx!=null) tx.rollback();
-	         e.printStackTrace(); 
-	      }finally {
-	         session.close(); 
-	      }
-	      if(alist.size()==0){
-	    	  return null;
-	      } else{
-	    	  return alist.get(0);
-	      }
+		Collections.sort(subPend, comp);
 	}
 	public boolean isDeepChildOf(int root) {
 		int curId = getAid();
+		if(curId==root)return false;
 		while (curId!=0) {
-			Activity act = Activity.getById(curId, getUid());
+			Activity act = ActivityFactory.getById(curId, getUid());
 			if(act==null){
 				return false;
 			}

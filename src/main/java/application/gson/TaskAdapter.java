@@ -7,6 +7,7 @@ import util.CalendarUtil;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import domain.Activity;
@@ -29,8 +30,33 @@ public class TaskAdapter extends TypeAdapter<Task> {
 	}
 
 	@Override
-	public Task read(JsonReader arg0) throws IOException {
+	public Task read(JsonReader reader) throws IOException {
 		// TODO Auto-generated method stub
-		return null;
+		Task act=new Task();
+		new ActivityAdapter().basicRead(reader, act);
+		while(reader.hasNext()){
+			String name=reader.nextName();
+			if(reader.peek()==JsonToken.NULL){
+				reader.nextNull();continue;
+			}
+			switch(name){
+			case "startTime":
+				act.setStartTime(CalendarUtil.long2Calendar(reader.nextLong()));
+				break;
+			case "finishTime":
+				act.setFinishTime(CalendarUtil.long2Calendar(reader.nextLong()));
+				break;
+			case "endTime":
+				act.setDeadline(CalendarUtil.long2Calendar(reader.nextLong()));
+				break;
+			case "taskState":
+				act.setState(Task.State.valueOf(reader.nextString()));
+				break;
+			default:
+				reader.skipValue();
+				break;
+			}
+		}
+		return act;
 	}
 }
