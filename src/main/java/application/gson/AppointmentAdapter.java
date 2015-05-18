@@ -9,6 +9,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
+import domain.Activity;
 import domain.Appointment;
 import domain.Task;
 
@@ -16,8 +17,9 @@ public class AppointmentAdapter extends TypeAdapter<Appointment> {
 
 	@Override
 	public Appointment read(JsonReader reader) throws IOException {
-		Appointment act=new Appointment();
-		new ActivityAdapter().basicRead(reader, act);
+		Activity activity=new ActivityAdapter().basicRead(reader);
+		if(activity==null||!"appt".equals(activity.getType()))return null;
+		Appointment act=(Appointment) activity;
 		while(reader.hasNext()){
 			String name=reader.nextName();
 			if(reader.peek()==JsonToken.NULL){
@@ -29,6 +31,9 @@ public class AppointmentAdapter extends TypeAdapter<Appointment> {
 				break;
 			case "finishTime":
 				act.setFinishTime(CalendarUtil.long2Calendar(reader.nextLong()));
+				break;
+			default:
+				reader.skipValue();
 				break;
 			}
 		}

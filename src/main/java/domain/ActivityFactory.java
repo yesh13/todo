@@ -1,5 +1,6 @@
 package domain;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -19,6 +20,8 @@ public class ActivityFactory {
 			act = new Appointment();
 			act.setUid(uid);
 			act.setParentId(parent);
+			act.setStartTime(Calendar.getInstance());
+			act.setFinishTime(Calendar.getInstance());
 			session.save(act);
 			tx.commit();
 		} catch (HibernateException e) {
@@ -41,6 +44,30 @@ public class ActivityFactory {
 			act.setUid(uid);
 			act.setParentId(parent);
 			act.setState(Task.State.Active);
+			act.setStartTime(Calendar.getInstance());
+			session.save(act);
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return act;
+	}
+	public static Task newNote(int uid,int parent){
+		Session session = util.hibernate.HibernateFactory.getInstance()
+				.buildSessionFactory().openSession();
+		Transaction tx = null;
+		Task act = null;
+		try {
+			tx = session.beginTransaction();
+			act = new Task();
+			act.setUid(uid);
+			act.setParentId(parent);
+			act.setState(Task.State.Active);
+			act.setFinishTime(Calendar.getInstance());
 			session.save(act);
 			tx.commit();
 		} catch (HibernateException e) {

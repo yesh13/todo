@@ -1,15 +1,16 @@
 
 <div class="list-title"><div style="display:inline-block">
-	{{item.data.name.length>0?item.data.name:"untitled"}}<br>
-	<span class="description">{{item.description}}</span>
+	{{item.name.length>0?item.name:"untitled"}}<br>
+	<!--<span class="description">{{item.description}}</span>-->
 	</div>
-	
 	<span
-		ng-click="actList.moveToTrash(item.data.aid,$event)"
-		style="float: right" ng-show="$index!=0"
-		class="glyphicon glyphicon-trash"></span> <span
+		ng-click="method.moveToTrash(item.aid,$event)"
+		style="float: right"
+		class="glyphicon glyphicon-trash"></span>
+	
+<!-- 	 <span
 		ng-show="stateName=='activity'&&$index!=0&&item.data.aid"
 		ng-click="actList.enter(item.data.aid,$event)"
-		class="glyphicon glyphicon-menu-right" style="float: right"></span>
+		class="glyphicon glyphicon-menu-right" style="float: right"></span>-->
 
 </div>

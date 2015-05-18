@@ -16,8 +16,6 @@ import org.hibernate.Transaction;
 import util.hibernate.HibernateFactory;
 import domain.Activity;
 import domain.ActivityFactory;
-import domain.ActivityFilter;
-import domain.LeavesComparator;
 import domain.ListComparator;
 import domain.Schedule;
 
@@ -138,122 +136,25 @@ public class ActivityService {
 		return 1;
 	}
 
-	public List<ActivityDTO> getChild(String aidString, int uid,
-			List<ActivityFilter> filters) {
-		ArrayList<ActivityDTO> dlist = new ArrayList<ActivityDTO>();
-		HibernateFactory instance = util.hibernate.HibernateFactory
-				.getInstance();
-		SessionFactory sessionFactory = instance.buildSessionFactory();
-		Session session = sessionFactory.openSession();
-		Transaction tx = null;
-		List<Activity> alist = null;
-		try {
-			tx = session.beginTransaction();
-			alist = session
-					.createQuery(
-							"from Activity act where act.parent = :aid and act.uid = :uid")
-					.setInteger("aid", Integer.parseInt(aidString))
-					.setInteger("uid", user).list();
-			tx.commit();
-		} catch (HibernateException e) {
-			if (tx != null)
-				tx.rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
-		//unsortedList
-		ArrayList<Activity> uslist = new ArrayList<Activity>();
-		for (Activity act : alist) {
-			boolean pass = true;
-			if (filters != null) {
-				for (ActivityFilter filter : filters) {
-					if (!filter.test(act)) {
-						pass = false;
-						break;
-					}
-				}
-			}
-			if (pass) {
-					uslist.add(act);
-			}
-		}
-		ListComparator comp=new ListComparator();
-		Collections.sort(uslist, comp);
-		//uslist.sort(comp);
-		for (Activity act:uslist){
-			dlist.add(new ActivityDTO(act,false));
-		}
-		return dlist;
-	}
 
-	public List<ActivityDTO> getPath(String aidString, int uid) {
-		ArrayList<ActivityDTO> dlist = new ArrayList<ActivityDTO>();
-		String curId = aidString;
-		while (!curId.equals("0")) {
-			ActivityDTO dto = getActivity(curId, user, false);
-			if (dto.getParent() != null) {
-				dlist.add(dto);
-				curId = dto.getParent();
+
+	public List<Activity> getPath(String aidString, int uid) {
+		ArrayList<Activity> dlist = new ArrayList<Activity>();
+		int curId = Integer.parseInt(aidString);
+		while (curId!=0) {
+			Activity act=ActivityFactory.getById(curId,uid);
+			if (act!=null) {
+				dlist.add(act);
+				curId = act.getParentId();
 			} else {
-				return new ArrayList<ActivityDTO>();
+				return new ArrayList<Activity>();
 			}
 		}
 		Collections.reverse(dlist);
 		return dlist;
 	}
 
-	public List<ActivityDTO> getLeaves(String aidString, int uid,
-			List<ActivityFilter> filters) {
-		//unfilteredList
-		ArrayList<ActivityDTO> dlist = new ArrayList<ActivityDTO>();
-		HibernateFactory instance = util.hibernate.HibernateFactory
-				.getInstance();
-		SessionFactory sessionFactory = instance.buildSessionFactory();
-		Session session = sessionFactory.openSession();
-		Transaction tx = null;
-		List<Activity> alist = null;
-		try {
-			tx = session.beginTransaction();
-			alist = session
-					.createQuery(
-							"from Activity act where act.uid = :uid and (select count(*) from Activity where parent=act.aid)=0")
-					.setInteger("uid", user).list();
-			tx.commit();
-		} catch (HibernateException e) {
-			if (tx != null)
-				tx.rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
-		int parent = Integer.parseInt(aidString);
-		//unsortedList
-		ArrayList<Activity> uslist = new ArrayList<Activity>();
-		for (Activity act : alist) {
-			boolean pass = true;
-			if (filters != null) {
-				for (ActivityFilter filter : filters) {
-					if (!filter.test(act)) {
-						pass = false;
-						break;
-					}
-				}
-			}
-			if (pass) {
-				if (act.isDeepChildOf(parent)) {
-					uslist.add(act);
-				}
-			}
-		}
-		LeavesComparator comp=new LeavesComparator();
-		Collections.sort(uslist, comp);
-		//uslist.sort(comp);
-		for (Activity act:uslist){
-			dlist.add(new ActivityDTO(act,false));
-		}
-		return dlist;
-	}
+
 	public List<ActivityDTO> getAll(int uid) {
 		List<ActivityDTO> dlist = new ArrayList<ActivityDTO>();
 		HibernateFactory instance = util.hibernate.HibernateFactory

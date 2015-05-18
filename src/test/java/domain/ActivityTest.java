@@ -1,6 +1,6 @@
 package domain;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.Timestamp;
@@ -32,12 +32,15 @@ public void fetchChild(){
 	t1.set(2015, 2,22);
 	Calendar t2=Calendar.getInstance();
 	t2.set(2015, 4, 26);
+	RequestFilter rf=new RequestFilter();
+	rf.setT1(t1);
+	rf.setT2(t2);
 	if(act==null||t1==null||t2==null)
 		System.err.println("null time");
 	else{
 		Activity act2=ActivityFactory.getById(489, 1);
 		assertFalse(act2.isFinished());
-	act.fetchChild(t1,t2);
+	act.fetchChild(rf);
 	assertTrue(act.isActive());
 	assertTrue(act.getSubTask().size()==1);
 	assertTrue(act.getSubNote().size()==2);
@@ -48,6 +51,14 @@ public void fetchChild(){
 public void newAct(){
 	Appointment apt=ActivityFactory.newAppointment(1, 0);
 	assertFalse(apt.getAid()==0);
+}
+@Test
+public void update(){
+	Activity act=ActivityFactory.getById(486, 1);
+	act.setName("update11");
+	act.updateActivity();
+	act=ActivityFactory.getById(486, 1);
+	assertEquals(act.getName(),"update11");
 }
 
 }

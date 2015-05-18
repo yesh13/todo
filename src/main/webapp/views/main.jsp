@@ -27,10 +27,17 @@
 	<script type="text/javascript" src="/todo/resources/js/main.js"></script>
 	<script type="text/ng-template" id="activity.html"
 		ng-include="'/todo/resources/views/activity-desktop.html'">
-<div class="act-list col-xs-4 full-height-flow" ng-include="'/todo/resources/views/activity.list.html'">
+<div class="act-detail col-xs-4 full-height-flow" >
+<div ng-if="actList.activity&&actList.activity.data.aid!=0">
+<list-header></list-header>
+<activity-detail model="actList.activity.data" default-date="filter.date"></activity-detail>
 </div>
-<div class="act-detail col-xs-5 full-height-flow">
-<activity-detail ng-if="actList.activeActNum!=-1" model="actList.activities[actList.activeActNum]" is-open="true" default-date="filter.date"></activity-detail>
+</div>
+<div class="act-list col-xs-4 full-height-flow">
+<activity-list ng-if="actList.activity.data.subTask" model="actList.activity.data.subTask" title="Task" method="actList" new-method="actList.newTask(event)"></activity-list>
+<activity-list ng-if="actList.activity.data.subAppt" model="actList.activity.data.subAppt" title="Appointment" method="actList" new-method="actList.newAppt(event)"></activity-list>
+<activity-list ng-if="actList.activity.data.subNote" model="actList.activity.data.subNote" title="Finished" method="actList" new-method="actList.newNote(event)"></activity-list>
+<activity-list ng-if="actList.activity.data.subPend" model="actList.activity.data.subPend" title="Pend" method="actList" new-method="actList.newPend(event)"></activity-list>
 </div>
 </script>
 
@@ -65,6 +72,7 @@
 		ng-controller="sideTabCtrl as sideTab">
 		<div class="row full-height">
 			<div class="col-xs-2 side-nav full-height-flow">
+		<my-date-picker  model="filter.date"></my-date-picker>
 				<ul class="nav nav-stacked" ng-repeat="group in routerState.states">
 				<li ui-sref-active="active" ng-repeat="item in group.data"><a ui-sref="{{item.ref}}">{{item.name}}</a></li>
 				</ul>

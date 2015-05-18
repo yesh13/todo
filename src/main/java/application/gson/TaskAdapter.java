@@ -11,6 +11,7 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import domain.Activity;
+import domain.Appointment;
 import domain.Task;
 
 public class TaskAdapter extends TypeAdapter<Task> {
@@ -31,9 +32,9 @@ public class TaskAdapter extends TypeAdapter<Task> {
 
 	@Override
 	public Task read(JsonReader reader) throws IOException {
-		// TODO Auto-generated method stub
-		Task act=new Task();
-		new ActivityAdapter().basicRead(reader, act);
+		Activity activity=new ActivityAdapter().basicRead(reader);
+		if(activity==null||!"task".equals(activity.getType()))return null;
+		Task act=(Task) activity;
 		while(reader.hasNext()){
 			String name=reader.nextName();
 			if(reader.peek()==JsonToken.NULL){

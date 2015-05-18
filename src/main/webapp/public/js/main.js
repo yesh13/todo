@@ -138,8 +138,8 @@ app.config(function($stateProvider, $urlRouterProvider) {
     stateProviderRef=$stateProvider;
     urlRouterProviderRef=$urlRouterProvider;
 });
-app.run(['$q', '$rootScope', '$state', '$http',
-        function ($q, $rootScope, $state, $http) {
+app.run(['$q', '$rootScope', '$state', '$stateParams', '$http',
+        function ($q, $rootScope, $state,$stateParams, $http) {
             $http.get("/todo/resources/json/router.js").success(function(data) {
                 urlRouterProviderRef.otherwise(data.defaultUrl);
                 for (i in data.states) {
@@ -150,25 +150,28 @@ app.run(['$q', '$rootScope', '$state', '$http',
                     }
                 }
                 $rootScope.routerState=data;
+                if($state.current.views==null)
                 $state.go("today",{aid:0})
             })
         }]);
 
 
-app.controller("sideTabCtrl", [ '$scope', '$stateParams', "$http",
-        function($scope, $stateParams, $http) {
+app.controller("sideTabCtrl", [ '$scope', '$stateParams', "$http","$state",
+        function($scope, $stateParams, $http,$state) {
 
             $scope.$stateParams = $stateParams;
+            $scope.filter = {
+                date:new Date()
+            };
             this.setSideTab = function(item) {
                 this.sideTabSelected = item;
             };
             this.sideTabUrl = function() {
                 return "/todo/resources/views/" + this.sideTabSelected + ".html";
             };
-            this.setSideTab("activity");
         } ]);
 
-app.controller("actListCtrl",
+app.controller("activityCtrl",
         [
         '$scope',
         '$http',
@@ -182,25 +185,45 @@ app.controller("actListCtrl",
             var actListCtrl = this;
             this.activeActNum = -1;
             this.activities = [];
+            this.updateQueue= [];
             this.lastUpdate=1;
-            this.poll=setInterval(function(){
-                $http.get("/todo/api/account/lastupdate").success(function(data){
-                    console.log(actListCtrl);
-                    if(actListCtrl.lastUpdate!=data){
-                        actListCtrl.buildList();
-                        actListCtrl.lastUpdate=data;
-                    }
-                })
-            },5000);
             $scope.stateInfo=$state.current.data;
             $scope.stateName = $state.current.name;
-            $scope.listUpdated = false;
-            $scope.filter = {
-                date:new Date()
-            };
+            if($scope.filter.name!=$scope.stateName){
+                $scope.filter.name=$scope.stateName;
             if($scope.stateInfo.date){
                 $scope.filter.date=dateService.shift(new Date(),$scope.stateInfo.date.shift,$scope.stateInfo.date.type);
             }
+            if($scope.stateInfo&&typeof($scope.stateInfo.sub)!='undefined'){
+                $scope.filter.sub=$scope.stateInfo.sub;
+            }
+            }
+            this.poll=setInterval(function(){
+                $http.get("/todo/api/account/lastupdate").success(function(data){
+                    console.log("update activity");
+                    if(actListCtrl.lastUpdate!=data&&actListCtrl.lastUpdate!=1){
+                        actListCtrl.buildActivity();
+                        actListCtrl.lastUpdate=data;
+                    }
+                })
+                for (i in actListCtrl.updateQueue) {
+                	act=actListCtrl.updateQueue[i];
+                	if(new Date()-act.inQueue>5000)
+                    activityService.submit(act,
+                        function() {
+                    	act.inQueue=null;
+                    	actListCtrl.updateQueue.splice(i,1);
+                        });
+                }
+            },5000);
+            $scope.$watch("actList.activity.data",
+                function(nv,ov) {
+            	if(ov==null||nv.aid!=ov.aid) return;
+                    	if(actListCtrl.activity.inQueue==null)
+                        actListCtrl.updateQueue.push(actListCtrl.activity);
+                    	actListCtrl.activity.inQueue=new Date();
+                },true)
+                $scope.listUpdated = false;
             $scope.defaultDate=function(){
                 return $scope.filter.date;
             }
@@ -208,38 +231,55 @@ app.controller("actListCtrl",
                 if (nv == false) {
                     $scope.listUpdated = true;
                     console.log("listUpdate");
-                    actListCtrl.buildList();
+                    actListCtrl.buildActivity();
                 }
             });
-            this.enter = function(aid, $event) {
+            this.enter = function(aid,$event) {
                 $event.preventDefault();
                 $event.stopPropagation();
-                $state.go("activity", {
+                $state.go($scope.stateName, {
                     aid : aid
                 })
             }
+            this.newNote=function($event){
+               $http.get("/todo/api/activity/newnote/"+actListCtrl.activity.data.aid).success(function(data){
+               actListCtrl.enter(data.aid,$event);
+               }) 
+            }
+            this.newAppt=function($event){
+               $http.get("/todo/api/activity/newappt/"+actListCtrl.activity.data.aid).success(function(data){
+               actListCtrl.enter(data.aid,$event);
+               }) 
+            }
+            this.newTask=function($event){
+                $http.get("/todo/api/activity/newtask/"+actListCtrl.activity.data.aid).success(function(data){
+                    actListCtrl.enter(data.aid,$event);
+                    }) 
+                 }
+            this.newPend=function($event){
+                $http.get("/todo/api/activity/newpend/"+actListCtrl.activity.data.aid).success(function(data){
+                actListCtrl.enter(data.aid,$event);
+                }) 
+             }
 
             //
-            this.buildList = function() {
-                var req={url:"/todo/api/activity/aid/" + $stateParams.aid,params:{}};
+            this.buildActivity = function() {
+                var req={url:"/todo/api/activity/fetch/" + $stateParams.aid,params:{}};
+                req.data={sub:$scope.filter.sub}
                 if($scope.stateInfo.date){
                     var t=dateService.empty($scope.filter.date,$scope.stateInfo.date.type);
-                    console.log(t[0]);
-                    console.log(t[1]);
-                    req.params={
-                        t1 : t[0].getUTCMilliseconds(),
-                        t2 : t[1].getUTCMilliseconds()}
+                    console.log("build from "+t[0]+" to "+t[1]);
+
+                    req.data.t1=t[0]-0;
+                    req.data.t2=t[1]-0;
                 }
 
-                activityService.buildList(actListCtrl, req, $stateParams.aid,
-                        false, function() {
-                            $scope.$watch("actList.activities[0].open",
-                                function(nv) {
-                                    if (nv == true) {
-                                        activityService
-                                .pushNew(actListCtrl.activities);
-                                    }
-                                })
+                activityService.buildActivity(req, function(data) {
+                    actListCtrl.activity={"data":data,"dirty":false,"inQueue":null};
+                    console.log("build: "+JSON.stringify(actListCtrl.activity.data));
+                    $http.get( "/todo/api/activity/path/" + data.aid)
+					  .success(function(response) {
+					  actListCtrl.activity.actPath =response; });
                         });
             };
             this.pushNew = function() {
@@ -248,11 +288,8 @@ app.controller("actListCtrl",
 
             this.setActivity = function(n) {
                 console.log("set activity " + n + "in")
-                    console.log(actListCtrl.activities[n].loaded);
                 if (n != this.activeActNum) {
-                    console.log(this.activeActNum);
                     if (this.activeActNum >= 0) {
-                        console.log(this.activeActNum);
                         activityService.submit(
                                 actListCtrl.activities[this.activeActNum],
                                 actListCtrl.buildList, $stateParams.aid);
@@ -278,10 +315,14 @@ app.controller("actListCtrl",
             }
             $scope.$on("$destroy", function() {
                 clearInterval(actListCtrl.poll);
-                for (i in actListCtrl.activities) {
-                    activityService.submit(actListCtrl.activities[i],
+                for (i in actListCtrl.updateQueue) {
+                	act=actListCtrl.updateQueue[i];
+                    activityService.submit(act,
                         function() {
-                        }, $stateParams.aid);
+                    	act.inQueue=null;
+                    	console.log("submit: "+act.data.aid);
+                    	actListCtrl.updateQueue.splice(i,1);
+                        });
                 }
             })
             window.onbeforeunload = function() {
@@ -343,7 +384,26 @@ app.directive('droppableActivity', [
                 });
             };
         } ]);
+app.directive('activityList', function(dateService,activityService) {
+    return {
+        templateUrl : "/todo/resources/views/activity.list.html",
+        controller : "activityListCtrl as listCtrl",
+    scope : {
+        model : "=model",
+    	title : "@title",
+    	method:"=method",
+    	newMethod:"&newMethod"
+    },
+    link : function(scope, element, attr) {
+    	console.log(typeof(scope.newMethod));
+           }
+    }
+});
+app.controller('activityListCtrl', [ '$scope', '$http',
+                                     function($scope, $http) {
+    var ctrl = this;
 
+} ]);
 app.directive('activityDetail', function(dateService,activityService) {
     return {
         templateUrl : "/todo/resources/views/activity.detail.html",
@@ -353,15 +413,6 @@ app.directive('activityDetail', function(dateService,activityService) {
     defaultDate:"=?"
     },
     link : function(scope, element, attr) {
-               scope.$watch("model",function(nv,ov){
-                   console.log("detail change");
-                   console.log(JSON.stringify(ov));
-                   console.log(JSON.stringify(nv));
-                   if(nv.data.aid==ov.data.aid&&ov.loaded){
-                       scope.model.dirty=true;
-                   }
-                   scope.model.description=activityService.getDescription(scope.model.data);
-               },true);
            }
     }
 });
@@ -440,7 +491,7 @@ app.directive('listHeader', [ '$state', function($state) {
     function link(scope, element, attr) {
         scope.$watch("filter.date", function(nv, ov) {
             if (nv != ov) {
-                scope.actList.buildList();
+                scope.actList.buildActivity();
             }
         })
     }

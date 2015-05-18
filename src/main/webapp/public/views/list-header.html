@@ -1,14 +1,15 @@
-		<div ng-show="stateInfo.type=='list'" class="list-header">
+		
+		<div class="list-header">
 		<ol class="breadcrumb">
-			<li><a ui-sref="activity({aid:0})"
-			droppable-activity="0"> Root </a></li>
-			<li ng-repeat="item in actList.actPath track by $index" 
+			<li><a ui-sref="{aid:0}"
+			droppable-activity="0"> Life </a></li>
+			<li ng-repeat="item in actList.activity.actPath track by $index" 
 			droppable-activity="item.aid">
-			<a ui-sref="activity({aid:item.aid})">
-					{{item.name}} </a>
+			<a ui-sref="{aid:item.aid}">
+					{{item.name.length>0?item.name:"untitled"}} </a>
 					</li>
 		</ol>
 	</div>
-	<my-date-picker ng-show="stateInfo.date" model="filter.date"></my-date-picker>
+	
 	
 	

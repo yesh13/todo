@@ -28,11 +28,9 @@ import application.ActivityService;
 import application.gson.GsonFactory;
 import domain.Activity;
 import domain.ActivityFactory;
-import domain.ActivityFilter;
 import domain.Appointment;
 import domain.BasicActivity;
-import domain.DateActivityFilter;
-import domain.LeavesComparator;
+import domain.RequestFilter;
 import domain.Task;
 
 @RestController
@@ -48,27 +46,28 @@ public class ActivityCtrl {
 		Gson gson=new GsonFactory().getActivity();
 		return gson.toJson(ActivityFactory.newTask(getUid(), parent));
 	}
-	@RequestMapping(value="/api/activity/aid/{aidString}", method=RequestMethod.POST)
+	@RequestMapping(value="/api/activity/update/{aidString}", method=RequestMethod.POST)
 	public String edit(@RequestBody String json,@PathVariable String aidString){
-		Session session = util.hibernate.HibernateFactory.getInstance()
-				.buildSessionFactory().openSession();
-		Transaction tx = null;
+		
+		System.out.println(CalendarUtil.calendar2string(Calendar.getInstance())+" edit activity");
+		System.out.println(json);
 		Gson gson=new GsonFactory().getActivity();
 		Activity act=gson.fromJson(json, Activity.class);
 		if(act!=null){
-		try {
-			tx = session.beginTransaction();
-			session.update(act);
-			tx.commit();
-		} catch (HibernateException e) {
-			if (tx != null)
-				tx.rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
-		return "Successful";}
-		else return "Invalid Json. Should be start of aid and uid";
+			System.out.println(act.getName());
+		act.updateActivity();
+		return "\"Successful\"";}
+		else return "\"Invalid Json. Should be start of aid and uid\"";
+	}
+	@RequestMapping(value="/api/activity/remove/{aidString}", method=RequestMethod.GET)
+	public String remove(@PathVariable String aidString){
+		int aid=Integer.parseInt(aidString);
+		System.out.println("remove: "+aid);
+		Activity act=ActivityFactory.getById(aid, getUid());
+		if(act!=null){
+			if(act.removeSelf()==0)
+		return "\"Successful\"";}
+		return "\"Unsuccessful\"";
 	}
 	@RequestMapping(value="/api/activity/detail/{aidString}", method=RequestMethod.GET)
 	public ActivityDTO getActivity(@PathVariable String aidString){
@@ -90,59 +89,31 @@ public class ActivityCtrl {
 		List<ActivityDTO> nameList = (new ActivityService(getUid())).getAll(getUid());
 		return nameList;
 	}
-	//parentString is 0 to show top level activities
-	@RequestMapping(value="/api/activity/list/{parentString}", method=RequestMethod.GET)
-	public List<ActivityDTO> list(@PathVariable String parentString){
-		if(parentString.equals("-1")){
-			List<ActivityDTO> nameList = (new ActivityService(getUid())).getAll(getUid());
-			return nameList;
-		}
-		List<ActivityDTO> nameList = (new ActivityService(getUid())).getChild(parentString,getUid(),null);
-		return nameList;
-	}
-	@RequestMapping(value="/api/activity/leaves/{parentString}", method=RequestMethod.GET)
-	public List<ActivityDTO> list1(@PathVariable String parentString,@RequestParam(required=false) String t1,@RequestParam(required=false) String t2,@RequestParam(required=false) String unscheduled){
-		List<ActivityFilter> filters=new ArrayList<ActivityFilter>();
-		if(t1!=null&&t2!=null){
-			Calendar ec=util.CalendarUtil.string2calendar(t1);
-			Calendar lc=util.CalendarUtil.string2calendar(t2);
-			ActivityFilter filter=new DateActivityFilter(ec,lc);
-			filters.add(filter);
-		}
-		if(unscheduled!=null&&unscheduled.equals("1")){
-		}
-		List<ActivityDTO> nameList = (new ActivityService(getUid())).getLeaves(parentString,getUid(),filters);
-		return nameList;
-	}
 	@RequestMapping(value="/api/activity/path/{parentString}", method=RequestMethod.GET)
-	public List<ActivityDTO> path(@PathVariable String parentString){
-		List<ActivityDTO> nameList = (new ActivityService(getUid())).getPath(parentString,getUid());
-		return nameList;
+	public String path(@PathVariable String parentString){
+		List<Activity> nameList = (new ActivityService(getUid())).getPath(parentString,getUid());
+		Gson gson=new GsonFactory().getActivity();
+		return gson.toJson(nameList);
 	}
 	@RequestMapping(value="/api/account/lastupdate", method=RequestMethod.GET)
 	public String lastupdate(){
 		Account ac=Account.read(getUid());
-		if(ac==null) return "Unknown User "+getUid();
+		if(ac==null) return "\"Unknown User "+getUid()+"\"";
 		return "\""+CalendarUtil.calendar2string(ac.getLastUpdate())+"\"";
 	}
-	@RequestMapping(value="/api/activity/aid/{aidString}", method=RequestMethod.GET)
-	public String getActivity1_2(@PathVariable String aidString,@RequestParam(required=false) Long t1,@RequestParam(required=false) Long t2){
+	@RequestMapping(value="/api/activity/fetch/{aidString}", method=RequestMethod.POST)
+	public String getActivity1_2(@PathVariable String aidString,@RequestBody String json){
 		if(Integer.parseInt(aidString)==-1){
 			return null;
 		}
 		Activity act=ActivityFactory.getById(Integer.parseInt(aidString), getUid());
-		Calendar c1=Calendar.getInstance();
-		Calendar c2=Calendar.getInstance();
-		if(t1!=null&&t2!=null){
-		c1.setTimeInMillis(t1);
-		c2.setTimeInMillis(t2);
-		}
-		else{
-			c1.set(Calendar.YEAR, 1970);
-			c2.set(Calendar.YEAR, 2970);
-		}
-		act.fetchChild(c1,c2);
+		Gson rson=new GsonFactory().getRequestFilter();
+		RequestFilter rf=rson.fromJson(json, RequestFilter.class);
+		System.out.println(json);
+		System.out.println(rf.allowPend());
+		act.fetchChild(rf);
 		Gson gson=new GsonFactory().getActivity();
 		return gson.toJson(act);
 	}
+
 }

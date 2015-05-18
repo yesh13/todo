@@ -51,3 +51,9 @@ input.text,textarea.text,input.text:focus,textarea.text:focus{
 	font-size:90%;
 	font-weight:normal;
 }
+.dropdown-menu{
+	position:fixed;
+	top:50%;
+	left:50%;
+	 -webkit-transform:translate(-50%,-50%);
+}

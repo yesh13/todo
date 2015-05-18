@@ -1,9 +1,15 @@
-<list-header></list-header>
-	<ul class="nav nav-stacked">
-		<li ng-repeat="item in actList.activities track by $index" draggable="true"
-		draggable-activity="item.aid"
-		droppable-activity="item.aid" ng-class="{active:$index==actList.activeActNum}"><a 
-			href="javascript:void(0)" ng-click="actList.setActivity($index)">
-			<list-title></list-title>
-		</a></li>
-	</ul>
+
+<div ng-if="model">
+{{newMethod}}
+<div>
+	<span style="width: 20%">{{title}}</span>
+	<span ng-click="newMethod({event:$event})"
+		style="float: right"
+		class="glyphicon glyphicon-plus"></span>
+</div>
+<ul class="nav nav-stacked">
+	<li ng-repeat="item in model track by $index"><a
+		href="javascript:void(0)" ng-click="method.enter(item.aid,$event)"> <list-title></list-title>
+	</a></li>
+</ul>
+</div>

@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 
 import domain.Activity;
 import domain.Appointment;
+import domain.RequestFilter;
 import domain.Task;
 
 public class GsonFactory {
@@ -15,5 +16,12 @@ public class GsonFactory {
 		builder.registerTypeAdapter(Appointment.class, new AppointmentAdapter());
 		builder.serializeNulls().setPrettyPrinting();
 		return builder.create();
+	}
+	public Gson getRequestFilter(){
+		GsonBuilder builder=new GsonBuilder();
+		builder.registerTypeAdapter(RequestFilter.class, new RequestFilterAdapter());
+		builder.serializeNulls().setPrettyPrinting();
+		return builder.create();
+		
 	}
 }

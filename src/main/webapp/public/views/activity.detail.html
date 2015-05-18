@@ -1,21 +1,22 @@
-	aid: {{model.data.aid}}<br>
+	aid: {{model.aid}}<br>
 	<ng-form ng-show="activeActNum!=-1" name="detail" novalidate>
 	<table id="detail-table" class="table">
   <tr>
-		<th colspan="2"> <input class="text" type="text" ng-model="model.data.name" placeholder="title"></th>
+		<th colspan="2"> <input class="text" type="text" ng-model="model.name" placeholder="title"></th>
+  </tr>
+      <tr>
+		<td colspan="2"> <textarea class="text" placeholder="note" rows="10" id="note-edit" ng-model="model.note"></textarea></td>
   </tr>
     <tr>
 		<td colspan="2"> Parent: <parent-select model="model"></parent-select> </td>
   </tr>
   <tr><td colspan="2">
-  <schedule-picker ng-model='model.data' is-open="model.loaded" default-date="defaultDate" description="model.scheduleDescription"></schedule-picker>
+  <schedule-picker ng-model='model' is-open="model.loaded" default-date="defaultDate" description="model.scheduleDescription"></schedule-picker>
   </td>
   </tr>
 		
 
-    <tr>
-		<td colspan="2"> <textarea class="text" placeholder="note" rows="10" id="note-edit" ng-model="model.data.note"></textarea></td>
-  </tr>
+
 </table>
-<!-- 		<button ng-click="alert(model.data.note)">submit</button> -->
+<!-- 		<button ng-click="alert(model.note)">submit</button> -->
 	</ng-form>

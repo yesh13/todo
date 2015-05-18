@@ -17,6 +17,7 @@
       <property name="uid" column="uid" type="int"/>
       <property name="parentId" column="parent" type="int"></property>
       <property name="name" column="name" type="string"/>
+      <property name="description" column="note" type="string"/>
        <subclass name="domain.Task" discriminator-value="0">
          <property name="startTime" column="start_time" type="calendar"/>
          <property name="deadline" column="end_time" type="calendar"/>
