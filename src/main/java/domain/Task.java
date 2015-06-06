@@ -99,4 +99,28 @@ public class Task extends Activity {
 		return !isPending();
 	}
 
+	@Override
+	public boolean allowSubTask() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean allowSubAppt() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean allowSubNote() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean allowSubPend() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

@@ -57,5 +57,29 @@ public class Appointment extends Activity{
 	public void setFinishTime(Calendar finishTime) {
 		this.finishTime = finishTime;
 	}
+
+	@Override
+	public boolean allowSubTask() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean allowSubAppt() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean allowSubNote() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean allowSubPend() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 }

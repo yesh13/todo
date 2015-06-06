@@ -23,7 +23,10 @@ public abstract class Activity extends BasicActivity implements Schedule{
 	private ArrayList<Activity> subTask=null;
 	private ArrayList<Activity> subNote=null;
 	private ArrayList<Activity> subPend=null;
-	
+	public abstract boolean allowSubTask();
+	public abstract boolean allowSubAppt();
+	public abstract boolean allowSubNote();
+	public abstract boolean allowSubPend();
 	public int updateActivity(){
 		int ret=0;
 		if(getAid()==0)return ret;

@@ -28,11 +28,14 @@
 	<script type="text/javascript" src="/todo/resources/js/ui-lib.js"></script>
 	<script type="text/javascript" src="/todo/resources/js/main.js"></script>
 		<script type="text/ng-template" id="activity.html">
-<div ng-include="'/todo/resources/views/activity.mobile.html'"></div>
-  
-
-
-
+<div ng-if="actList.activity&&actList.activity.data.aid!=0">
+<list-header></list-header>
+<activity-detail model="actList.activity.data" default-date="filter.date"></activity-detail>
+</div>
+<activity-list ng-if="actList.activity.data.subTask" model="actList.activity.data.subTask" title="Task" method="actList" new-method="actList.newTask(event)"></activity-list>
+<activity-list ng-if="actList.activity.data.subAppt" model="actList.activity.data.subAppt" title="Appointment" method="actList" new-method="actList.newAppt(event)"></activity-list>
+<activity-list ng-if="actList.activity.data.subNote" model="actList.activity.data.subNote" title="Finished" method="actList" new-method="actList.newNote(event)"></activity-list>
+<activity-list ng-if="actList.activity.data.subPend" model="actList.activity.data.subPend" title="Pend" method="actList" new-method="actList.newPend(event)"></activity-list>
 
 </script>
 	<nav class="navbar navbar-inverse">
@@ -48,9 +51,9 @@
 					</c:when>
 
 					<c:otherwise>
-						<li><a href="/register"><span
+						<li><a href="/todo/register"><span
 								class="glyphicon glyphicon-user"></span> Join</a></li>
-						<li><a href="/private"><span
+						<li><a href="/todo/private"><span
 								class="glyphicon glyphicon-log-in"></span> Sign in</a></li>
 					</c:otherwise>
 				</c:choose>
@@ -58,9 +61,8 @@
 		</div>
 	</div>
 	</nav>
-
+<div  ng-controller="sideTabCtrl">
 	<div ui-view></div>
-	<div ng-controller="sideTabCtrl">
 	<tabset class="bottom-tab" ng-repeat="group in routerState.states">
     <tab heading="{{item.name}}"  ng-repeat="item in group.data" ui-sref-active="active" ui-sref="{{item.ref}}"></tab>
   </tabset>
