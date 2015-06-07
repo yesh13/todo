@@ -46,6 +46,16 @@ public class ActivityCtrl {
 		Gson gson=new GsonFactory().getActivity();
 		return gson.toJson(ActivityFactory.newTask(getUid(), parent));
 	}
+	@RequestMapping(value="/api/activity/newnote/{parent}", method=RequestMethod.GET)
+	public String addnote(@PathVariable int parent){
+		Gson gson=new GsonFactory().getActivity();
+		return gson.toJson(ActivityFactory.newNote(getUid(), parent));
+	}
+	@RequestMapping(value="/api/activity/newpend/{parent}", method=RequestMethod.GET)
+	public String addpend(@PathVariable int parent){
+		Gson gson=new GsonFactory().getActivity();
+		return gson.toJson(ActivityFactory.newPend(getUid(), parent));
+	}
 	@RequestMapping(value="/api/activity/update/{aidString}", method=RequestMethod.POST)
 	public String edit(@RequestBody String json,@PathVariable String aidString){
 		

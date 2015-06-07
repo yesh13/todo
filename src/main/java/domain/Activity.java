@@ -118,13 +118,14 @@ public abstract class Activity extends BasicActivity implements Schedule{
 		for (Activity act : alist) {
 			if(!act.withinTime(t1, t2)) continue;
 			if(!act.isDeepChildOf(getAid()))continue;
+			if(rf.allowAppt()&&act.getType().equals("appt")){
+				subAppt.add(act);
+			}else
 			if(rf.allowNote()&&act.isFinished()){
 				subNote.add(act);
 			}else if(act.isActive()){
 			if(rf.allowTask()&&act.getType().equals("task")){
 					subTask.add(act);
-			}else if(rf.allowAppt()&&act.getType().equals("appt")){
-				subAppt.add(act);
 			}
 			}else{
 				if(rf.allowPend())

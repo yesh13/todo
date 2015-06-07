@@ -198,6 +198,14 @@ app.controller("activityCtrl",
 					$scope.filter.sub=$scope.stateInfo.sub;
 				}
 			}
+			$scope.$watch("filter.date", function(nv, ov) {
+				if (nv != ov) {
+					console.log("filter date change");
+					console.log(ov);
+					console.log(nv);
+					$scope.actList.buildActivity();
+				}
+			})
 			this.poll=setInterval(function(){
 				$http.get("/todo/api/account/lastupdate").success(function(data){
 					console.log("update activity");
@@ -275,6 +283,8 @@ app.controller("activityCtrl",
 				}
 
 				activityService.buildActivity(req, function(data) {
+					data.startTime=dateService.digit2Date(data.startTime);
+					data.finishTime=dateService.digit2Date(data.finishTime);
 					actListCtrl.activity={"data":data,"dirty":false,"inQueue":null};
 					console.log("build: "+JSON.stringify(actListCtrl.activity.data));
 					$http.get( "/todo/api/activity/path/" + data.aid)
@@ -489,11 +499,6 @@ app.directive('listHeader', [ '$state', function($state) {
 	link : link
 	}
 	function link(scope, element, attr) {
-		scope.$watch("filter.date", function(nv, ov) {
-			if (nv != ov) {
-				scope.actList.buildActivity();
-			}
-		})
 	}
 } ])
 

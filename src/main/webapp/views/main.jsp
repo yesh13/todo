@@ -36,7 +36,7 @@
 <div class="act-list col-xs-4 full-height-flow">
 <activity-list ng-if="actList.activity.data.subTask" model="actList.activity.data.subTask" title="Task" method="actList" new-method="actList.newTask(event)"></activity-list>
 <activity-list ng-if="actList.activity.data.subAppt" model="actList.activity.data.subAppt" title="Appointment" method="actList" new-method="actList.newAppt(event)"></activity-list>
-<activity-list ng-if="actList.activity.data.subNote" model="actList.activity.data.subNote" title="Finished" method="actList" new-method="actList.newNote(event)"></activity-list>
+<activity-list ng-if="actList.activity.data.subNote" model="actList.activity.data.subNote" title="Note" method="actList" new-method="actList.newNote(event)"></activity-list>
 <activity-list ng-if="actList.activity.data.subPend" model="actList.activity.data.subPend" title="Pend" method="actList" new-method="actList.newPend(event)"></activity-list>
 </div>
 </script>

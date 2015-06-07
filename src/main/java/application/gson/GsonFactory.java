@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 
 import domain.Activity;
 import domain.Appointment;
+import domain.PlainActivity;
 import domain.RequestFilter;
 import domain.Task;
 
@@ -14,6 +15,7 @@ public class GsonFactory {
 		builder.registerTypeAdapter(Activity.class, new ActivityAdapter());
 		builder.registerTypeAdapter(Task.class, new TaskAdapter());
 		builder.registerTypeAdapter(Appointment.class, new AppointmentAdapter());
+		builder.registerTypeAdapter(PlainActivity.class, new PlainActivityAdapter());
 		builder.serializeNulls().setPrettyPrinting();
 		return builder.create();
 	}

@@ -88,6 +88,9 @@ public class ActivityAdapter extends TypeAdapter<Activity> {
 		case "appt":
 			act=new AppointmentAdapter().read(reader);
 			break;
+		case "plain":
+			act=new PlainActivityAdapter().read(reader);
+			break;
 		}
 		reader.endObject();
 		}
@@ -108,7 +111,7 @@ public class ActivityAdapter extends TypeAdapter<Activity> {
 		writer.name("note").value(act.getDescription());
 		SubActivityAdapter subAdapter=new SubActivityAdapter();
 		writer.name("subTask");
-		if(act.getSubTask()!=null){
+		if(act.getSubTask()!=null&&act.allowSubTask()){
 		writer.beginArray();
 		for(Activity bact: act.getSubTask()){
 			subAdapter.write(writer, bact);
@@ -117,7 +120,7 @@ public class ActivityAdapter extends TypeAdapter<Activity> {
 		else writer.nullValue();
 		
 		writer.name("subAppt");
-		if(act.getSubAppt()!=null){
+		if(act.getSubAppt()!=null&&act.allowSubAppt()){
 		writer.beginArray();
 		for(Activity bact: act.getSubAppt()){
 			subAdapter.write(writer, bact);
@@ -126,7 +129,7 @@ public class ActivityAdapter extends TypeAdapter<Activity> {
 		else writer.nullValue();
 		
 		writer.name("subNote");
-		if(act.getSubNote()!=null){
+		if(act.getSubNote()!=null&&act.allowSubNote()){
 		writer.beginArray();
 		for(Activity bact: act.getSubNote()){
 			subAdapter.write(writer, bact);
@@ -135,7 +138,7 @@ public class ActivityAdapter extends TypeAdapter<Activity> {
 		else writer.nullValue();
 		
 		writer.name("subPend");
-		if(act.getSubPend()!=null){
+		if(act.getSubPend()!=null&&act.allowSubPend()){
 		writer.beginArray();
 		for(Activity bact: act.getSubPend()){
 			subAdapter.write(writer, bact);

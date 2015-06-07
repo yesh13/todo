@@ -102,25 +102,25 @@ public class Task extends Activity {
 	@Override
 	public boolean allowSubTask() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean allowSubAppt() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean allowSubNote() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean allowSubPend() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 }

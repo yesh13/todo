@@ -79,10 +79,33 @@ public class ActivityFactory {
 		}
 		return act;
 	}
+	public static Task newPend(int uid,int parent){
+		Session session = util.hibernate.HibernateFactory.getInstance()
+				.buildSessionFactory().openSession();
+		Transaction tx = null;
+		Task act = null;
+		try {
+			tx = session.beginTransaction();
+			act = new Task();
+			act.setUid(uid);
+			act.setParentId(parent);
+			act.setState(Task.State.Pending);
+			act.setStartTime(Calendar.getInstance());
+			session.save(act);
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return act;
+	}
 
 	public static Activity getById(int aid, int uid) {
 		if(aid==0){
-			Activity act=new Appointment();
+			Activity act=new PlainActivity();
 			act.setAid(0);
 			act.setUid(uid);
 			return act;

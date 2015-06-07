@@ -1,21 +1,11 @@
-
-<div class="type-check">
-<input type="radio" ng-model="model.type" value=0>
-ASAP
-<input type="radio" ng-model="model.type" value=1>
-Range
-<input type="radio" ng-model="model.type" value=2>
-Deadline
-</div>
-<div ng-switch="model.type">
-	<div ng-switch-when=0>
-	<table class="schedule">
+<table class="schedule">
+{{model.startTime}}
 	<tr><td>
 	<modal-datepicker model="model.startTime" set-null="true" invalid-text="Schedule" default-date="defaultDate"></modalDatepicker>
 	</td>
 	</tr>
 	<tr><td>
-	<modal-datepicker model="model.endTime" set-null="true" invalid-text="Finish"></modalDatepicker>
+	<modal-datepicker model="model.finishTime" set-null="true" invalid-text="Finish"></modalDatepicker>
 	</td>
 	</tr>
 		<!-- <tr>
@@ -35,62 +25,3 @@ Deadline
 				<td><my-date-picker ng-if="model.endTime!=null" model="model.endTime"></my-date-picker></td>
 			</tr> -->
 		</table>
-
-	</div>
-	<div ng-switch-when=1>
-		<table class="schedule">
-<!-- 		<tr>
-		<th>From</th>
-		<th>To</th>
-		</tr>
-			<tr>
-				<td><timepicker minute-step="30" ng-model='model.startTime'><timepicker></td>
-				<td><timepicker minute-step="30" ng-model='model.endTime'><timepicker></td>
-			</tr>
-			<tr>
-				<td><my-date-picker model="model.startTime"></my-date-picker></td>
-				<td><my-date-picker ng-show="!sameDate" model="model.endTime"></my-date-picker>
-					<button class="btn btn-primary" ng-click="disableSameDate()" ng-show="sameDate">Unlock
-						Date</button></td>
-			</tr> -->
-			
-	<tr><td>
-	<modal-datepicker model="model.startTime"></modalDatepicker>
-	</td>
-	</tr>
-	<tr><td>
-	<modal-datepicker model="model.endTime"></modalDatepicker>
-	</td>
-	</tr>
-		</table>
-
-
-	</div>
-	<div ng-switch-when=2>
-		<table class="schedule">
-<!-- 		<tr>
-		<th>Deadline</th>
-		<th>Finish</th>
-		</tr>
-			<tr>
-				<td><timepicker minute-step="30" ng-model='model.endTime'><timepicker></td>
-				<td style="vertical-align:middle"><button class="btn btn-success" ng-show="model.finishTime==null" ng-click="finish()">Finish</button>
-				<timepicker minute-step="30" ng-show="model.finishTime!=null" ng-model='model.finishTime'><timepicker></td>
-			</tr>
-			<tr>
-				<td><my-date-picker model="model.endTime"></my-date-picker></td>
-				<td><my-date-picker ng-show="model.finishTime!=null" model="model.finishTime"></my-date-picker></td>
-			</tr> -->
-			
-	<tr><td>
-	<modal-datepicker model="model.endTime" set-null="true" invalid-text="Deadline" default-date="defaultDate"></modalDatepicker>
-	</td>
-	</tr>
-	<tr><td>
-	<modal-datepicker model="model.finishTime" set-null="true" invalid-text="Finish"></modalDatepicker>
-	</td>
-	</tr>
-		</table>
-
-	</div>
-	</div>

@@ -4,6 +4,16 @@ app
 	.service(
 		"dateService",
 		function() {
+			this.digit2Date=function(str){
+				if(str==null)return null;
+				var a=new Date()
+				a.setTime(str);
+				return a;
+			}
+			this.date2Digit=function(date){
+				if(date==null)return null;
+				return date-0+"";
+			}
 			this.formatInt = function(value, size) {
 				var s = value + "";
 				while (s.length < size)
@@ -159,7 +169,10 @@ app.service("activityService",
 				} 
 			}
 			this.submit = function(context, callback) {
+				if(context.data.aid==0)callback();
 				console.log("edit: " + JSON.stringify(context.data));
+				context.data.startTime=dateService.date2Digit(context.data.startTime);
+				context.data.finishTime=dateService.date2Digit(context.data.finishTime);
 				$http.post("/todo/api/activity/update/" + context.data.aid,
 					context.data).success(function() {
 					console.log("submit success");
